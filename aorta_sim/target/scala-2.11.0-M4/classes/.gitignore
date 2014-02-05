@@ -1,0 +1,23 @@
+# compiled stuff
+.build
+
+# vim swapfiles
+*.swp
+
+# maps/scenarios/logs/plots
+osm/*
+!osm/synthetic.osm
+!osm/small_synthetic.osm
+maps/*
+scenarios/*
+logs/*
+plots/*
+final*/*
+
+# ew, python
+*.pyc
+
+# sbt
+target/
+.history
+#lib/

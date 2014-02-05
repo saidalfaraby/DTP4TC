@@ -1,0 +1,15 @@
+[0m[[0minfo[0m] [0mCreating a distributable package in target/pack[0m
+[0m[[0minfo[0m] [0mCopying libraries to target/pack/lib[0m
+[0m[[0minfo[0m] [0mproject jars:[0m
+[0m[[0minfo[0m] [0mtarget/scala-2.11.0-M4/aorta_2.11.0-M4-0.1-SNAPSHOT.jar[0m
+[0m[[0minfo[0m] [0mproject dependencies:[0m
+[0m[[0minfo[0m] [0morg.scala-lang:scala-library:2.11.0-M4[0m
+[0m[[0minfo[0m] [0morg.scala-lang:scala-swing:2.11.0-M4[0m
+[0m[[0minfo[0m] [0morg.scala-lang.modules:scala-xml_2.11.0-M4:1.0-RC3[0m
+[0m[[0minfo[0m] [0munmanaged dependencies:[0m
+[0m[[0minfo[0m] [0mCreate a bin folder: target/pack/bin[0m
+[0m[[0minfo[0m] [0mGenerating launch scripts[0m
+[0m[[33mwarn[0m] [0mNo mapping (program name) -> MainClass is defined. Please set packMain variable (Map[String, String]) in your sbt project settings.[0m
+[0m[[0minfo[0m] [0mGenerating target/pack/Makefile[0m
+[0m[[0minfo[0m] [0mGenerating target/pack/VERSION[0m
+[0m[[0minfo[0m] [0mdone.[0m
