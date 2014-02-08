@@ -1,5 +1,0 @@
-#!/bin/bash
-# Run from the base AORTA directory: ./tools/benchmark_routing
-
-. common
-$SCALA utexas.aorta.tests.BenchmarkRouting $@

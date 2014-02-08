@@ -1,3 +1,0 @@
-#!/bin/bash
-. common
-$SCALA utexas.aorta.sim.Headless $@
