@@ -28,6 +28,7 @@ class DBN (sim: Simulation) {
 	val high_delay = 100
 	private var count = 1
 	var CPT_per_lane = new mutable.HashMap[String, mutable.HashMap[String, Double]]
+	var CPT_total = new mutable.HashMap[String, Double]
 	private var key = ""
 	private var freq = 0.0
 	var CPT = new mutable.HashMap[String, Double]()
@@ -35,6 +36,7 @@ class DBN (sim: Simulation) {
 	// init hashmap for the CPT's of each lane
 	for(i <- 0 to state.discrete_traffic.length - 1)
 		CPT_per_lane.put("Lane "+i, CPT.clone())
+	
 	
 	// query for stats 
 	val check_stats = new Thread(new Runnable {
@@ -51,7 +53,9 @@ class DBN (sim: Simulation) {
 				updateCPT(previous_traffic)
 				previous_traffic = state.discrete_traffic.clone()  
 				state.reset_carsPresent()
-				printCPT(CPT_per_lane, count)
+				printCPT_ML(CPT_per_lane, count)
+				printCPT_Dir(CPT_per_lane, count, count * 8, count.toFloat/8)
+				printCPT_total(count*8)
 				count += 1
 				//printCPT(CPT)
 				Thread.sleep(3000)
@@ -69,22 +73,61 @@ class DBN (sim: Simulation) {
 				      CPT = CPT_per_lane.get("Lane "+i).get
 				      key = previous_traffic(i)+" "+state.discrete_traffic(i)
 				      try{
+				             
 				    		 freq = CPT.get(key).get.+(1.0)
 				    		 CPT.put(key, freq)
-				    	  }
-				    	  catch{
-				          	case e: Exception => {
+				    		 
+				      }catch{
+				         case e: Exception => {
 				          		CPT.put(key, 1.0)
-				          	}
-				    	  }
+				          		
+				          }
+				      }
+				      
+				      // global probabilities (for smoothing)
+				      try{
+				             freq = CPT_total.get(key).get.+(1.0)
+				    		 CPT_total.put(key, freq)
+				      }catch{
+				        case f: Exception => {
+				          CPT_total.put(key, 1.0)
+				        }
+				      }
 				}
 	}
 	
+	def printCPT_Dir(CPT: mutable.HashMap[String, mutable.HashMap[String, Double]], count: Int, count_t: Int, mu: Double){
+		var key = ""
+		var dir = 0.0
+		var ml_estimate = 0.0
+		//var check = 0.0
+		println("Estimates with Dirichlet prior smoothing: ")
+		for(i <- 0 to CPT.keySet.size - 1){
+		  key = "Lane "+i
+		  for (j <- CPT_total.keySet){
+		      try{
+		        ml_estimate = CPT.get(key).get.get(j).get
+		      }catch{
+		        case e: Exception => {
+		          ml_estimate = 0.0
+		        }
+		      }
+		      
+		      dir = (ml_estimate + (mu * CPT_total.get(j).get./(count_t)))/((count) + mu)
+		      println(key+" "+j+" "+dir)
+		      //check += CPT.get(key).get.get(j).get./(count)
+		  }
+		  // simple validation to check if the probabilities sum to 1
+		  //println("Valid: "+check)
+		  //check = 0.0
+		  println()
+		}
+	}
 	
-	def printCPT(CPT: mutable.HashMap[String, mutable.HashMap[String, Double]], count: Int){
+	def printCPT_ML(CPT: mutable.HashMap[String, mutable.HashMap[String, Double]], count: Int){
 		var key = ""
 		//var check = 0.0
-		println()
+		println("Maximum Likelihood estimates:")
 		for(i <- 0 to CPT.keySet.size - 1){
 		  key = "Lane "+i
 		  for (j <- CPT.get(key).get.keySet){
@@ -97,4 +140,17 @@ class DBN (sim: Simulation) {
 		  println()
 		}
 	}
+	
+	def printCPT_total(count: Int){
+		//var check = 0.0
+		println()
+
+		  for (j <- CPT_total.keySet){
+		      println("total: "+ j +" "+CPT_total.get(j).get./(count))
+		  }
+		  // simple validation to check if the probabilities sum to 1
+		  //println("Valid: "+check)
+		  //check = 0.0
+		  println()
+		}
 }
