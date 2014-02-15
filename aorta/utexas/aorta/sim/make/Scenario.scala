@@ -13,14 +13,15 @@ import utexas.aorta.sim.intersections._
 import Function.tupled
 import scala.collection.mutable
 
-import utexas.aorta.common.{Util, StateWriter, StateReader, AgentID, VertexID, RoadID, cfg}
+import utexas.aorta.common.{Util, StateWriter, StateReader, AgentID, VertexID, RoadID, cfg,
+                            Serializable}
 
 // Array index and agent/intersection ID must correspond. Creator's
 // responsibility.
 case class Scenario(
   name: String, map_fn: String, agents: Array[MkAgent], intersections: Array[MkIntersection],
   system_wallet: SystemWalletConfig, auditor: CongestionType.Value
-) {
+) extends Serializable {
   def graph = Graph.load(map_fn)
   def make_sim() = new Simulation(this)
   def save() {
@@ -68,7 +69,7 @@ case class Scenario(
   }
 
   // Describe the percentages of each thing
-  private def percentages[T](things: Iterable[T]) = {
+  private def percentages[T](things: Iterable[T]) {
     val count = new mutable.HashMap[T, Int]().withDefaultValue(0)
     things.foreach(t => count(t) += 1)
     val total = things.size
@@ -105,13 +106,9 @@ case class Scenario(
   }
 
   def serialize(w: StateWriter) {
-    w.string(name)
-    w.string(map_fn)
-    w.int(agents.size)
-    agents.foreach(a => a.serialize(w))
-    w.int(intersections.size)
-    intersections.foreach(i => i.serialize(w))
-    system_wallet.serialize(w)
+    w.strings(name, map_fn)
+    w.lists(agents, intersections)
+    w.obj(system_wallet)
     w.int(auditor.id)
   }
 
@@ -150,7 +147,7 @@ object Scenario {
 // TODO associate directly with their corresponding class?
 
 case class MkAgent(id: AgentID, birth_tick: Double, start: RoadID, start_dist: Double,
-                   route: MkRoute, wallet: MkWallet) extends Ordered[MkAgent]
+                   route: MkRoute, wallet: MkWallet) extends Ordered[MkAgent] with Serializable
 {
   // break ties by ID
   def compare(other: MkAgent) =
@@ -165,11 +162,10 @@ case class MkAgent(id: AgentID, birth_tick: Double, start: RoadID, start_dist: D
     w.double(birth_tick)
     w.int(start.int)
     w.double(start_dist)
-    route.serialize(w)
-    wallet.serialize(w)
+    w.objs(route, wallet)
   }
 
-  def diff(other: MkAgent) = {
+  def diff(other: MkAgent) {
     Util.assert_eq(id, other.id)
     val d = List(
       Util.diff(birth_tick, other.birth_tick, "spawn time"),
@@ -200,18 +196,15 @@ object MkAgent {
 case class MkRoute(
   strategy: RouteType.Value, orig_router: RouterType.Value, rerouter: RouterType.Value,
   initial_path: List[RoadID], goal: RoadID
-) {
+) extends Serializable {
   def make(sim: Simulation) = Factory.make_route(
     strategy, sim.graph, orig_router, rerouter, sim.graph.get_r(goal),
     initial_path.map(id => sim.graph.get_r(id))
   )
 
   def serialize(w: StateWriter) {
-    w.int(strategy.id)
-    w.int(orig_router.id)
-    w.int(rerouter.id)
-    w.int(initial_path.size)
-    initial_path.foreach(id => w.int(id.int))
+    w.ints(strategy.id, orig_router.id, rerouter.id)
+    w.list_int(initial_path.map(_.int))
     w.int(goal.int)
   }
 }
@@ -223,13 +216,13 @@ object MkRoute {
   )
 }
 
-case class MkWallet(policy: WalletType.Value, budget: Int, priority: Int, bid_ahead: Boolean) {
+case class MkWallet(policy: WalletType.Value, budget: Int, priority: Int, bid_ahead: Boolean)
+  extends Serializable
+{
   def make() = Factory.make_wallet(policy, budget, priority, bid_ahead)
 
   def serialize(w: StateWriter) {
-    w.int(policy.id)
-    w.int(budget)
-    w.int(priority)
+    w.ints(policy.id, budget, priority)
     w.bool(bid_ahead)
   }
 }
@@ -239,11 +232,11 @@ object MkWallet {
 }
 
 case class MkIntersection(id: VertexID, policy: IntersectionType.Value,
-                          ordering: OrderingType.Value)
+                          ordering: OrderingType.Value) extends Serializable
 {
   def make(v: Vertex, sim: Simulation) = new Intersection(v, policy, ordering, sim)
 
-  def diff(other: MkIntersection) = {
+  def diff(other: MkIntersection) {
     Util.assert_eq(id, other.id)
     val d = List(
       Util.diff(policy, other.policy, "policy"),
@@ -255,9 +248,7 @@ case class MkIntersection(id: VertexID, policy: IntersectionType.Value,
   }
 
   def serialize(w: StateWriter) {
-    w.int(id.int)
-    w.int(policy.id)
-    w.int(ordering.id)
+    w.ints(id.int, policy.id, ordering.id)
   }
 }
 
@@ -275,17 +266,15 @@ case class SystemWalletConfig(
   dependency_rate: Int          = 2,
   waiting_rate: Int             = 1,
   ready_bonus: Int              = 5
-) {
+) extends Serializable {
   override def toString =
     s"SystemWalletConfig(thruput_bonus = $thruput_bonus, avail_capacity_threshold = $avail_capacity_threshold, capacity_bonus = $capacity_bonus, dependency_rate = $dependency_rate, waiting_rate = $waiting_rate, ready_bonus = $ready_bonus)"
 
   def serialize(w: StateWriter) {
-    w.int(thruput_bonus)
-    w.int(avail_capacity_threshold)
-    w.int(capacity_bonus)
-    w.int(dependency_rate)
-    w.int(waiting_rate)
-    w.int(ready_bonus)
+    w.ints(
+      thruput_bonus, avail_capacity_threshold, capacity_bonus, dependency_rate, waiting_rate,
+      ready_bonus
+    )
   }
 }
 
@@ -317,7 +306,7 @@ object RouterType extends Enumeration {
 
 object OrderingType extends Enumeration {
   type OrderingType = Value
-  val FIFO, Auction = Value
+  val FIFO, Auction, Pressure = Value
 }
 
 object WalletType extends Enumeration {
@@ -371,6 +360,7 @@ object Factory {
   {
     case OrderingType.FIFO => new FIFO_Ordering[T]()
     case OrderingType.Auction => new AuctionOrdering[T]()
+    case OrderingType.Pressure => new AuctionOrdering[T]()
   }
 
   def make_wallet(enum: WalletType.Value, budget: Int, priority: Int, bid_ahead: Boolean)

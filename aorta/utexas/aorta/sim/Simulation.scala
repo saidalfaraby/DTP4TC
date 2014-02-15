@@ -17,11 +17,9 @@ import utexas.aorta.sim.drivers.Agent
 
 import utexas.aorta.common.{Util, cfg, StateWriter, StateReader, Flags, AgentID, Publisher,
                             VertexID, EdgeID, RoadID, Timer}
-import utexas.aorta.analysis.{RerouteCountMonitor, ArrivalEstimator}
+import utexas.aorta.analysis.RerouteCountMonitor
 
-class Simulation(val scenario: Scenario)
-  extends Publisher[Sim_Event] with AgentManager
-{
+class Simulation(val scenario: Scenario) extends Publisher with AgentManager {
   //////////////////////////////////////////////////////////////////////////////
   // State
   // (All transient, important state is in our constituent traits)
@@ -67,8 +65,6 @@ class Simulation(val scenario: Scenario)
       terminate()
     })
 
-    //new ArrivalEstimator(this)  // TODO enable this once it's stable
-
     return this
   }
 
@@ -77,11 +73,9 @@ class Simulation(val scenario: Scenario)
     w.double(tick)
     w.int(finished_count)
     w.int(agents.size)
-    agents.foreach(a => a.serialize(w))
-    w.int(ready_to_spawn.size)
-    ready_to_spawn.foreach(a => w.int(a.id.int))
-    graph.traversables.foreach(t => t.queue.serialize(w))
-    graph.vertices.foreach(v => v.intersection.policy.serialize(w))
+    agents.foreach(a => w.obj(a))
+    w.list_int(ready_to_spawn.map(_.id.int))
+    w.lists(graph.traversables.map(_.queue), graph.vertices.map(_.intersection.policy))
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -244,9 +238,11 @@ object Simulation {
     val ready_ids = Range(0, num_ready).map(_ => new AgentID(r.int)).toSet
     sim.ready_to_spawn ++=
       sim.scenario.agents.filter(a => ready_ids.contains(a.id)).sortBy(_.birth_tick)
+    r.int // equal to number of traversables
     for (t <- sim.graph.traversables) {
       Queue.unserialize(t.queue, r, sim)
     }
+    r.int // equal to number of vertices
     for (v <- sim.graph.vertices) {
       Policy.unserialize(v.intersection.policy, r, sim)
     }
@@ -266,13 +262,13 @@ trait AgentManager {
   //////////////////////////////////////////////////////////////////////////////
   // Actions
 
-  def spawn_agents(tick: Double) = {
+  def spawn_agents(tick: Double) {
     while (future_spawn.nonEmpty && tick >= future_spawn.head.birth_tick) {
       ready_to_spawn += future_spawn.dequeue
     }
   }
 
-  def insert_agent(a: Agent) = {
+  def insert_agent(a: Agent) {
     Util.assert_eq(agents.contains(a), false)
     agents += a
   }

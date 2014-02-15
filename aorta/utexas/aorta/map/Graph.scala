@@ -26,11 +26,7 @@ class Graph(
   // Meta
 
   def serialize(w: MapStateWriter) {
-    w.double(width)
-    w.double(height)
-    w.double(offX)
-    w.double(offY)
-    w.double(scale)
+    w.doubles(width, height, offX, offY, scale)
     w.int(roads.size)
     roads.foreach(r => r.serialize(w))
     w.int(edges.size)
@@ -68,7 +64,7 @@ object Graph {
 
   // this MUST be set before world_to_gps is called.
   // TODO get rid of this approach once GPS coordinates always retained
-  def set_params(w: Double, h: Double, x: Double, y: Double, s: Double) = {
+  def set_params(w: Double, h: Double, x: Double, y: Double, s: Double) {
     width = w
     height = h
     xoff = x

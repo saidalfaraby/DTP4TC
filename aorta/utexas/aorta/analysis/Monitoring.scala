@@ -19,19 +19,32 @@ class SimSpeedMonitor(sim: Simulation, fn: String) {
   private val start = System.currentTimeMillis
   private var last_record = start
 
-  sim.listen("sim_speed", _ match {
-    case e: EV_Heartbeat => {
-      val now = System.currentTimeMillis
-      if (now - last_record >= freq_ms) {
-        record((now - start) / 1000, e.tick)
-        last_record = now
-      }
+  sim.listen(classOf[EV_Heartbeat], _ match { case e: EV_Heartbeat => {
+    val now = System.currentTimeMillis
+    if (now - last_record >= freq_ms) {
+      record((now - start) / 1000, e.tick)
+      last_record = now
     }
-    case _ =>
-  })
+  }})
 
   private def record(realtime: Long, tick: Double) {
     file.println(s"$realtime $tick")
+  }
+}
+
+// Dump a file plotting number of agents done per time
+class AgentProgressMonitor(sim: Simulation, fn: String) {
+  // Don't have to explicitly close the file when simulation finishes
+  // TODO fn library. denote what we're running on.
+  private val file = new IO(None).output_file("agent_progress_" + fn)
+  file.println("sim_tick agents_done")
+
+  sim.listen(classOf[EV_Heartbeat], _ match { case e: EV_Heartbeat => {
+    record(e.tick, e.done_agents)
+  }})
+
+  private def record(tick: Double, done_agents: Int) {
+    file.println(s"$tick $done_agents")
   }
 }
 
@@ -41,7 +54,7 @@ class RerouteCountMonitor(sim: Simulation) {
   var unrealizable_count = 0
   def discretionary_count = astar_count - unrealizable_count
 
-  sim.listen("reroute_count", _ match {
+  sim.listen(classOf[EV_Reroute], _ match {
     case EV_Reroute(_, _, _, method, unrealizable, _) => method match {
       case x if x != RouterType.Fixed && x != RouterType.Unusable => {
         astar_count += 1

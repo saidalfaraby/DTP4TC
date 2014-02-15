@@ -7,12 +7,11 @@ package utexas.aorta.sim.intersections
 import scala.annotation.tailrec
 import scala.collection.mutable
 import Function.tupled
-
 import utexas.aorta.map.{Turn, Vertex, Edge}
-import utexas.aorta.sim.{EV_Signal_Change, Simulation, EV_IntersectionOutcome}
+import utexas.aorta.sim.{EV_Signal_Change, Simulation, EV_IntersectionOutcome, EV_IntersectionOutcomeWin, EV_IntersectionTickets}
 import utexas.aorta.sim.make.{IntersectionType, OrderingType}
-
 import utexas.aorta.common.{Util, cfg, StateWriter, StateReader}
+import utexas.aorta.sim.EV_IntersectionOutcome
 
 // A phase-based light.
 class SignalPolicy(
@@ -62,15 +61,27 @@ class SignalPolicy(
       // In auctions, we may not have a viable next phase at all...
       ordering.choose(candidates, request_queue, this) match {
         case Some(p) => {
+          
+          sim.publish(
+              EV_IntersectionTickets(policy_type, request_queue)
+          )
           sim.publish(
             EV_IntersectionOutcome(policy_type, request_queue.filter(t => !p.has(t.turn)))
           )
+          
+          // Added in order to test how it works
+          sim.publish(
+              EV_IntersectionOutcomeWin(policy_type, request_queue.filter(t => p.has(t.turn)))
+          )
+          
           current_phase = p
           phase_order = phase_order.filter(phase => phase != p)
           phase_order += p
 
           started_at = sim.tick
-
+          
+          //println(current_phase.turns.toSet.size)
+          //println(policy_type)
           sim.publish(EV_Signal_Change(current_phase.turns.toSet))
         }
         case None =>  // shouldn't happen...

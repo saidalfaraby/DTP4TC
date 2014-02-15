@@ -12,7 +12,6 @@
 - reservation protocol should actually be faster. opportunistic.
   - michael's refined notion of turn conflict
 - unprotected left, right turn on red, better stop sign
-- if easy: backpressure lights
 - optimize fixpoints
 
 # Zones #
@@ -43,14 +42,12 @@
 - rename edges as lanes? policy -> controller? vertex -> junction? agent -> driver?
 - hard to have multiple sims due to objects with state: Graph (norm coords), system wallets,
   AgentMap, ReplayDiffScheme, GUI
-- https://github.com/scala/pickling
 - reduce vars and publics and mutable collections
 - distance/time types
 - merge headless/gui clients
 
 # Experiment framework #
 
-- lightweight experiments... cmdline flag to record trip time, then compare multiple files
 - mode to run many things locally, in parallel
 - better R templates, or another solution (gnuplot?)
 - port old experiments
@@ -129,7 +126,7 @@
 
 # Performance: parallelization #
 
-- PARALLEL DETERMINISM INVALID: queue avail_slots
+- agent react() is fine except for events, maybe
 
 # Map making #
 

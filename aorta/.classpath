@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="utexas/aorta"/>
+	<classpathentry excluding="utexas/aorta/contrib/old/|maps/|osm/|project/|project/project/|project/project/target/|project/target/|project/target/streams/|project/target/streams/$global/|project/target/streams/$global/$global/|project/target/streams/$global/$global/$global/|project/target/streams/$global/ivyConfiguration/|project/target/streams/$global/ivyConfiguration/$global/|project/target/streams/$global/ivySbt/|project/target/streams/$global/ivySbt/$global/|project/target/streams/$global/projectDescriptors/|project/target/streams/$global/projectDescriptors/$global/|project/target/streams/$global/update/|project/target/streams/$global/update/$global/|project/target/streams/compile/|project/target/streams/compile/$global/|scenarios/|target/|target/pack/|target/pack/bin/|target/pack/lib/|target/streams/|target/streams/$global/|target/streams/$global/$global/|target/streams/$global/$global/$global/|target/streams/$global/ivyConfiguration/|target/streams/$global/ivyConfiguration/$global/|target/streams/$global/ivySbt/|target/streams/$global/ivySbt/$global/|target/streams/$global/pack/|target/streams/$global/pack/$global/|target/streams/$global/projectDescriptors/|target/streams/$global/projectDescriptors/$global/|target/streams/$global/update/|target/streams/$global/update/$global/|target/streams/compile/|target/streams/compile/$global/|utexas/aorta/|utexas/|tools/cloud/|tools/|reports/" kind="src" path=""/>
+	<classpathentry kind="src" path="utexas/aorta/contrib/old"/>
+	<classpathentry excluding="contrib/old/" kind="src" path="utexas/aorta"/>
 	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_COMPILER_CONTAINER"/>
 	<classpathentry kind="output" path="target/scala-2.11.0-M4/classes"/>
 </classpath>

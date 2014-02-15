@@ -35,6 +35,13 @@ final case class EV_Breakpoint(focus: Agent) extends Sim_Event
 final case class EV_Signal_Change(greens: Set[Turn]) extends Sim_Event
 final case class EV_IntersectionOutcome(intersection: IntersectionType.Value, losers: List[Ticket])
   extends Sim_Event
+ 
+// added in order to test how it works
+final case class EV_IntersectionOutcomeWin(intersection:IntersectionType.Value, winners: List[Ticket])
+  extends Sim_Event
+  
+final case class EV_IntersectionTickets(intersection: IntersectionType.Value, all: List[Ticket]) extends Sim_Event
+  
 final case class EV_TurnFinished(
   agent: Agent, vert: Vertex, req_tick: Double, accept_tick: Double, done_tick: Double,
   cost_paid: Double

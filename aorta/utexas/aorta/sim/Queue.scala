@@ -12,10 +12,10 @@ import Function.tupled
 import utexas.aorta.map.{Edge, Traversable, Position}
 import utexas.aorta.sim.drivers.Agent
 
-import utexas.aorta.common.{Util, cfg, Physics, StateWriter, StateReader}
+import utexas.aorta.common.{Util, cfg, Physics, StateWriter, StateReader, Serializable}
 
 // Reason about collisions on edges and within individual turns.
-class Queue(t: Traversable) {
+class Queue(t: Traversable) extends Serializable {
   //////////////////////////////////////////////////////////////////////////////
   // State
 
@@ -30,6 +30,10 @@ class Queue(t: Traversable) {
   // turns.
   private var avail_slots = capacity
 
+  // Round down. How many drivers max could squish together here? Minimum 1,
+  // short edges just support 1.
+  lazy val capacity = math.max(1, math.floor(t.length / separation_dist).toInt)
+
   //////////////////////////////////////////////////////////////////////////////
   // Meta
   
@@ -38,8 +42,7 @@ class Queue(t: Traversable) {
     w.int(avail_slots)
     // TODO some of these feel transient, but eh.
     w.double(last_tick)
-    w.int(prev_agents.size)
-    prev_agents.foreach(a => w.int(a.id.int))
+    w.list_int(prev_agents.map(_.id.int).toList)
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -97,7 +100,7 @@ class Queue(t: Traversable) {
     for ((a1, a2) <- alist.zip(alist.tail)) {
       if (a1.at.dist < a2.at.dist + cfg.follow_dist) {
         Util.log(s"It's ${a1.sim.tick}")
-        Util.log(s"LCing? ${a1.old_lane} (${a1.lanechange_dist_left}), ${a2.old_lane} (${a2.lanechange_dist_left})")
+        Util.log(s"LCing? ${a1.lc.old_lane} (${a1.lc.lanechange_dist_left}), ${a2.lc.old_lane} (${a2.lc.lanechange_dist_left})")
         throw new Exception(
           s"$a2 too close to $a1 on $t (" + (a1.at.dist - a2.at.dist) + ")"
         )
@@ -137,7 +140,7 @@ class Queue(t: Traversable) {
     return Position(t, dist)
   }
 
-  def exit(a: Agent, old_dist: Double) = {
+  def exit(a: Agent, old_dist: Double) {
     start_step(a)  // lazily, if needed
 
     Util.assert_eq(agents.get(-old_dist), a)
@@ -189,9 +192,6 @@ class Queue(t: Traversable) {
   def separation_dist =
     cfg.follow_dist + Physics.max_next_dist_plus_stopping(0.0, t.speed_limit) +
     Physics.max_next_dist(0.0, t.speed_limit)
-  // Round down. How many drivers max could squish together here? Minimum 1,
-  // short edges just support 1.
-  def capacity = math.max(1, math.floor(t.length / separation_dist).toInt)
   // How many people can travel at the speed limit comfortably? This is generous, since cars are
   // planning for a worst-case where the leader slams on their brakes
   def freeflow_capacity =
@@ -252,7 +252,6 @@ object Queue {
   def unserialize(queue: Queue, r: StateReader, sim: Simulation) {
     queue.avail_slots = r.int
     queue.last_tick = r.double
-    val prev_agents_size = r.int
-    queue.prev_agents ++= Range(0, prev_agents_size).map(_ => sim.get_agent(r.int).get)
+    queue.prev_agents ++= Range(0, r.int).map(_ => sim.get_agent(r.int).get)
   }
 }

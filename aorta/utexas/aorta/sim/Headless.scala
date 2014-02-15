@@ -5,16 +5,23 @@
 package utexas.aorta.sim
 
 import utexas.aorta.ui.GUIDebugger
-import utexas.aorta.analysis.{SimSpeedMonitor, ReplayReader, ReplayWriter}
+import utexas.aorta.analysis.{SimSpeedMonitor, ReplayReader, ReplayWriter, AgentProgressMonitor,
+                              REPLDebugger}
+import utexas.aorta.learning.DBN
 
 import utexas.aorta.common.{Util, Timer, cfg, Flags}
 
 object Headless {
   def main(args: Array[String]): Unit = {
     val sim = Util.process_args(args)
+    val dbn = new DBN(sim)
     // TODO move elsewhere?
     Flags.string("--benchmark") match {
       case Some(fn) => new SimSpeedMonitor(sim, fn)
+      case None =>
+    }
+    Flags.string("--done_time") match {
+      case Some(fn) => new AgentProgressMonitor(sim, fn)
       case None =>
     }
     Flags.string("--record") match {
@@ -25,17 +32,15 @@ object Headless {
       case Some(fn) => new ReplayReader(sim, Util.reader(fn))
       case None =>
     }
-    val gui = new GUIDebugger(sim)
+    new GUIDebugger(sim)
+    new REPLDebugger(sim)
 
     // Print an update every second
     var last_tick = sim.tick
-    sim.listen("headless", _ match {
-      case e: EV_Heartbeat => {
-        Util.log("[%.0fx] %s".format(e.tick - last_tick, e.describe))
-        last_tick = e.tick
-      }
-      case _ =>
-    })
+    sim.listen(classOf[EV_Heartbeat], _ match { case e: EV_Heartbeat => {
+      Util.log("[%.0fx] %s".format(e.tick - last_tick, e.describe))
+      last_tick = e.tick
+    }})
 
     Util.log("Starting simulation with time-steps of " + cfg.dt_s + "s")
     val t = Timer("headless simulation")

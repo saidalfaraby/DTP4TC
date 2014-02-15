@@ -4,7 +4,6 @@
 
 package utexas.aorta.sim.intersections
 
-import utexas.aorta.map.Turn
 import utexas.aorta.sim.{Simulation, EV_IntersectionOutcome}
 import utexas.aorta.sim.make.IntersectionType
 
@@ -24,12 +23,10 @@ class ReservationPolicy(intersection: Intersection,
     super.serialize(w)
     interruption match {
       case Some(ticket) => {
-        w.int(ticket.a.id.int)
-        w.int(ticket.turn.id.int)
+        w.ints(ticket.a.id.int, ticket.turn.id.int)
       }
       case None => {
-        w.int(-1)
-        w.int(-1)
+        w.ints(-1, -1)
       }
     }
   }
@@ -81,7 +78,7 @@ class ReservationPolicy(intersection: Intersection,
             ticket.is_interruption = true
             unqueue(ticket)
             // Furthermore, grab a spot for them and keep it!
-            ticket.turn.to.queue.allocate_slot
+            ticket.turn.to.queue.allocate_slot()
             return
           }
         }

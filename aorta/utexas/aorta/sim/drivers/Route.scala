@@ -12,12 +12,12 @@ import utexas.aorta.map.{Edge, Road, Traversable, Turn, Vertex, Graph, Router}
 import utexas.aorta.sim.{EV_Transition, EV_Reroute}
 import utexas.aorta.sim.make.{RouteType, RouterType, Factory}
 
-import utexas.aorta.common.{Util, cfg, StateWriter, StateReader, TurnID}
+import utexas.aorta.common.{Util, cfg, StateWriter, StateReader, TurnID, Serializable}
 
 // TODO maybe unify the one class with the interface, or something. other routes were useless.
 
 // Get a client to their goal by any means possible.
-abstract class Route(val goal: Road) {
+abstract class Route(val goal: Road) extends Serializable {
   //////////////////////////////////////////////////////////////////////////////
   // Transient state
 
@@ -28,8 +28,7 @@ abstract class Route(val goal: Road) {
   // Meta
 
   def serialize(w: StateWriter) {
-    w.int(route_type.id)
-    w.int(goal.id.int)
+    w.ints(route_type.id, goal.id.int)
   }
 
   protected def unserialize(r: StateReader, graph: Graph) {}
@@ -54,7 +53,8 @@ abstract class Route(val goal: Road) {
   // have to always return the same answer.
   def pick_turn(e: Edge): Turn
   // Prescribe the final lane on this road to aim for. We should be able to spazz around in
-  // our answer here. True if e doesn't lead to next road.
+  // our answer here. True if e doesn't already lead to next road, aka, the final lane is more than
+  // recommended.
   def pick_final_lane(e: Edge): (Edge, Boolean)
   // Just mark that we don't have to take the old turn prescribed
   def reroute(at: Edge) {}
@@ -93,7 +93,7 @@ class PathRoute(goal: Road, orig_router: Router, private var rerouter: Router) e
   // to re-route.
   private var path: List[Road] = Nil
   private val chosen_turns = new mutable.ImmutableMapAdaptor(new immutable.TreeMap[Edge, Turn]())
-  private val reroutes_requested = new mutable.HashSet[Edge]()
+  private val reroutes_requested = new mutable.TreeSet[Edge]()
 
   //////////////////////////////////////////////////////////////////////////////
   // Meta
@@ -104,15 +104,12 @@ class PathRoute(goal: Road, orig_router: Router, private var rerouter: Router) e
     w.int(rerouter.router_type.id)
     // We can't tell when we last rerouted given less state; store the full
     // path.
-    w.int(path.size)
-    path.foreach(step => w.int(step.id.int))
+    w.list_int(path.map(_.id.int))
     w.int(chosen_turns.size)
     chosen_turns.foreach(tupled((e, t) => {
-      w.int(e.id.int)
-      w.int(t.id.int)
+      w.ints(e.id.int, t.id.int)
     }))
-    w.int(reroutes_requested.size)
-    reroutes_requested.foreach(e => w.int(e.id.int))
+    w.list_int(reroutes_requested.map(_.id.int).toList)
   }
 
   override def unserialize(r: StateReader, graph: Graph) {
@@ -129,7 +126,7 @@ class PathRoute(goal: Road, orig_router: Router, private var rerouter: Router) e
   //////////////////////////////////////////////////////////////////////////////
   // Actions
 
-  def transition(from: Traversable, to: Traversable) = {
+  def transition(from: Traversable, to: Traversable) {
     (from, to) match {
       case (e: Edge, _: Turn) => {
         chosen_turns -= e
@@ -146,7 +143,7 @@ class PathRoute(goal: Road, orig_router: Router, private var rerouter: Router) e
       }
       case _ =>
     }
-    owner.sim.publish(EV_Transition(owner, from, to))
+    owner.sim.publish(EV_Transition(owner, from, to), owner)
   }
 
   override def reroute(at: Edge) {
@@ -231,6 +228,8 @@ class PathRoute(goal: Road, orig_router: Router, private var rerouter: Router) e
     // Pick the lane closest to the current
     //return candidates.minBy(e => math.abs(from.lane_num - e.lane_num))
 
+    // TODO lookahead a bit to lane-change early
+
     // Discretionary lane-changing: pick the lane with the fewest people ahead of us
     return (candidates.minBy(e => owner.num_ahead(e)), !candidates.contains(from))
   }
@@ -238,6 +237,14 @@ class PathRoute(goal: Road, orig_router: Router, private var rerouter: Router) e
   // Returns the turn we must make from at to continue down the new route
   private def perform_reroute(at: Edge, slice_before: List[Road], must_reroute: Boolean): Turn = {
     reroutes_requested -= at
+
+    // TODO only do rerouting of the ENTIRE path
+    // For now, don't do optional rerouting in the middle of the path
+    if (!must_reroute && slice_before.nonEmpty) {
+      val next_road = path.span(r => r != at.road)._2.tail.head
+      return at.next_turns.find(t => t.to.road == next_road).get
+    }
+
     // Re-route, but start from a source we can definitely reach without
     // lane-changing.
     val choice = at.next_turns.maxBy(t => t.to.queue.percent_avail)
@@ -264,7 +271,7 @@ class PathRoute(goal: Road, orig_router: Router, private var rerouter: Router) e
 
   def route_type = RouteType.Path
   def dump_info() {
-    Util.log(s"Static route to $goal using $path")
+    Util.log(s"Path route to $goal using $path")
   }
 
   def roads = path.toSet

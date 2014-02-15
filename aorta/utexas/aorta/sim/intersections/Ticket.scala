@@ -8,9 +8,9 @@ import utexas.aorta.map.{Turn, Graph}
 import utexas.aorta.sim.EV_TurnFinished
 import utexas.aorta.sim.drivers.Agent
 
-import utexas.aorta.common.{Util, cfg, StateWriter, StateReader, TurnID}
+import utexas.aorta.common.{Util, cfg, StateWriter, StateReader, TurnID, Serializable}
 
-class Ticket(val a: Agent, val turn: Turn) extends Ordered[Ticket] {
+class Ticket(val a: Agent, val turn: Turn) extends Ordered[Ticket] with Serializable {
   //////////////////////////////////////////////////////////////////////////////
   // State
   
@@ -33,10 +33,7 @@ class Ticket(val a: Agent, val turn: Turn) extends Ordered[Ticket] {
   def serialize(w: StateWriter) {
     // Agent is implied, since we belong to them
     w.int(turn.id.int)
-    w.double(req_tick)
-    w.double(accept_tick)
-    w.double(done_tick)
-    w.double(cost_paid)
+    w.doubles(req_tick, accept_tick, done_tick, cost_paid)
     w.bool(is_interruption)
     w.double(waiting_since)
   }
@@ -50,7 +47,7 @@ class Ticket(val a: Agent, val turn: Turn) extends Ordered[Ticket] {
     // TODO this messes up parallelism again...
     if (!is_interruption) {
       // When we became the interrupting ticket, we grabbed the slot.
-      turn.to.queue.allocate_slot
+      turn.to.queue.allocate_slot()
     }
   }
 
@@ -68,7 +65,7 @@ class Ticket(val a: Agent, val turn: Turn) extends Ordered[Ticket] {
     val target = turn.to
 
     // They might not finish LCing before an agent in the new or old lane stalls.
-    if (a.is_lanechanging) {
+    if (a.lc.is_lanechanging) {
       return true
     }
 

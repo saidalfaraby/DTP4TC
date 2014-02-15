@@ -27,7 +27,7 @@ object ModScenarioTool {
   }
 
   // TODO split it up a bit for readability
-  def main(arg_array: Array[String]) = {
+  def main(arg_array: Array[String]) {
     if (arg_array.size == 2) {
       val Array(a1, a2) = arg_array
       Util.log(s"Diffing $a1 with $a2\n")
@@ -204,7 +204,7 @@ object ModScenarioTool {
         }
         case "--auditor" => {
           val auditor = CongestionType.withName(shift_args)
-          Util.log("Changing link auditor: $auditor")
+          Util.log(s"Changing link auditor: $auditor")
           s = s.copy(auditor = auditor)
         }
         case _ => dump_usage

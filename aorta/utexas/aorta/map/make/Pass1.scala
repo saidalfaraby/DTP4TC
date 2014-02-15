@@ -17,7 +17,7 @@ class Pass1(fn: String) {
   // How many OSM roads reference a point?
   private val node_uses = new mutable.HashMap[OsmNode, Int]()
 
-  osm.listen("pass1", _ match {
+  osm.listen(classOf[EV_OSM], _ match {
     case EV_OSM(node: OsmNode) => node_uses(node) = 0
     case EV_OSM(way: OsmWay) if !skip(way) => {
       way.refs.foreach(node => node_uses(node) += 1)
@@ -97,7 +97,7 @@ object Pass1 {
     "multipolygon",   // WHY ARE THERE SO MANY
     "power",          // AHHH DON'T SHOCK ME
     // cycleway is marked in addition to being highway=tertiary... geez.
-    "path", "footway", "bridleway", "steps", "pedestrian", "bus_guideway"
+    "cycleway", "path", "footway", "bridleway", "steps", "pedestrian", "bus_guideway"
     // TODO cemeteries in Houston, real roads in BTR, alleys in ATX...
     // they all cause problems when they have no name:
     // "service"

@@ -11,6 +11,7 @@ import javax.swing.WindowConstants
 import java.io.File
 
 import utexas.aorta.sim.{Simulation, EV_Heartbeat}
+import utexas.aorta.learning.DBN
 import utexas.aorta.common.{Util, cfg}
 
 object Status_Bar {
@@ -103,15 +104,16 @@ object GUI extends SimpleSwingApplication {
   private var headless = false
   var closed = false
 
-  override def main(args: Array[String]) = {
+  override def main(args: Array[String]) {
     val sim = Util.process_args(args)
+    val dbn = new DBN(sim)
     canvas_2d = new MapCanvas(sim)
     // TODO doesnt start drawn correctly!
     canvas_2d.repaint
     super.main(args)
   }
 
-  def launch_from_headless(canvas: MapCanvas) = {
+  def launch_from_headless(canvas: MapCanvas) {
     headless = true
     canvas_2d = canvas
     super.main(Array())
@@ -119,7 +121,7 @@ object GUI extends SimpleSwingApplication {
 
   def top = new MainFrame {
     title = "AORTA"
-    preferredSize = new Dimension(800, 600)
+    preferredSize = new Dimension(600, 400)
     peer.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
 
     override def closeOperation() {
@@ -218,30 +220,27 @@ class GUIDebugger(sim: Simulation) {
   private val gui_signal = new File(".headless_gui")
   private var gui: Option[MapCanvas] = None
 
-  sim.listen("gui-debugger", _ match {
-    case e: EV_Heartbeat => {
-      if (gui_signal.exists) {
-        gui_signal.delete()
-        gui match {
-          case Some(ui) => {
-            if (GUI.closed) {
-              println("Resuming the GUI...")
-              GUI.top.open()
-              GUI.closed = false
-            }
-          }
-          case None => {
-            println("Launching the GUI...")
-            gui = Some(new MapCanvas(sim, headless = true))
-            GUI.launch_from_headless(gui.get)
+  sim.listen(classOf[EV_Heartbeat], _ match { case e: EV_Heartbeat => {
+    if (gui_signal.exists) {
+      gui_signal.delete()
+      gui match {
+        case Some(ui) => {
+          if (GUI.closed) {
+            println("Resuming the GUI...")
+            GUI.top.open()
+            GUI.closed = false
           }
         }
-      }
-      gui match {
-        case Some(ui) if !GUI.closed => ui.handle_ev(EV_Action("step"))
-        case _ =>
+        case None => {
+          println("Launching the GUI...")
+          gui = Some(new MapCanvas(sim, headless = true))
+          GUI.launch_from_headless(gui.get)
+        }
       }
     }
-    case _ =>
-  })
+    gui match {
+      case Some(ui) if !GUI.closed => ui.handle_ev(EV_Action("step"))
+      case _ =>
+    }
+  }})
 }

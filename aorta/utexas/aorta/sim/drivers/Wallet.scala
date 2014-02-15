@@ -8,13 +8,13 @@ import utexas.aorta.sim.{EV_Transition, EV_Reroute}
 import utexas.aorta.sim.make.{WalletType, IntersectionType, OrderingType, Factory,
                               SystemWalletConfig}
 import utexas.aorta.map.{Turn, Vertex}
-import utexas.aorta.sim.intersections.{Ticket, Policy, Phase, ReservationPolicy, SignalPolicy}
+import utexas.aorta.sim.intersections.{Ticket, Policy, Phase}
 
-import utexas.aorta.common.{Util, cfg, StateReader, StateWriter}
+import utexas.aorta.common.{Util, cfg, StateReader, StateWriter, Serializable}
 
 // Express an agent's preferences of trading between time and cost.
 // TODO dont require an agent, ultimately
-abstract class Wallet(initial_budget: Int, val priority: Int) {
+abstract class Wallet(initial_budget: Int, val priority: Int) extends Serializable {
   //////////////////////////////////////////////////////////////////////////////
   // Transient state
 
@@ -37,10 +37,8 @@ abstract class Wallet(initial_budget: Int, val priority: Int) {
   // Meta
 
   def serialize(w: StateWriter) {
-    w.int(wallet_type.id)
     // TODO initial budget vs current... will it matter?
-    w.int(budget)
-    w.int(priority)
+    w.ints(wallet_type.id, budget, priority)
     w.int(tooltip.size)
     tooltip.foreach(line => w.string(line))
     w.bool(dark_tooltip)
@@ -55,7 +53,7 @@ abstract class Wallet(initial_budget: Int, val priority: Int) {
   //////////////////////////////////////////////////////////////////////////////
   // Actions
 
-  def spend(amount: Int, ticket: Ticket) = {
+  def spend(amount: Int, ticket: Ticket) {
     Util.assert_ge(budget, amount)
     budget -= amount
     ticket.cost_paid += amount
@@ -130,7 +128,7 @@ class StaticWallet(initial_budget: Int, p: Int)
   //////////////////////////////////////////////////////////////////////////////
   // Actions
 
-  override def spend(amount: Int, ticket: Ticket) = {
+  override def spend(amount: Int, ticket: Ticket) {
     Util.assert_ge(budget, amount)
     ticket.cost_paid = amount
   }
@@ -194,16 +192,14 @@ class FairWallet(initial_budget: Int, p: Int, initial_bid_ahead: Boolean)
 
   override def setup(agent: Agent) {
     super.setup(agent)
-    agent.sim.listen("fair_wallet", _ match {
+    agent.sim.listen(classOf[EV_Reroute], _ match {
       case EV_Reroute(a, path, _, _, _, _) if a == owner => {
         total_weight = path.map(r => weight(r.to)).sum
       }
-      case EV_Transition(a, from, to) if a == owner => to match {
-        case t: Turn => {
-          total_weight -= weight(t.vert)
-        }
-        case _ =>
-      }
+      case _ =>
+    })
+    agent.sim.listen(classOf[EV_Transition], owner, _ match {
+      case EV_Transition(a, from, to: Turn) => total_weight -= weight(to.vert)
       case _ =>
     })
   }
