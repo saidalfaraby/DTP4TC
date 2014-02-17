@@ -27,38 +27,52 @@ class DBN (sim: Simulation) {
 	val high_ratioau = 5
 	val high_delay = 100
 	private var count = 1
-	var CPT_per_lane = new mutable.HashMap[String, mutable.HashMap[String, Double]]
-	var CPT_total = new mutable.HashMap[String, Double]
+	var CPT_per_lane = mutable.Map[String, mutable.Map[String, Double]]()
+	var CPT_total = mutable.Map[String, Double]().withDefaultValue(0.0)
 	private var key = ""
 	private var freq = 0.0
-	var CPT = new mutable.HashMap[String, Double]()
-
+	var CPT = mutable.Map[String, Double]().withDefaultValue(0.0)
+	
+	var location = List("South", "North", "West", "East")
 	// init hashmap for the CPT's of each lane
 	for(i <- 0 to state.discrete_traffic.length - 1)
-		CPT_per_lane.put("Lane "+i, CPT.clone())
+		CPT_per_lane.put("Lane "+location(i), CPT.clone())
 	
 	
 	// query for stats 
 	val check_stats = new Thread(new Runnable {
 		def run() {
 		    var previous_traffic = state.discrete_traffic.clone()
+		    var previous_actions = state.actions_per_lane.clone()
 			while(true){
+			    
+			    
+			    
 				//println("Average_losers: " + state.avg_losers)
 				//println("Ratio au: " + state.ratio_au)
 				//println("Average Delay: " + state.avg_delay)
-				print("Cars present: ")
+				
+			    print("Cars present: ")
 				state.print_carsPresent()
 				print("Lane traffic: ")
 				state.print_traffic()
-				updateCPT(previous_traffic)
-				previous_traffic = state.discrete_traffic.clone()  
-				state.reset_carsPresent()
+				
+				//updateCPT(previous_traffic)
+				updateCPT(previous_traffic, previous_actions)
+				updateCPT_action(previous_actions)
+				previous_traffic = state.discrete_traffic.clone()
+				previous_actions = state.actions_per_lane.clone()
+				
+				
+				//println(state.actions_per_lane)
 				printCPT_ML(CPT_per_lane, count)
-				printCPT_Dir(CPT_per_lane, count, count * 8, count.toFloat/8)
-				printCPT_total(count*8)
+				//printCPT_Dir(CPT_per_lane, count, count * state.discrete_traffic.size, count.toFloat/state.discrete_traffic.size)
+				//printCPT_total(count*state.discrete_traffic.size)
+				
 				count += 1
 				//printCPT(CPT)
-				Thread.sleep(3000)
+				state.reset_carsPresent()
+				Thread.sleep(1500)
 			}
 		}
 		
@@ -66,12 +80,14 @@ class DBN (sim: Simulation) {
 	
 	check_stats.start()
 	
-	
+	/*
 	def updateCPT(previous_traffic: Array[String]){
 			for( i <- 0 to state.discrete_traffic.length -1){
 				      //CPT = CPT_per_lane.getOrElseUpdate("Lane"+i, CPT.clone())
-				      CPT = CPT_per_lane.get("Lane "+i).get
+				      CPT = CPT_per_lane.get("Lane "+location(i)).get
 				      key = previous_traffic(i)+" "+state.discrete_traffic(i)
+				      
+				      
 				      try{
 				             
 				    		 freq = CPT.get(key).get.+(1.0)
@@ -96,6 +112,38 @@ class DBN (sim: Simulation) {
 				}
 	}
 	
+	*/
+
+	
+	def updateCPT_action(previous_actions: mutable.HashMap[String, List[Edge]]){
+	   var key2 = ""
+	     for( i<- 0 to state.discrete_traffic.length -1){
+		       CPT = CPT_per_lane.get("Lane "+location(i)).get
+		       key2 = "P("+state.actions_per_lane.getOrElse(location(i), List()).toString()+"_(t+1)|"+previous_actions.getOrElse(location(i), List()).toString()+"_(t),"+state.discrete_traffic(i)+"_(t+1))"
+		       
+		       CPT(key2) += 1.0
+		       
+		       CPT_total(key2) += 1.0
+		    
+		    }
+	   
+	}
+	
+	def updateCPT(previous_traffic: Array[String], previous_actions: mutable.HashMap[String, List[Edge]] ){
+		      
+			for( i <- 0 to state.discrete_traffic.length -1){
+				      CPT = CPT_per_lane.get("Lane "+location(i)).get
+				      key = "P("+state.discrete_traffic(i)+"_(t+1)|"+previous_traffic(i)+"_(t),"+previous_actions.getOrElse(location(i), List()).toString()+"_(t))"
+				      
+				      
+				      CPT(key) += 1.0
+				      
+				      CPT_total(key) += 1.0
+
+				      
+				}
+	}
+	
 	def printCPT_Dir(CPT: mutable.HashMap[String, mutable.HashMap[String, Double]], count: Int, count_t: Int, mu: Double){
 		var key = ""
 		var dir = 0.0
@@ -103,8 +151,8 @@ class DBN (sim: Simulation) {
 		//var check = 0.0
 		println("Estimates with Dirichlet prior smoothing: ")
 		for(i <- 0 to CPT.keySet.size - 1){
-		  key = "Lane "+i
-		  for (j <- CPT_total.keySet){
+		  key = "Lane "+location(i)
+		  for (j <- CPT_total.keySet.toList.sorted){
 		      try{
 		        ml_estimate = CPT.get(key).get.get(j).get
 		      }catch{
@@ -114,7 +162,7 @@ class DBN (sim: Simulation) {
 		      }
 		      
 		      dir = (ml_estimate + (mu * CPT_total.get(j).get./(count_t)))/((count) + mu)
-		      println(key+" "+j+" "+dir)
+		      println(key+": "+j+" "+dir)
 		      //check += CPT.get(key).get.get(j).get./(count)
 		  }
 		  // simple validation to check if the probabilities sum to 1
@@ -124,14 +172,16 @@ class DBN (sim: Simulation) {
 		}
 	}
 	
-	def printCPT_ML(CPT: mutable.HashMap[String, mutable.HashMap[String, Double]], count: Int){
+	def printCPT_ML(CPT: mutable.Map[String, mutable.Map[String, Double]], count: Int){
 		var key = ""
 		//var check = 0.0
 		println("Maximum Likelihood estimates:")
 		for(i <- 0 to CPT.keySet.size - 1){
-		  key = "Lane "+i
-		  for (j <- CPT.get(key).get.keySet){
-		      println(key+" "+j+" "+CPT.get(key).get.get(j).get./(count))
+		  key = "Lane "+location(i)
+		  println(key+":")
+		  for (j <- CPT.get(key).get.keySet.toList.sorted){
+			  //println(j+" "+CPT.get(key).get.get(j).get)
+		      println(j+": "+CPT.get(key).get.get(j).get./(count))
 		      //check += CPT.get(key).get.get(j).get./(count)
 		  }
 		  // simple validation to check if the probabilities sum to 1
@@ -143,10 +193,9 @@ class DBN (sim: Simulation) {
 	
 	def printCPT_total(count: Int){
 		//var check = 0.0
-		println()
-
-		  for (j <- CPT_total.keySet){
-		      println("total: "+ j +" "+CPT_total.get(j).get./(count))
+		println("Whole intersection estimates: ")
+		  for (j <- CPT_total.keySet.toList.sorted){ 
+		      println(j +": "+CPT_total.get(j).get./(count))
 		  }
 		  // simple validation to check if the probabilities sum to 1
 		  //println("Valid: "+check)

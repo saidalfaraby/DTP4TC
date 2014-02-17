@@ -3,8 +3,9 @@ package utexas.aorta.learning
 import utexas.aorta.sim.{Simulation, EV_AgentSpawned, EV_Reroute, EV_AgentQuit, EV_TurnFinished, EV_Heartbeat,
                          EV_IntersectionOutcome, EV_IntersectionOutcomeWin, EV_IntersectionTickets, EV_Transition, EV_Signal_Change}
 import utexas.aorta.sim.make.{Scenario, MkAgent, Factory, RouterType}
-import utexas.aorta.map.Turn
+import utexas.aorta.map.{Turn, Edge}
 import utexas.aorta.common.{Util, Timer, cfg, Flags}
+import scala.collection.mutable
 
 class DBNState (sim: Simulation){
   
@@ -17,13 +18,21 @@ class DBNState (sim: Simulation){
   var thres_away = 80.0
   // 2*south, 2*north, 2* west, 2*east
   // south(+1, +0), north(-1, -0), west(+1, +0), east(-1, -0)
-  var cars_present = Array(0,0,0,0,0,0,0,0)
-  // low, high for now
-  var discrete_traffic = Array("low","low","low","low","low","low","low","low") 
+  //var cars_present = Array(0,0,0,0,0,0,0,0)
+  // south, north, west, east
+  var cars_present = Array(0,0,0,0)
+  // low, medium, high for now
+  //var discrete_traffic = Array("low","low","low","low","low","low","low","low") 
+  var discrete_traffic = Array("low","low","low","low")
+  //var previous_traffic = Array("low","low","low","low")
+  
   // 16 binary values, according to traffic lights
   // south +1-> 
-  var traffic_lights = Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+  //var traffic_lights = Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
   private var from = " "
+  
+  var actions_per_lane = new mutable.HashMap[String, List[Edge]]
+  //var previous_actions = new mutable.HashMap[String, List[Edge]]
   //var greens: Set[Turn]
   
   
@@ -82,8 +91,9 @@ class DBNState (sim: Simulation){
        case EV_IntersectionTickets(policy, all) =>
          //println("All tickets: ")
          //all.foreach(ticket => println(ticket))
+         //previous_traffic = discrete_traffic.clone()
          all.foreach(ticket =>{
-          
+           /*
            if (ticket.turn.from.road.dir.toString() == "+" && ticket.turn.from.lane_num.toString == "1" ){
              if (ticket.turn.from.road.name == "South"){
                if(ticket.dist_away < thres_away){
@@ -111,32 +121,36 @@ class DBNState (sim: Simulation){
             	   cars_present(6) += 1
                }
              }
-           }
-           else if (ticket.turn.from.road.dir.toString() == "+" && ticket.turn.from.lane_num.toString == "0"){
+           }*/
+           if (ticket.turn.from.road.dir.toString() == "+" ){//&& ticket.turn.from.lane_num.toString == "0"){
              if (ticket.turn.from.road.name == "South"){
                if(ticket.dist_away < thres_away){
                    //println("+0 south:" + ticket.a.id)
-            	   cars_present(1) += 1
+            	   //cars_present(1) += 1
+                     cars_present(0) += 1
                }
              }
              else if (ticket.turn.from.road.name == "West"){
                if(ticket.dist_away < thres_away){
                    //println("+0 west:" + ticket.a.id)
-            	   cars_present(5) += 1
+            	   //cars_present(5) += 1
+            	   cars_present(2) += 1
                }
              }
            }
-           else if (ticket.turn.from.road.dir.toString() == "-" && ticket.turn.from.lane_num.toString == "0"){
+           else if (ticket.turn.from.road.dir.toString() == "-"){ //&& ticket.turn.from.lane_num.toString == "0"){
              if (ticket.turn.from.road.name == "North"){
                if(ticket.dist_away < thres_away){
                    //println("-0 north:" + ticket.a.id)
-            	   cars_present(3) += 1
+            	   //cars_present(3) += 1
+            	   cars_present(1) += 1
                }
              }
              else if (ticket.turn.from.road.name == "East"){
                if(ticket.dist_away < thres_away){
                    //println("-0 east:" + ticket.a.id)
-            	   cars_present(7) += 1
+            	   //cars_present(7) += 1
+            	   	cars_present(3) += 1
                }
              }
            }
@@ -148,9 +162,9 @@ class DBNState (sim: Simulation){
          
         // reduce to three measurements (low, medium, high)
         for(i <- 0 to cars_present.length - 1){
-           if(cars_present(i) >= 8 && cars_present(i) <= 15)
+           if(cars_present(i) >= 5 && cars_present(i) <= 10)
              discrete_traffic(i) = "medium"
-           else if (cars_present(i) > 15)
+           else if (cars_present(i) > 10)
              discrete_traffic(i) = "high"
          } 
          
@@ -162,9 +176,17 @@ class DBNState (sim: Simulation){
          //println("Winners:"  + winners.size)
      //})
      
-     //sim.listen(classOf[EV_Signal_Change], _ match{
-     //  case f: EV_Signal_Change => println(f.greens)
-     //})
+     sim.listen(classOf[EV_Signal_Change], _ match{
+       case f: EV_Signal_Change => if (f.greens.size >= 4){
+         //println(f.greens.size)
+         //previous_actions = actions_per_lane.clone()
+         f.greens.foreach(green => {
+             //println(green)
+        	 //println(green.leads_to)
+        	 actions_per_lane.put(green.from.road.name, green.leads_to)
+         })
+       }
+     })
      
      def reset_carsPresent(){
       for(i <- 0 to cars_present.length - 1){
