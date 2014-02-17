@@ -66,7 +66,7 @@ class DBN (sim: Simulation) {
 				
 				//println(state.actions_per_lane)
 				printCPT_ML(CPT_per_lane, count)
-				//printCPT_Dir(CPT_per_lane, count, count * state.discrete_traffic.size, count.toFloat/state.discrete_traffic.size)
+				printCPT_Dir(CPT_per_lane, count, count * state.discrete_traffic.size, count.toFloat/state.discrete_traffic.size)
 				//printCPT_total(count*state.discrete_traffic.size)
 				
 				count += 1
@@ -144,7 +144,7 @@ class DBN (sim: Simulation) {
 				}
 	}
 	
-	def printCPT_Dir(CPT: mutable.HashMap[String, mutable.HashMap[String, Double]], count: Int, count_t: Int, mu: Double){
+	def printCPT_Dir(CPT: mutable.Map[String, mutable.Map[String, Double]], count: Int, count_t: Int, mu: Double){
 		var key = ""
 		var dir = 0.0
 		var ml_estimate = 0.0
@@ -152,6 +152,7 @@ class DBN (sim: Simulation) {
 		println("Estimates with Dirichlet prior smoothing: ")
 		for(i <- 0 to CPT.keySet.size - 1){
 		  key = "Lane "+location(i)
+		  println(key+":")
 		  for (j <- CPT_total.keySet.toList.sorted){
 		      try{
 		        ml_estimate = CPT.get(key).get.get(j).get
@@ -162,7 +163,7 @@ class DBN (sim: Simulation) {
 		      }
 		      
 		      dir = (ml_estimate + (mu * CPT_total.get(j).get./(count_t)))/((count) + mu)
-		      println(key+": "+j+" "+dir)
+		      println(j+" "+dir)
 		      //check += CPT.get(key).get.get(j).get./(count)
 		  }
 		  // simple validation to check if the probabilities sum to 1
