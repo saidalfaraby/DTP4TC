@@ -31,7 +31,7 @@ class DBNState (sim: Simulation){
   //var traffic_lights = Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
   private var from = " "
   
-  var actions_per_lane = new mutable.HashMap[String, List[Edge]]
+  var actions = new mutable.HashMap[String, Seq[String]]
   //var previous_actions = new mutable.HashMap[String, List[Edge]]
   //var greens: Set[Turn]
   
@@ -180,11 +180,20 @@ class DBNState (sim: Simulation){
        case f: EV_Signal_Change => if (f.greens.size >= 4){
          //println(f.greens.size)
          //previous_actions = actions_per_lane.clone()
-         f.greens.foreach(green => {
-             //println(green)
-        	 //println(green.leads_to)
-        	 actions_per_lane.put(green.from.road.name, green.leads_to)
-         })
+         //println(f.greens)
+         
+          var action_list: Seq[String] = {
+        	 val result = mutable.ArrayBuffer[String]()
+        			 f.greens.foreach { green =>
+        			 result += green.toString()
+        	 	}
+        	 result
+         }
+         
+         var act = action_list.sortBy(_.toString())
+         
+         actions.put("signals", act)
+
        }
      })
      

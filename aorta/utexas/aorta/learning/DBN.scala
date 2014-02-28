@@ -43,8 +43,10 @@ class DBN (sim: Simulation) {
 	val check_stats = new Thread(new Runnable {
 		def run() {
 		    var previous_traffic = state.discrete_traffic.clone()
-		    var previous_actions = state.actions_per_lane.clone()
-			while(true){
+		    var previous_actions = state.actions.clone()
+		    sim.listen(classOf[EV_Signal_Change], _ match{
+		    	case f: EV_Signal_Change => if (f.greens.size >= 4){
+			//while(true){
 			    
 			    
 			    
@@ -59,9 +61,9 @@ class DBN (sim: Simulation) {
 				
 				//updateCPT(previous_traffic)
 				updateCPT(previous_traffic, previous_actions)
-				updateCPT_action(previous_actions)
+				updateCPT_action(previous_traffic, previous_actions)
 				previous_traffic = state.discrete_traffic.clone()
-				previous_actions = state.actions_per_lane.clone()
+				previous_actions = state.actions.clone()
 				
 				
 				//println(state.actions_per_lane)
@@ -72,9 +74,11 @@ class DBN (sim: Simulation) {
 				count += 1
 				//printCPT(CPT)
 				state.reset_carsPresent()
-				Thread.sleep(1500)
+				//Thread.sleep(1500)
 			}
-		}
+		    }
+		)}
+		//}
 		
 	})
 	
@@ -115,25 +119,30 @@ class DBN (sim: Simulation) {
 	*/
 
 	
-	def updateCPT_action(previous_actions: mutable.HashMap[String, List[Edge]]){
-	   var key2 = ""
-	     for( i<- 0 to state.discrete_traffic.length -1){
+	def updateCPT_action(previous_traffic: Array[String], previous_actions: mutable.HashMap[String, Seq[String]]){
+		 var key2 = ""
+	     key2 = "P("+state.actions.getOrElse("signals", "None").toString()+"_(t+1)|"+previous_actions.getOrElse("signals", "None").toString()+"_(t),"+previous_traffic.toString()+"_(t))"
+	     CPT(key2) += 1.0
+	     CPT_total(key2) += 1.0
+	     
+	     /*
+	      for( i<- 0 to state.discrete_traffic.length -1){
 		       CPT = CPT_per_lane.get("Lane "+location(i)).get
-		       key2 = "P("+state.actions_per_lane.getOrElse(location(i), List()).toString()+"_(t+1)|"+previous_actions.getOrElse(location(i), List()).toString()+"_(t),"+state.discrete_traffic(i)+"_(t+1))"
+		       key2 = "P("+state.actions.get("signals").toString()+"_(t+1)|"+previous_actions.getOrElse(location(i), List()).toString()+"_(t),"+previous_traffic(i)+"_(t))"
 		       
 		       CPT(key2) += 1.0
 		       
 		       CPT_total(key2) += 1.0
 		    
-		    }
+		    }*/
 	   
 	}
 	
-	def updateCPT(previous_traffic: Array[String], previous_actions: mutable.HashMap[String, List[Edge]] ){
+	def updateCPT(previous_traffic: Array[String], previous_actions: mutable.HashMap[String, Seq[String]] ){
 		      
 			for( i <- 0 to state.discrete_traffic.length -1){
 				      CPT = CPT_per_lane.get("Lane "+location(i)).get
-				      key = "P("+state.discrete_traffic(i)+"_(t+1)|"+previous_traffic(i)+"_(t),"+previous_actions.getOrElse(location(i), List()).toString()+"_(t))"
+				      key = "P("+state.discrete_traffic(i)+"_(t+1)|"+previous_traffic(i)+"_(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
 				      
 				      
 				      CPT(key) += 1.0
