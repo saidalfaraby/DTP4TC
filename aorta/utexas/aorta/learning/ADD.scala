@@ -16,6 +16,7 @@ class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalN
   val root = new Node(internalNode(0))
   
   def getParents = internalNode
+  def getDecisionValues = decisionNodeVal
   def getName = decisionNodeName
   
   /**
@@ -157,8 +158,13 @@ class Leaf(label : String, values : Array[String]) extends GenericNode(label){
   }
 }
 
+/**
+ * This class is for storing all transition probabilities for all actions and all
+ * features for each actions
+ */
 class Model{
   val actionADD : HashMap[String, mutable.ListBuffer[ADD]] = HashMap()
+  
   
   def addModel(action : String, decisionNode : String, decisionNodeVal : Array[String], parents : Array[String]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
@@ -183,6 +189,16 @@ class Model{
   def printToDotFile{
     val filename = "test.dot"
     var string = ""
+    //assume all actions have the same ADD, take the first action, find all possible
+    //values for each features/variable
+    val listADD = actionADD(actionADD.keySet.head)
+    string += "(variables "
+    for (add <- listADD){
+      string += "("+add.getName+" "
+      string += add.getDecisionValues.mkString(" ")
+      string += ") "
+    }
+    string += ")\n"
     for ((k,v)<- actionADD){
       string += "action "+k+"\n"
       for (add <- v){
