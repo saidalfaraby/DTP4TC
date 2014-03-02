@@ -1,6 +1,9 @@
 package learning
 
 import scala.collection.mutable.LinkedHashMap
+import java.io.FileWriter
+import scala.collection.mutable.HashMap
+import scala.collection.mutable
 
 /**
  * Decision node is a node whose probability of its values are going to be predicted
@@ -8,10 +11,11 @@ import scala.collection.mutable.LinkedHashMap
  * @param decisionNodeName - label of decision node
  * @param decisionNodeVal - all possible values/states of decision node
  */
-class ADD (internalNode : Array[String], decisionNodeName : String, decisionNodeVal : Array[String]){
+class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalNode : Array[String]){
   //Assume the order of internalNode is fix, and the first one is the root
-  val root = new Node(internalNode(0)) 
+  val root = new Node(internalNode(0))
   
+  def getParents = internalNode
   def getName = decisionNodeName
   
   /**
@@ -52,7 +56,7 @@ class ADD (internalNode : Array[String], decisionNodeName : String, decisionNode
     }
     recur(root, state)
   }
-
+  
   def printTree {
     //traverse breadth first
     var queue : Array[GenericNode] = Array(root)
@@ -75,56 +79,55 @@ class ADD (internalNode : Array[String], decisionNodeName : String, decisionNode
 
   }
   
-  def printToData {
+  /**
+   * This method will print the ADD into a dot file
+   * @param filename - filename where the data will be appended to
+   */
+  def printToString() : String = {
     //traverse depth first
+    var string = ""
     print(getName)
+    string += getName
     def traverseHelper(node : GenericNode){
       print("\t(")
+      string += "\t("
       if (node.isInstanceOf[Node]){
         print(node.toString)
+        string += node.toString
         val children = node.asInstanceOf[Node].children
         var count=children.size
         for (edge <-children.keysIterator){
           print("\t(")
+          string += "\t("
           print(edge)
+          string += edge
           traverseHelper(children.getOrElse(edge, null))
           print(")")
-          if (count>1) 
+          string += ")"
+          if (count>1){
             println
+            string += "\n"
+          } 
           count -=1
         }
-        
       } else if (node.isInstanceOf[Leaf]){
         print(node.toString)
+        string += node.toString
       }
-      
       print(")")
-      
-      
+      string += ")"
     }
-    
     traverseHelper(root)
+    string += "\n"
+    string
     /*
-    var queue : Array[GenericNode] = Array(root)
-    var remaining = 0
-    while (queue.length > 0){
-      if (remaining==0) {
-        println()
-        remaining=queue.length
-      }
-      var curNode = queue(0)
-      //remove proceeded node
-      queue = queue.slice(1,queue.length)
-      print (curNode.toString+"  ")
-      //expand current Node
-      if (!curNode.isInstanceOf[Leaf]){
-        for (nextNode <- curNode.asInstanceOf[Node].children.valuesIterator) queue :+= nextNode
-      }
-      remaining-=1
+    val fw = new FileWriter(filename, true)
+    try {
+    	fw.write(string)
     }
+    finally fw.close() 
     * 
     */
-
   }
 }
 
@@ -151,5 +154,46 @@ class Leaf(label : String, values : Array[String]) extends GenericNode(label){
     var s = ""
     for (v <- valuesMap.valuesIterator){s+=(v+" ")}
     s
+  }
+}
+
+class Model{
+  val actionADD : HashMap[String, mutable.ListBuffer[ADD]] = HashMap()
+  
+  def addModel(action : String, decisionNode : String, decisionNodeVal : Array[String], parents : Array[String]){
+    val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
+    act+= new ADD(decisionNode, decisionNodeVal, parents)
+  }
+  def update(action : String, prevState : HashMap[String, String], curState : HashMap[String,String]){
+    val act = actionADD.get(action).get
+    if (act == None)
+      throw new Exception("action not found, add new action using addModel")
+    else{
+      act.iterator.foreach(add => {
+        val decisionVal = curState.getOrElse(add.getName, throw new Exception(add.getName+" is not in current State Map"))
+        val parentVal = Array.fill[String](add.getParents.length)("")
+        for (i <- 0 until add.getParents.length){
+          parentVal(i) = curState.getOrElse(add.getParents(i), throw new Exception(add.getParents(i)+" is not in the previous State Map"))
+        }
+        add.update(parentVal, decisionVal)
+      })
+    }
+  }
+  
+  def printToDotFile{
+    val filename = "test.dot"
+    var string = ""
+    for ((k,v)<- actionADD){
+      string += "action "+k+"\n"
+      for (add <- v){
+        string += add.printToString
+      }
+      string += "endaction\n"
+    }
+    val fw = new FileWriter(filename, true)
+    try {
+    	fw.write(string)
+    }
+    finally fw.close()
   }
 }
