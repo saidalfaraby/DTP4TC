@@ -13,8 +13,8 @@ import scala.collection.mutable
  */
 class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalNode : Array[String]){
   //Assume the order of internalNode is fix, and the first one is the root
-  val root = new Node(internalNode(0))
-  
+  var root = new Node(internalNode(0))
+  def this(name: String, root: Node) { this(name, Array(), Array("")); this.root = root; }
   def getParents = internalNode
   def getDecisionValues = decisionNodeVal
   def getName = decisionNodeName
@@ -112,13 +112,20 @@ class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalN
           count -=1
         }
       } else if (node.isInstanceOf[Leaf]){
-        print(node.toString)
-        string += node.toString
+        if (node.asInstanceOf[Leaf].getValues.length>0){
+          print(node.toString)
+          string += node.toString
+        } else {
+          print (node.getLabel)
+          string += node.getLabel
+        }
+        
       }
       print(")")
       string += ")"
     }
     traverseHelper(root)
+    print("\n")
     string += "\n"
     string
     /*
@@ -133,10 +140,11 @@ class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalN
 }
 
 abstract class GenericNode(label : String){
-  var parents : LinkedHashMap[String, GenericNode] = LinkedHashMap()
+  val parents : LinkedHashMap[String, GenericNode] = LinkedHashMap()
   def getLabel = label
   override def toString = label
   def addParent(edge : String, parent : Node) = parents+= (edge->parent)
+  def getParent = parents
 }
 
 class Node(label : String) extends GenericNode(label){
