@@ -133,10 +133,10 @@ class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalN
 }
 
 abstract class GenericNode(label : String){
-  var parents : Array[Node] = Array()
+  var parents : LinkedHashMap[String, GenericNode] = LinkedHashMap()
   def getLabel = label
   override def toString = label
-  def addParent(parent : Node) = parents :+= parent
+  def addParent(edge : String, parent : Node) = parents+= (edge->parent)
 }
 
 class Node(label : String) extends GenericNode(label){

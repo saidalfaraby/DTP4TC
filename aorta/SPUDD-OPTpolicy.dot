@@ -1,0 +1,25 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a0" [label="huc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a1" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a2" [label = "buyc "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a3" [label = "getu "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a4" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a5" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a6" [label = "delc "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a7" [label = "move "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a8" [label="l"];}
+"a1" -> "a2" [label = "office"];
+"a1" -> "a3" [label = "shop"];
+"a0" -> "a1" [label = "yes"];
+"a5" -> "a6" [label = "office"];
+"a5" -> "a7" [label = "shop"];
+"a4" -> "a5" [label = "yes"];
+"a8" -> "a7" [label = "office"];
+"a8" -> "a2" [label = "shop"];
+"a4" -> "a8" [label = "no"];
+"a0" -> "a4" [label = "no"];
+}

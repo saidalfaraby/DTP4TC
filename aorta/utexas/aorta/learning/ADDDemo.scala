@@ -13,6 +13,8 @@ object ADDDemo {
     x.update(Array("False","False","False"),"True")
     x.printToString
     
+    val y = new SPUDD
+    
     //var y : String = _
     //println(y)
 
