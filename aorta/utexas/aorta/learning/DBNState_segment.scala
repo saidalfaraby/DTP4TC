@@ -7,7 +7,8 @@ import utexas.aorta.map.{Turn, Edge}
 import utexas.aorta.common.{Util, Timer, cfg, Flags}
 import scala.collection.mutable
 
-class DBNState (sim: Simulation){
+
+class DBNState_segment (sim: Simulation){
   
   // State Variables
   var avg_losers = 0.0
@@ -16,19 +17,17 @@ class DBNState (sim: Simulation){
   var ratio_au = 0.0
   var avg_delay = 0.0
   var thres_away = 80.0
-  // 2*south, 2*north, 2* west, 2*east
-  // south(+1, +0), north(-1, -0), west(+1, +0), east(-1, -0)
-  //var cars_present = Array(0,0,0,0,0,0,0,0)
-  // south, north, west, east
-  var cars_present = Array(0,0,0,0)
+  var uniq_roads =  mutable.Map[String, Double]()
+  val segments = 3
 
-  var discrete_traffic = Array("low","low","low","low")
+  var cars_present = Array.ofDim[Int](4,3)
 
+  var discrete_traffic = Array.ofDim[String](4,3)
+  
   private var from = " "
   
   var actions = new mutable.HashMap[String, Seq[String]]
-  //var greens: Seq[String]
-  
+
   
   /*var last_tick = sim.tick
     sim.listen(classOf[EV_Heartbeat], _ match { case e: EV_Heartbeat => {
@@ -89,66 +88,70 @@ class DBNState (sim: Simulation){
          
          
          all.foreach(ticket =>{
-          
-           if (ticket.turn.from.road.dir.toString() == "+" ){//&& ticket.turn.from.lane_num.toString == "0"){
+        	 // parse the length of each road
+        	 // will create segments according to it later
+        	  if (!uniq_roads.contains(ticket.turn.from.road.id.toString())){
+               uniq_roads.put(ticket.turn.from.road.id.toString(), ticket.turn.from.road.length)
+             }
+        	  
+           val segment_len = uniq_roads.get(ticket.turn.from.road.id.toString()).get./(segments)
+           
+           if (ticket.turn.from.road.dir.toString() == "+" ){
              if (ticket.turn.from.road.name == "South"){
-               if(ticket.dist_away < thres_away){
-                   //println("+0 south:" + ticket.a.id)
-            	   //cars_present(1) += 1
-                     cars_present(0) += 1
+               
+               for (x <- 1 to segments){
+            	   if (ticket.dist_away <= x * segment_len){
+            	     cars_present(0)(x-1) += 1
+            	   }
                }
              }
              else if (ticket.turn.from.road.name == "West"){
-               if(ticket.dist_away < thres_away){
-                   //println("+0 west:" + ticket.a.id)
-            	   //cars_present(5) += 1
-            	   cars_present(2) += 1
+               
+                for (x <- 1 to segments){
+            	   if (ticket.dist_away <= x * segment_len){
+            	     cars_present(2)(x-1) += 1
+            	   }
                }
+               
              }
            }
-           else if (ticket.turn.from.road.dir.toString() == "-"){ //&& ticket.turn.from.lane_num.toString == "0"){
+           else if (ticket.turn.from.road.dir.toString() == "-"){ 
              if (ticket.turn.from.road.name == "North"){
-               if(ticket.dist_away < thres_away){
-                   //println("-0 north:" + ticket.a.id)
-            	   //cars_present(3) += 1
-            	   cars_present(1) += 1
+                 for (x <- 1 to segments){
+            	   if (ticket.dist_away <= x * segment_len){
+            	     cars_present(1)(x-1) += 1
+            	   }
                }
+
              }
              else if (ticket.turn.from.road.name == "East"){
-               if(ticket.dist_away < thres_away){
-                   //println("-0 east:" + ticket.a.id)
-            	   //cars_present(7) += 1
-            	   	cars_present(3) += 1
-               }
+                 for (x <- 1 to segments){
+            	   if (ticket.dist_away <= x * segment_len){
+            	     cars_present(3)(x-1) += 1
+            	   }
+                 }	
+
              }
            }
-           
-           //println(ticket.turn.from.road.dir+" " +ticket.turn.from.lane_num+ " " + ticket.turn.from.road.name)//ticket.turn.from)//*ticket.turn.from.lane_num)
-         	
-         }
-         )
+         })
          
         // reduce to three measurements (low, medium, high)
         for(i <- 0 to cars_present.length - 1){
-           if(cars_present(i) >= 3 && cars_present(i) <= 8)
-             discrete_traffic(i) = "medium"
-           else if (cars_present(i) > 8)
-             discrete_traffic(i) = "high"
-         } 
+          for (j <- 0 to cars_present(i).length - 1 ){
+            if(cars_present(i)(j) <= 10)
+              discrete_traffic(i)(j) = "low"
+            else if(cars_present(i)(j) > 10 && cars_present(i)(j) <= 20)
+             discrete_traffic(i)(j) = "medium"
+           else if (cars_present(i)(j) > 20)
+             discrete_traffic(i)(j) = "high"
+          }
+        } 
          
      })
     
      
-     //sim.listen(classOf[EV_IntersectionOutcomeWin], _ match{
-     //  case EV_IntersectionOutcomeWin(policy, winners) =>
-         //println("Winners:"  + winners.size)
-     //})
-     
      sim.listen(classOf[EV_Signal_Change], _ match{
        case f: EV_Signal_Change => if (f.greens.size >= 4){
-         //println(f.greens.size)
-         //previous_actions = actions_per_lane.clone()
-         //println(f.greens)
          
           var action_list: Seq[String] = {
         	 val result = mutable.ArrayBuffer[String]()
@@ -166,24 +169,32 @@ class DBNState (sim: Simulation){
      })
      
      def reset_carsPresent(){
-      for(i <- 0 to cars_present.length - 1){
-        cars_present(i) = 0
-        discrete_traffic(i) = "low"
+      
+	  for(i <- 0 to cars_present.length - 1){
+        for (j <- 0 to cars_present(i).length - 1){
+        	cars_present(i)(j) = 0
+        	discrete_traffic(i)(j) = "low"
+        }
       } 
   	}
       def print_carsPresent(){
          for(i <- 0 to cars_present.length - 1){
-        	print(" " + cars_present(i))
+           for (j <- 0 to cars_present(i).length - 1){
+        	   print("("+i+","+j+"):" + cars_present(i)(j) + " ")
+           }
          }
          println()
       }
       
       def print_traffic(){
          for(i <- 0 to discrete_traffic.length - 1){
-        	print(" " + discrete_traffic(i))
+           for (j <- 0  to discrete_traffic(i).length - 1){
+        	   print("("+i + "," + j + "):" + discrete_traffic(i)(j)+" ")
+           }
          }
          println()
       }
       
+
 
 }
