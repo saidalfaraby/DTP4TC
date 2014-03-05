@@ -7,9 +7,9 @@ import scala.collection.mutable
 
 /**
  * Decision node is a node whose probability of its values are going to be predicted
- * @param internalNode - in out case these are array of parents labels
  * @param decisionNodeName - label of decision node
  * @param decisionNodeVal - all possible values/states of decision node
+ * @param internalNode - in out case these are array of parents labels
  */
 class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalNode : Array[String]){
   //Assume the order of internalNode is fix, and the first one is the root
