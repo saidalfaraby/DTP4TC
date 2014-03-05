@@ -45,32 +45,38 @@ class DBN_segment(sim: Simulation) {
 		def run() {
 		    var previous_traffic = state.discrete_traffic.clone()
 		    var previous_actions = state.actions.clone()
+		    var cnt = 0
 		    sim.listen(classOf[EV_Signal_Change], _ match{
 		    	case f: EV_Signal_Change => if (f.greens.size >= 4){
 
+		    	if(cnt > 1){
+		    		print("Cars present: ")
+		    		state.print_carsPresent()
+		    		print("Lane traffic: ")
+		    		state.print_traffic()
 
-			    print("Cars present: ")
-				state.print_carsPresent()
-				print("Lane traffic: ")
-				state.print_traffic()
-
-				updateCPT(previous_traffic, previous_actions)
-				updateCPT_action(previous_traffic, previous_actions)
-				//println(state.discrete_traffic)
-				//println(state.cars_present)
-				previous_traffic = state.discrete_traffic.clone()
-				previous_actions = state.actions.clone()
+		    		updateCPT(previous_traffic, previous_actions)
+		    		updateCPT_action(previous_traffic, previous_actions)
+		    		//println(state.discrete_traffic)
+		    		//println(state.cars_present)
+		    		previous_traffic = state.discrete_traffic.clone()
+		    		previous_actions = state.actions.clone()
 
 
-				//println(state.actions_per_lane)
-				printCPT_ML(CPT_per_lane, count)
-				//printCPT_Dir(CPT_per_lane, count, count * state.discrete_traffic.size, count.toFloat/state.discrete_traffic.size)
-				//printCPT_total(count*state.discrete_traffic.size)
+		    		//println(state.actions_per_lane)
+		    		printCPT_ML(CPT_per_lane, count)
+		    		//printCPT_Dir(CPT_per_lane, count, count * state.discrete_traffic.size, count.toFloat/state.discrete_traffic.size)
+		    		//printCPT_total(count*state.discrete_traffic.size)
 
-				count += 1
-				//printCPT(CPT)
-				state.reset_carsPresent()
-				//Thread.sleep(1500)
+		    		count += 1
+		    		//printCPT(CPT)
+		    		state.reset_carsPresent()
+		    		//Thread.sleep(1500)
+		    	}else{
+		    	  previous_traffic = state.discrete_traffic.clone()
+		    	  previous_actions = state.actions.clone()
+		    	}
+				cnt += 1
 			}
 		    }
 		)}
