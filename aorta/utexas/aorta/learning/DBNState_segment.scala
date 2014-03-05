@@ -117,17 +117,16 @@ class DBNState_segment (sim: Simulation){
              }
              // outgoing lanes, reverse segments
              else if (ticket.turn.from.road.name == "North"){
-               for (x <- segments to 1){
-                 println(ticket.a.id+" outgoing:"+ ticket.dist_away)
+               for (x <- segments to 1 by -1){
                  if ((x-1) * segment_len < ticket.dist_away && ticket.dist_away <= x * segment_len){
-                   cars_present(5)(x-1) += 1
+                   cars_present(5)((segments - 1)- (x-1)) += 1
                  }
                }
              }
              else if (ticket.turn.from.road.name == "East"){
-               for (x <- segments to 1){
+               for (x <- segments to 1 by -1){
                  if ((x-1) * segment_len < ticket.dist_away && ticket.dist_away <= x * segment_len){
-                   cars_present(7)(x-1) += 1
+                   cars_present(7)((segments - 1)- (x-1)) += 1
                  }
                }
              }
@@ -152,16 +151,17 @@ class DBNState_segment (sim: Simulation){
              }
              // outgoing, reverse segments
              else if (ticket.turn.from.road.name == "South"){
-               for (x <- segments to 1){
+
+               for (x <- segments to 1 by -1){
                  if ((x-1) * segment_len < ticket.dist_away && ticket.dist_away <= x * segment_len){
-                   cars_present(4)(x-1) += 1
+                   cars_present(4)((segments - 1)- (x-1)) += 1
                  }
                }
              }
              else if(ticket.turn.from.road.name == "West"){
-               for (x <- segments to 1){
+               for (x <- segments to 1 by -1){
                  if ((x-1) * segment_len < ticket.dist_away && ticket.dist_away <= x * segment_len){
-                   cars_present(6)(x-1) += 1
+                   cars_present(6)((segments - 1)- (x-1)) += 1
                  }
                }
              }
