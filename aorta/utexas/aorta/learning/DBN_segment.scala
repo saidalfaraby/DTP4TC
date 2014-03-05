@@ -18,8 +18,8 @@ import utexas.aorta.experiments.MetricInfo
 import Array._
 
 class DBN_segment(sim: Simulation) {
-  
-  
+
+
 	var state = new DBNState_segment(sim)
 	val high_losers = 100
 	val high_ratioau = 5
@@ -30,17 +30,17 @@ class DBN_segment(sim: Simulation) {
 	private var key = ""
 	private var freq = 0.0
 	var CPT = mutable.Map[String, Int]().withDefaultValue(0)
-	
-	var location = List("South", "North", "West", "East")
+
+	var location = List("South_in", "North_in", "West_in", "East_in", "South_out", "North_out", "West_out", "East_out")
 	// init hashmap for the CPT's of each lane
 	for(i <- 0 to state.discrete_traffic.length - 1)
 		CPT_per_lane.put("Lane "+location(i), CPT.clone())
-	
+
 	// put for the action
 	CPT_per_lane.put("Action", CPT.clone())
-	
-	
-	// query for stats 
+
+
+	// query for stats
 	val check_stats = new Thread(new Runnable {
 		def run() {
 		    var previous_traffic = state.discrete_traffic.clone()
@@ -48,24 +48,25 @@ class DBN_segment(sim: Simulation) {
 		    sim.listen(classOf[EV_Signal_Change], _ match{
 		    	case f: EV_Signal_Change => if (f.greens.size >= 4){
 
-				
+
 			    print("Cars present: ")
 				state.print_carsPresent()
 				print("Lane traffic: ")
 				state.print_traffic()
-				
-				//updateCPT(previous_traffic)
+
 				updateCPT(previous_traffic, previous_actions)
 				updateCPT_action(previous_traffic, previous_actions)
+				//println(state.discrete_traffic)
+				//println(state.cars_present)
 				previous_traffic = state.discrete_traffic.clone()
 				previous_actions = state.actions.clone()
-				
-				
+
+
 				//println(state.actions_per_lane)
 				printCPT_ML(CPT_per_lane, count)
 				//printCPT_Dir(CPT_per_lane, count, count * state.discrete_traffic.size, count.toFloat/state.discrete_traffic.size)
 				//printCPT_total(count*state.discrete_traffic.size)
-				
+
 				count += 1
 				//printCPT(CPT)
 				state.reset_carsPresent()
@@ -74,47 +75,69 @@ class DBN_segment(sim: Simulation) {
 		    }
 		)}
 		//}
-		
+
 	})
-	
+
 	check_stats.start()
 
-	
+
 	def updateCPT_action(previous_traffic: Array[Array[String]], previous_actions: mutable.HashMap[String, Seq[String]]){
 	     //println(previous_traffic.deep.toString())
 		 var key2 = ""
 	     key2 = "P("+state.actions.getOrElse("signals", "None").toString()+"_(t+1)|"+previous_actions.getOrElse("signals", "None").toString()+"_(t),"+previous_traffic.deep.toString()+"_(t))"
 	     CPT_per_lane.get("Action").get(key2) += 1
 	     CPT_total(key2) += 1
-	   
+
 	}
-	
+
 	def updateCPT(previous_traffic: Array[Array[String]], previous_actions: mutable.HashMap[String, Seq[String]] ){
-		      
+
 			for( i <- 0 to state.discrete_traffic.length -1){
 			  CPT = CPT_per_lane.get("Lane "+location(i)).get
 			  //println("Lane "+location(i)+":")
 			  for(j <- 0 to state.discrete_traffic(i).length - 1){
-				      
-				      if (j != state.discrete_traffic(i).length - 1){
-				          // segment j at t+1 -> segment j at t, segment j + 1 (previous segment) at t, action
-				    	  key = "P("+state.discrete_traffic(i)(j)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+"_seg"+j+"(t),"+previous_traffic(i)(j+1)+"_seg"+(j+1)+"(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
-				      }
-				      else{
-				          // segment j at t+1 -> segment j at t, action (last segment, only depends on itself)
-				          key = "P("+state.discrete_traffic(i)(j)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+"_seg"+j+"(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
-				      }
+				  	// if we are modeling incoming lanes
+				  	 if (i < state.discrete_traffic.length / 2){
+				  		 if (j != state.discrete_traffic(i).length - 1){
+				  			 // segment j at t+1 -> segment j at t, segment j + 1 (previous segment) at t, action
+				  			 key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j) +
+				  					 	"_"+location(i)+"_seg"+j+"(t),"+previous_traffic(i)(j+1)+"_"+location(i)+"_seg"+(j+1) +
+				  					 		"(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  		 }
+				  		 else{
+				  			 // segment j at t+1 -> segment j at t, action (last segment, only depends on itself)
+				  			 key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+
+				  					 "_"+location(i)+"_seg"+j+"(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  		 }
+				  	 }
+				  	 // now we are modeling outgoing lanes
+				  	 else{
+				  	     // if we are modeling a segment that is not immediately after the intersection
+				  		 if (j != 0){
+				  		   key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+
+				  				   "_"+location(i)+"_seg"+j+"(t),"+previous_traffic(i)(j-1)+"_"+location(i)+"_seg"+(j-1)+"(t),"+
+				  				   		previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  		 }
+				  		 // the segment immediately after the intersection, it has more dependencies
+				  		 else{
+				  		   key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+
+				  				   "_"+location(i)+"_seg"+j+"(t),"+previous_traffic(0)(state.segments-1)+"_"+location(0)+"_seg"+
+				  				   (state.segments - 1)+"(t),"+ previous_traffic(1)(state.segments-1)+"_"+location(1)+"_seg"+
+				  				   (state.segments - 1)+"(t)," + previous_traffic(2)(state.segments-1)+"_"+location(2)+"_seg"+
+				  				   (state.segments - 1)+"(t)," + previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  		 }
+				  	 }
 				      CPT(key) += 1
-				      
+
 				      CPT_total(key) += 1
-				      
+
 				      //println(key + "_lane: " + CPT(key))
 				      //println(key +"_total: " + CPT_total(key))
-				      
+
 				}
 			}
 	}
-	
+
 	def printCPT_Dir(CPT: mutable.Map[String, mutable.Map[String, Int]], count: Int, count_t: Int, mu: Double){
 		var key = ""
 		var dir = 0.0
@@ -135,7 +158,7 @@ class DBN_segment(sim: Simulation) {
 		          ml_estimate = 0.0
 		        }
 		      }
-		      
+
 		      dir = (ml_estimate + (mu * CPT_total.get(j).get./(count_t))).toFloat/((count) + mu)
 		      println(j+" "+dir)
 		      //check += CPT.get(key).get.get(j).get./(count)
@@ -146,7 +169,7 @@ class DBN_segment(sim: Simulation) {
 		  println()
 		}
 	}
-	
+
 	def printCPT_ML(CPT: mutable.Map[String, mutable.Map[String, Int]], count: Int){
 		var key = ""
 		//var check = 0.0
@@ -168,11 +191,11 @@ class DBN_segment(sim: Simulation) {
 		  println()
 		}
 	}
-	
+
 	def printCPT_total(count: Int){
 		//var check = 0.0
 		println("Whole intersection estimates: ")
-		  for (j <- CPT_total.keySet.toList.sorted){ 
+		  for (j <- CPT_total.keySet.toList.sorted){
 		      println(j +": "+CPT_total.get(j).get./(count))
 		  }
 		  // simple validation to check if the probabilities sum to 1
