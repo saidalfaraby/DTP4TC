@@ -17,10 +17,12 @@ import utexas.aorta.analysis.RerouteCountMonitor
 import utexas.aorta.experiments.MetricInfo
 import Array._
 
+
 class DBN_segment(sim: Simulation) {
 
 
 	var state = new DBNState_segment(sim)
+	var treeCPT = new Model()
 	val high_losers = 100
 	val high_ratioau = 5
 	val high_delay = 100
@@ -30,6 +32,9 @@ class DBN_segment(sim: Simulation) {
 	private var key = ""
 	private var freq = 0.0
 	var CPT = mutable.Map[String, Int]().withDefaultValue(0)
+	var isParentMapInitialized = false
+	
+	
 
 	var location = List("South_in", "North_in", "West_in", "East_in", "South_out", "North_out", "West_out", "East_out")
 	// init hashmap for the CPT's of each lane
@@ -38,12 +43,15 @@ class DBN_segment(sim: Simulation) {
 
 	// put for the action
 	CPT_per_lane.put("Action", CPT.clone())
-
-
+	
+	
+	var parentMap = mutable.HashMap[String, mutable.ListBuffer[String]]()
+	
+	
 	// query for stats
 	val check_stats = new Thread(new Runnable {
 		def run() {
-		    var previous_traffic = state.discrete_traffic.clone()
+		    var previous_traffic = state.discrete_traffic.map(_.clone)
 		    var previous_actions = state.actions.clone()
 		    var cnt = 0
 		    sim.listen(classOf[EV_Signal_Change], _ match{
@@ -57,9 +65,37 @@ class DBN_segment(sim: Simulation) {
 
 		    		updateCPT(previous_traffic, previous_actions)
 		    		updateCPT_action(previous_traffic, previous_actions)
+		    		isParentMapInitialized = true
+		    		
+		    		//============================================
+		    		//Initialize ADD for new action, or just update the ADD
+		    		val actionName = previous_actions.get("signals").toString
+		    		if (!treeCPT.actionADD.contains(actionName)){ //if the action is not initialized yet, than initialize first
+		    		  //initialize new ADDs for this action
+		    		  //for each variable in time t+1 effected by this action, initialize the ADD
+		    		  for ((decisionNodeName,parents)<-parentMap){
+		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toArray)
+		    		  }
+		    		  
+		    		}
+		    		//update the ADD
+		    		val prevState = mutable.HashMap[String, String]()
+		    		val curState = mutable.HashMap[String, String]()
+		    		for( i <- 0 until state.discrete_traffic.length){
+		    		  for(j <- 0 until state.discrete_traffic(i).length){
+		    		    prevState.+=(location(i)+"_seg"+j -> previous_traffic(i)(j))
+		    		    curState.+=(location(i)+"_seg"+j -> state.discrete_traffic(i)(j))
+		    		  }
+		    		}
+		    		prevState.+=("TrafficSignal" -> previous_actions.get("signals").get.toString())
+		    		curState.+=("TrafficSignal" -> state.actions.get("signals").get.toString())
+		    		treeCPT.update(actionName, prevState, curState)
+		    		
+		    		//============================================
+		    		
 		    		//println(state.discrete_traffic)
 		    		//println(state.cars_present)
-		    		previous_traffic = state.discrete_traffic.clone()
+		    		previous_traffic = state.discrete_traffic.map(_.clone)
 		    		previous_actions = state.actions.clone()
 
 
@@ -72,11 +108,14 @@ class DBN_segment(sim: Simulation) {
 		    		//printCPT(CPT)
 		    		state.reset_carsPresent()
 		    		//Thread.sleep(1500)
+		    		
+		    		
 		    	}else{
-		    	  previous_traffic = state.discrete_traffic.clone()
+		    	  previous_traffic = state.discrete_traffic.map(_.clone)
 		    	  previous_actions = state.actions.clone()
 		    	}
 				cnt += 1
+				treeCPT.printToDotFile
 			}
 		    }
 		)}
@@ -109,11 +148,17 @@ class DBN_segment(sim: Simulation) {
 				  			 key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j) +
 				  					 	"_"+location(i)+"_seg"+j+"(t),"+previous_traffic(i)(j+1)+"_"+location(i)+"_seg"+(j+1) +
 				  					 		"(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  			if (!isParentMapInitialized)
+				  			  parentMap.+=(location(i)+"_seg"+j -> mutable.ListBuffer(location(i)+"_seg"+j, location(i)+"_seg"+(j+1),
+				  			    "TrafficSignal"))
 				  		 }
 				  		 else{
 				  			 // segment j at t+1 -> segment j at t, action (last segment, only depends on itself)
 				  			 key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+
 				  					 "_"+location(i)+"_seg"+j+"(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  			if (!isParentMapInitialized)
+				  				parentMap.+=(location(i)+"_seg"+j -> mutable.ListBuffer(location(i)+"_seg"+j, 
+				  			    "TrafficSignal"))
 				  		 }
 				  	 }
 				  	 // now we are modeling outgoing lanes
@@ -123,6 +168,9 @@ class DBN_segment(sim: Simulation) {
 				  		   key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+
 				  				   "_"+location(i)+"_seg"+j+"(t),"+previous_traffic(i)(j-1)+"_"+location(i)+"_seg"+(j-1)+"(t),"+
 				  				   		previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  			if (!isParentMapInitialized)
+				  			  parentMap.+=(location(i)+"_seg"+j -> mutable.ListBuffer(location(i)+"_seg"+j, location(i)+"_seg"+(j-1), 
+				  			    "TrafficSignal"))
 				  		 }
 				  		 // the segment immediately after the intersection, it has more dependencies
 				  		 else{
@@ -131,6 +179,10 @@ class DBN_segment(sim: Simulation) {
 				  				   (state.segments - 1)+"(t),"+ previous_traffic(1)(state.segments-1)+"_"+location(1)+"_seg"+
 				  				   (state.segments - 1)+"(t)," + previous_traffic(2)(state.segments-1)+"_"+location(2)+"_seg"+
 				  				   (state.segments - 1)+"(t)," + previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  			if (!isParentMapInitialized)
+				  			  parentMap.+=(location(i)+"_seg"+j -> mutable.ListBuffer(location(i)+"_seg"+j, 
+				  			    location(0)+"_seg"+(state.segments - 1),location(1)+"_seg"+(state.segments - 1), 
+				  			    location(2)+"_seg"+(state.segments - 1), "TrafficSignal"))
 				  		 }
 				  	 }
 				      CPT(key) += 1

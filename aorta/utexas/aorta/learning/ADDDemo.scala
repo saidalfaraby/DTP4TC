@@ -1,8 +1,8 @@
-package learning
+package utexas.aorta.learning
 
 object ADDDemo {
   def main(args: Array[String]) {
-    var x = new ADD("Aprime", Array("True","False"), Array("A","B","C"))
+    var x = new ADD("Aprime", Array("A","B","C"))
     x.update(Array("True","True","True"),"True")
     x.update(Array("True","True","False"),"True")
     x.update(Array("True","False","True"),"True")

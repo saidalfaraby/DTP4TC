@@ -1,4 +1,4 @@
-package learning
+package utexas.aorta.learning
 import scala.io.Source
 import scala.collection.mutable
 import scala.util.matching.Regex
@@ -23,7 +23,7 @@ class SPUDD {
         if (line.contains("ellipse")){ //internal node
           nodesMap += (m(0).replaceAll("\"", "") -> new Node(m(1).replaceAll("\"", "")))
         } else if (line.contains("box")){ //leaf node
-          nodesMap += (m(0).replaceAll("\"", "") -> new Leaf(m(1).replaceAll("\"", ""),Array()))
+          nodesMap += (m(0).replaceAll("\"", "") -> new Leaf(m(1).replaceAll("\"", "")))
         }
       } else if (line.contains("->")){ //edge
         val pattern = "\"[^-=]*\"".r

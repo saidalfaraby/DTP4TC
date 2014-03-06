@@ -1,4 +1,4 @@
-package learning
+package utexas.aorta.learning
 
 import scala.collection.mutable.LinkedHashMap
 import java.io.FileWriter
@@ -11,10 +11,11 @@ import scala.collection.mutable
  * @param decisionNodeVal - all possible values/states of decision node
  * @param internalNode - in out case these are array of parents labels
  */
-class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalNode : Array[String]){
+class ADD (decisionNodeName : String, internalNode : Array[String]){
   //Assume the order of internalNode is fix, and the first one is the root
   var root = new Node(internalNode(0))
-  def this(name: String, root: Node) { this(name, Array(), Array("")); this.root = root; }
+  var decisionNodeVal : mutable.ListBuffer[String] = mutable.ListBuffer()
+  def this(name: String, root: Node) { this(name, Array("")); this.root = root; }
   def getParents = internalNode
   def getDecisionValues = decisionNodeVal
   def getName = decisionNodeName
@@ -31,12 +32,16 @@ class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalN
       val edgeLabel = edgeNames.head
 
       if (edgeNames.length == 1) {
+        //check if the current value is already registered in decisionNodeVal or not
+        if (!decisionNodeVal.contains(value)){
+          decisionNodeVal+= value
+        }
         try { //get leaf
           val leaf = parent.getChild(edgeLabel).asInstanceOf[Leaf]
           leaf.hit(value)
         } catch { //leaf doesn't exist, create the new one
           case e:Exception => {
-            val leaf = new Leaf(decisionNodeName, decisionNodeVal)//create new leaf
+            val leaf = new Leaf(decisionNodeName)//create new leaf
             leaf.hit(value)
             parent.addChild(edgeLabel,leaf)//add to parent
           }
@@ -87,45 +92,48 @@ class ADD (decisionNodeName : String, decisionNodeVal : Array[String], internalN
   def printToString() : String = {
     //traverse depth first
     var string = ""
-    print(getName)
+    //print(getName)
     string += getName
     def traverseHelper(node : GenericNode){
-      print("\t(")
+      //print("\t(")
       string += "\t("
       if (node.isInstanceOf[Node]){
-        print(node.toString)
+        //print(node.toString)
         string += node.toString
         val children = node.asInstanceOf[Node].children
         var count=children.size
         for (edge <-children.keysIterator){
-          print("\t(")
+          //print("\t(")
           string += "\t("
-          print(edge)
+          //print(edge)
           string += edge
           traverseHelper(children.getOrElse(edge, null))
-          print(")")
+          //print(")")
           string += ")"
           if (count>1){
-            println
+            //println
             string += "\n"
           } 
           count -=1
         }
       } else if (node.isInstanceOf[Leaf]){
         if (node.asInstanceOf[Leaf].getValues.length>0){
-          print(node.toString)
-          string += node.toString
+          //print(node.toString)
+          //string += node.toString
+          decisionNodeVal.foreach(f => {
+            if (node.asInstanceOf[Leaf].valuesMap.contains(f))
+              string+= f+"="+node.asInstanceOf[Leaf].valuesMap(f)+" "})
         } else {
-          print (node.getLabel)
+          //print (node.getLabel)
           string += node.getLabel
         }
         
       }
-      print(")")
+      //print(")")
       string += ")"
     }
     traverseHelper(root)
-    print("\n")
+    //print("\n")
     string += "\n"
     string
     /*
@@ -153,10 +161,16 @@ class Node(label : String) extends GenericNode(label){
   def addChild(edgeName : String, child : GenericNode) = children.+=(edgeName -> child)
 }
 
-class Leaf(label : String, values : Array[String]) extends GenericNode(label){
+class Leaf(label : String) extends GenericNode(label){
   val valuesMap : LinkedHashMap[String, Int] = LinkedHashMap()
-  for (v : String <- values){ valuesMap.+=(v -> 0)  }
-  def hit(valueName : String) : Unit = {valuesMap.update(valueName,valuesMap(valueName)+1)}
+  //for (v : String <- values){ valuesMap.+=(v -> 0)  }
+  def hit(valueName : String) : Unit = {
+    val prevV = valuesMap.get(valueName)
+    if (prevV != None)
+      valuesMap.update(valueName,prevV.get+1)
+    else 
+      valuesMap.+=(valueName -> 1)
+  }
   def getValue(key : String) = valuesMap(key)
   def getValues = valuesMap.valuesIterator
   override def toString : String = {
@@ -174,15 +188,16 @@ class Model{
   val actionADD : HashMap[String, mutable.ListBuffer[ADD]] = HashMap()
   
   
-  def addModel(action : String, decisionNode : String, decisionNodeVal : Array[String], parents : Array[String]){
+  def addModel(action : String, decisionNode : String, parents : Array[String]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
-    act+= new ADD(decisionNode, decisionNodeVal, parents)
+    act+= new ADD(decisionNode, parents)
   }
   def update(action : String, prevState : HashMap[String, String], curState : HashMap[String,String]){
-    val act = actionADD.get(action).get
-    if (act == None)
+    val actSome = actionADD.get(action)
+    if (actSome == None)
       throw new Exception("action not found, add new action using addModel")
     else{
+      val act = actSome.get
       act.iterator.foreach(add => {
         val decisionVal = curState.getOrElse(add.getName, throw new Exception(add.getName+" is not in current State Map"))
         val parentVal = Array.fill[String](add.getParents.length)("")
@@ -197,6 +212,7 @@ class Model{
   def printToDotFile{
     val filename = "test.dot"
     var string = ""
+    if (actionADD.keySet.size >0){
     //assume all actions have the same ADD, take the first action, find all possible
     //values for each features/variable
     val listADD = actionADD(actionADD.keySet.head)
@@ -214,10 +230,14 @@ class Model{
       }
       string += "endaction\n"
     }
+    }
+    print(string)
+    /*
     val fw = new FileWriter(filename, true)
     try {
     	fw.write(string)
     }
     finally fw.close()
+    */
   }
 }
