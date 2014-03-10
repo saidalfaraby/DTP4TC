@@ -1,50 +1,9 @@
-package utexas.aorta.learning
+package utexas.aorta.backup
 
 import scala.collection.mutable.LinkedHashMap
 import java.io.FileWriter
 import scala.collection.mutable.HashMap
 import scala.collection.mutable
-
-abstract class GenericNode(label : String){
-  var parent : Node = null
-  var edge : String = null
-  var splitCandidates : List[String]
-  def getLabel = label
-}
-/*
-class nullLeaf extends GenericNode{
-  var parent : Node = null
-  var edge : String = null
-  var splitCandidates : List[String]
-}*/
-
-class Node(label : String) extends GenericNode(label){
-  val children = LinkedHashMap[String, GenericNode]()
-  val score : Double = 0.0
-  def getChild(edgeName : String) = children(edgeName)
-  def addChild(edgeName : String, child : GenericNode) = children.+=(edgeName -> child)
-  override def toString = label
-}
-
-class Leaf(label : String) extends GenericNode(label){
-  def this() {this("")}
-  val valuesMap : LinkedHashMap[String, Int] = LinkedHashMap()
-  //for (v : String <- values){ valuesMap.+=(v -> 0)  }
-  def hit(valueName : String) : Unit = {
-    val prevV = valuesMap.get(valueName)
-    if (prevV != None)
-      valuesMap.update(valueName,prevV.get+1)
-    else 
-      valuesMap.+=(valueName -> 1)
-  }
-  def getValue(key : String) = valuesMap(key)
-  def getValues = valuesMap.valuesIterator
-  override def toString : String = {
-    var s = ""
-    for (v <- valuesMap.valuesIterator){s+=(v+" ")}
-    s
-  }
-}
 
 /**
  * Decision node is a node whose probability of its values are going to be predicted
@@ -55,80 +14,11 @@ class Leaf(label : String) extends GenericNode(label){
 class ADD (decisionNodeName : String, internalNode : Array[String]){
   //Assume the order of internalNode is fix, and the first one is the root
   var root = new Node(internalNode(0))
-  var decisionNodeVal = mutable.ListBuffer[String]()
-  var refCandidates = mutable.ListBuffer[Leaf]()
+  var decisionNodeVal : mutable.ListBuffer[String] = mutable.ListBuffer()
   def this(name: String, root: Node) { this(name, Array("")); this.root = root; }
   def getParents = internalNode
   def getDecisionValues = decisionNodeVal
   def getName = decisionNodeName
-  
-  var N = 0//sample size so far
-  
-  
-  //now we need to know all possible value of each internal node beforehand
-  val domVar = mutable.HashMap[String, mutable.ListBuffer[String]]()
-  def addSplit(Y : String,l : Leaf):Node = {
-    refCandidates.-=(l)
-    val t = new Node(Y)
-    t.splitCandidates = l.splitCandidates
-    l.parent.addChild(l.edge, t)
-    for (v <- domVar(l.edge)){
-      val newL = new Leaf()
-      newL.parent = t
-      newL.edge = v
-      t.addChild(v, newL)
-      newL.splitCandidates = l.splitCandidates.diff(List(Y))
-      refCandidates.+=(newL)
-    }
-    return t
-  }
-  
-  def removeSplit(Y : Node, l : Leaf){
-    Y.parent.addChild(l.edge, l)
-    refCandidates.+=(l)
-    Y.parent = null
-    Y.edge = null
-  }
-  
-  def extend{
-    //select a node from refinement candidates with a probability (uniform)
-    var l = scala.util.Random.shuffle(refCandidates).head
-    var minScore = Double.PositiveInfinity
-    var bestCandidate : String = null
-    for (Y <- l.splitCandidates){
-      var t = addSplit(Y, l)
-      if (score < minScore){
-        minScore = score
-        bestCandidate = Y
-      }
-      removeSplit(t,l)
-    }
-    addSplit(bestCandidate, l)
-  }
-  
-  def score : Double ={
-    def DLstruct(testNode : GenericNode) : Double ={
-      if (testNode.isInstanceOf[Leaf])
-        return 1.0
-      else {
-        var sum = 0.0
-        for (v <- testNode.asInstanceOf[Node].children.valuesIterator){
-          sum += DLstruct(v)
-        }
-        return 1+ Math.log(testNode.asInstanceOf[Node].splitCandidates.length)+sum
-      }
-    }
-    
-    def DLparam():Double = {
-      return 1./2*(decisionNodeVal.length-1)*refCandidates.length* N
-    }
-    
-    return DLstruct(root)+DLparam
-  }
-  
-  def learning(){
-    
-  }
   
   /**
    * @param state - values/states of all internal nodes at time step n
@@ -143,8 +33,9 @@ class ADD (decisionNodeName : String, internalNode : Array[String]){
 
       if (edgeNames.length == 1) {
         //check if the current value is already registered in decisionNodeVal or not
-        if (!decisionNodeVal.contains(value))
+        if (!decisionNodeVal.contains(value)){
           decisionNodeVal+= value
+        }
         try { //get leaf
           val leaf = parent.getChild(edgeLabel).asInstanceOf[Leaf]
           leaf.hit(value)
@@ -166,7 +57,7 @@ class ADD (decisionNodeName : String, internalNode : Array[String]){
             parent.addChild(edgeLabel,childNode)//add to parent
           }
         }
-        recur(childNode.asInstanceOf[Node],edgeNames.tail)
+        recur(childNode.asInstanceOf[Node],edgeNames.slice(1, edgeNames.length))
       }
     }
     recur(root, state)
@@ -183,7 +74,7 @@ class ADD (decisionNodeName : String, internalNode : Array[String]){
       }
       var curNode = queue(0)
       //remove proceeded node
-      queue = queue.tail
+      queue = queue.slice(1,queue.length)
       print (curNode.toString+"  ")
       //expand current Node
       if (!curNode.isInstanceOf[Leaf]){
@@ -201,37 +92,48 @@ class ADD (decisionNodeName : String, internalNode : Array[String]){
   def printToString() : String = {
     //traverse depth first
     var string = ""
+    //print(getName)
     string += getName
     def traverseHelper(node : GenericNode){
+      //print("\t(")
       string += "\t("
       if (node.isInstanceOf[Node]){
+        //print(node.toString)
         string += node.toString
         val children = node.asInstanceOf[Node].children
         var count=children.size
         for (edge <-children.keysIterator){
+          //print("\t(")
           string += "\t("
+          //print(edge)
           string += edge
           traverseHelper(children.getOrElse(edge, null))
+          //print(")")
           string += ")"
           if (count>1){
+            //println
             string += "\n"
           } 
           count -=1
         }
       } else if (node.isInstanceOf[Leaf]){
         if (node.asInstanceOf[Leaf].getValues.length>0){
+          //print(node.toString)
           //string += node.toString
           decisionNodeVal.foreach(f => {
             if (node.asInstanceOf[Leaf].valuesMap.contains(f))
               string+= f+"="+node.asInstanceOf[Leaf].valuesMap(f)+" "})
         } else {
-          string += node.asInstanceOf[Leaf].getLabel
+          //print (node.getLabel)
+          string += node.getLabel
         }
         
       }
+      //print(")")
       string += ")"
     }
     traverseHelper(root)
+    //print("\n")
     string += "\n"
     string
     /*
@@ -245,9 +147,38 @@ class ADD (decisionNodeName : String, internalNode : Array[String]){
   }
 }
 
+abstract class GenericNode(label : String){
+  val parents : LinkedHashMap[String, GenericNode] = LinkedHashMap()
+  def getLabel = label
+  override def toString = label
+  def addParent(edge : String, parent : Node) = parents+= (edge->parent)
+  def getParent = parents
+}
 
+class Node(label : String) extends GenericNode(label){
+  val children : LinkedHashMap[String, GenericNode] = LinkedHashMap()
+  def getChild(edgeName : String) = children(edgeName)
+  def addChild(edgeName : String, child : GenericNode) = children.+=(edgeName -> child)
+}
 
-
+class Leaf(label : String) extends GenericNode(label){
+  val valuesMap : LinkedHashMap[String, Int] = LinkedHashMap()
+  //for (v : String <- values){ valuesMap.+=(v -> 0)  }
+  def hit(valueName : String) : Unit = {
+    val prevV = valuesMap.get(valueName)
+    if (prevV != None)
+      valuesMap.update(valueName,prevV.get+1)
+    else 
+      valuesMap.+=(valueName -> 1)
+  }
+  def getValue(key : String) = valuesMap(key)
+  def getValues = valuesMap.valuesIterator
+  override def toString : String = {
+    var s = ""
+    for (v <- valuesMap.valuesIterator){s+=(v+" ")}
+    s
+  }
+}
 
 /**
  * This class is for storing all transition probabilities for all actions and all
