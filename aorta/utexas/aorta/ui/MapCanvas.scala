@@ -336,7 +336,7 @@ class MapCanvas(val sim: Simulation, headless: Boolean = false) extends Scrollin
           case Some(v: Vertex) => {
             for (t <- v.intersection.policy.current_greens) {
               state.draw_turn(t, cfg.turn_color)
-            }
+            } 
           }
           case _ =>
         }
@@ -375,14 +375,18 @@ class MapCanvas(val sim: Simulation, headless: Boolean = false) extends Scrollin
       // What tooltips do we want?
       state.current_obj match {
         case Some(thing) => {
-          state.tooltips += Tooltip(
-            screen_to_map_x(mouse_at_x), screen_to_map_y(mouse_at_y),
-            thing.tooltip, false
-          )
           thing match {
             // TODO make all the moused over things be renderables with this method
-            case a: Agent => driver_renderers.get(a).moused_over()
-            case _ =>
+            case a: Agent => {state.tooltips += Tooltip(
+            		screen_to_map_x(mouse_at_x), screen_to_map_y(mouse_at_y),
+            		thing.tooltip, false)
+            		driver_renderers.get(a).moused_over()}
+            case v: Vertex =>{state.tooltips += Tooltip(
+            		screen_to_map_x(mouse_at_x), screen_to_map_y(mouse_at_y),
+            		thing.tooltip.++(v.intersection.GUIplot), false)}
+            case _ => {state.tooltips += Tooltip(
+            		screen_to_map_x(mouse_at_x), screen_to_map_y(mouse_at_y),
+            		thing.tooltip, false)}
           }
         }
         case None =>

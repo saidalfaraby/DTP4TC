@@ -5,12 +5,12 @@
 package utexas.aorta.sim.intersections
 
 import scala.collection.mutable
-
 import utexas.aorta.map.{Vertex, Turn, Edge}
 import utexas.aorta.sim.{Simulation, EV_TurnApproved, EV_TurnStarted}
 import utexas.aorta.sim.make.{IntersectionType, OrderingType, Factory}
-
 import utexas.aorta.common.{Util, StateWriter, StateReader, TurnID, Serializable}
+import scala.collection.mutable.ListBuffer
+import java.text.DecimalFormat
 
 // Reason about collisions from conflicting simultaneous turns.
 class Intersection(val v: Vertex, policy_type: IntersectionType.Value,
@@ -23,6 +23,7 @@ class Intersection(val v: Vertex, policy_type: IntersectionType.Value,
   // but we have to know how many are on the turn to know when nobody's
   // attempting it.
   val turns = mutable.HashMap[Turn, Int]() // TODO count type
+  val df = new DecimalFormat("#0.000") 
 
   // For reporting stats
   private var sum_waiting_times = 0.0
@@ -88,6 +89,15 @@ class Intersection(val v: Vertex, policy_type: IntersectionType.Value,
       sum_waiting_times / number_finished
     else
       0.0
+   
+  def GUIplot(): List[String] = {
+      var list =  new ListBuffer[String]()
+      //add avarage waiting time
+      list += "AWT: " + df.format(this.average_waiting_time)
+      //add more data:
+      list += ("more data")
+      return list.toList
+  }
 }
 
 object Intersection {
