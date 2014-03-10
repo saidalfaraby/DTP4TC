@@ -21,19 +21,13 @@ class DBNState (sim: Simulation){
   //var cars_present = Array(0,0,0,0,0,0,0,0)
   // south, north, west, east
   var cars_present = Array(0,0,0,0)
-  // low, medium, high for now
-  //var discrete_traffic = Array("low","low","low","low","low","low","low","low") 
+
   var discrete_traffic = Array("low","low","low","low")
-  //var previous_traffic = Array("low","low","low","low")
-  
-  // 16 binary values, according to traffic lights
-  // south +1-> 
-  //var traffic_lights = Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+
   private var from = " "
   
   var actions = new mutable.HashMap[String, Seq[String]]
-  //var previous_actions = new mutable.HashMap[String, List[Edge]]
-  //var greens: Set[Turn]
+  //var greens: Seq[String]
   
   
   /*var last_tick = sim.tick
@@ -92,36 +86,10 @@ class DBNState (sim: Simulation){
          //println("All tickets: ")
          //all.foreach(ticket => println(ticket))
          //previous_traffic = discrete_traffic.clone()
+         
+         
          all.foreach(ticket =>{
-           /*
-           if (ticket.turn.from.road.dir.toString() == "+" && ticket.turn.from.lane_num.toString == "1" ){
-             if (ticket.turn.from.road.name == "South"){
-               if(ticket.dist_away < thres_away){
-                   //println("+1 south:" + ticket.a.id)
-            	   cars_present(0) += 1
-               }
-             }
-             else if (ticket.turn.from.road.name == "West"){
-               if(ticket.dist_away < thres_away){
-                   //println("+1 west:" + ticket.a.id)
-            	   cars_present(4) += 1
-               }
-             }
-           }
-           else if (ticket.turn.from.road.dir.toString() == "-" && ticket.turn.from.lane_num.toString == "1"){
-             if (ticket.turn.from.road.name == "North"){
-               if(ticket.dist_away < thres_away){
-            	   //println("-1 north:" + ticket.a.id)
-            	   cars_present(2) += 1
-               }
-             }
-             else if (ticket.turn.from.road.name == "East"){
-               if(ticket.dist_away < thres_away){
-                   //println("-1 east:" + ticket.a.id)
-            	   cars_present(6) += 1
-               }
-             }
-           }*/
+          
            if (ticket.turn.from.road.dir.toString() == "+" ){//&& ticket.turn.from.lane_num.toString == "0"){
              if (ticket.turn.from.road.name == "South"){
                if(ticket.dist_away < thres_away){
@@ -162,9 +130,9 @@ class DBNState (sim: Simulation){
          
         // reduce to three measurements (low, medium, high)
         for(i <- 0 to cars_present.length - 1){
-           if(cars_present(i) >= 5 && cars_present(i) <= 10)
+           if(cars_present(i) >= 3 && cars_present(i) <= 8)
              discrete_traffic(i) = "medium"
-           else if (cars_present(i) > 10)
+           else if (cars_present(i) > 8)
              discrete_traffic(i) = "high"
          } 
          
@@ -185,7 +153,7 @@ class DBNState (sim: Simulation){
           var action_list: Seq[String] = {
         	 val result = mutable.ArrayBuffer[String]()
         			 f.greens.foreach { green =>
-        			 result += green.toString()
+        			 result += green.id.toString()
         	 	}
         	 result
          }

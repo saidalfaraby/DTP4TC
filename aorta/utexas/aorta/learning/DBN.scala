@@ -20,18 +20,16 @@ import Array._
 
 class DBN (sim: Simulation) {
   
-	//var agents: immutable.SortedSet[Agent] = immutable.TreeSet.empty[Agent]
 	var state = new DBNState(sim)
-	//var CPT = ofDim[Double](2,2)
 	val high_losers = 100
 	val high_ratioau = 5
 	val high_delay = 100
 	private var count = 1
-	var CPT_per_lane = mutable.Map[String, mutable.Map[String, Double]]()
-	var CPT_total = mutable.Map[String, Double]().withDefaultValue(0.0)
+	var CPT_per_lane = mutable.Map[String, mutable.Map[String, Int]]()
+	var CPT_total = mutable.Map[String, Int]().withDefaultValue(0)
 	private var key = ""
 	private var freq = 0.0
-	var CPT = mutable.Map[String, Double]().withDefaultValue(0.0)
+	var CPT = mutable.Map[String, Int]().withDefaultValue(0)
 	
 	var location = List("South", "North", "West", "East")
 	// init hashmap for the CPT's of each lane
@@ -83,58 +81,13 @@ class DBN (sim: Simulation) {
 	})
 	
 	check_stats.start()
-	
-	/*
-	def updateCPT(previous_traffic: Array[String]){
-			for( i <- 0 to state.discrete_traffic.length -1){
-				      //CPT = CPT_per_lane.getOrElseUpdate("Lane"+i, CPT.clone())
-				      CPT = CPT_per_lane.get("Lane "+location(i)).get
-				      key = previous_traffic(i)+" "+state.discrete_traffic(i)
-				      
-				      
-				      try{
-				             
-				    		 freq = CPT.get(key).get.+(1.0)
-				    		 CPT.put(key, freq)
-				    		 
-				      }catch{
-				         case e: Exception => {
-				          		CPT.put(key, 1.0)
-				          		
-				          }
-				      }
-				      
-				      // global probabilities (for smoothing)
-				      try{
-				             freq = CPT_total.get(key).get.+(1.0)
-				    		 CPT_total.put(key, freq)
-				      }catch{
-				        case f: Exception => {
-				          CPT_total.put(key, 1.0)
-				        }
-				      }
-				}
-	}
-	
-	*/
 
 	
 	def updateCPT_action(previous_traffic: Array[String], previous_actions: mutable.HashMap[String, Seq[String]]){
 		 var key2 = ""
 	     key2 = "P("+state.actions.getOrElse("signals", "None").toString()+"_(t+1)|"+previous_actions.getOrElse("signals", "None").toString()+"_(t),"+previous_traffic.toString()+"_(t))"
-	     CPT(key2) += 1.0
-	     CPT_total(key2) += 1.0
-	     
-	     /*
-	      for( i<- 0 to state.discrete_traffic.length -1){
-		       CPT = CPT_per_lane.get("Lane "+location(i)).get
-		       key2 = "P("+state.actions.get("signals").toString()+"_(t+1)|"+previous_actions.getOrElse(location(i), List()).toString()+"_(t),"+previous_traffic(i)+"_(t))"
-		       
-		       CPT(key2) += 1.0
-		       
-		       CPT_total(key2) += 1.0
-		    
-		    }*/
+	     CPT(key2) += 1
+	     CPT_total(key2) += 1
 	   
 	}
 	
@@ -145,15 +98,15 @@ class DBN (sim: Simulation) {
 				      key = "P("+state.discrete_traffic(i)+"_(t+1)|"+previous_traffic(i)+"_(t),"+previous_actions.getOrElse("signals", "None").toString()+"_(t))"
 				      
 				      
-				      CPT(key) += 1.0
+				      CPT(key) += 1
 				      
-				      CPT_total(key) += 1.0
+				      CPT_total(key) += 1
 
 				      
 				}
 	}
 	
-	def printCPT_Dir(CPT: mutable.Map[String, mutable.Map[String, Double]], count: Int, count_t: Int, mu: Double){
+	def printCPT_Dir(CPT: mutable.Map[String, mutable.Map[String, Int]], count: Int, count_t: Int, mu: Double){
 		var key = ""
 		var dir = 0.0
 		var ml_estimate = 0.0
@@ -171,7 +124,7 @@ class DBN (sim: Simulation) {
 		        }
 		      }
 		      
-		      dir = (ml_estimate + (mu * CPT_total.get(j).get./(count_t)))/((count) + mu)
+		      dir = (ml_estimate + (mu * CPT_total.get(j).get./(count_t))).toFloat/((count) + mu)
 		      println(j+" "+dir)
 		      //check += CPT.get(key).get.get(j).get./(count)
 		  }
@@ -182,7 +135,7 @@ class DBN (sim: Simulation) {
 		}
 	}
 	
-	def printCPT_ML(CPT: mutable.Map[String, mutable.Map[String, Double]], count: Int){
+	def printCPT_ML(CPT: mutable.Map[String, mutable.Map[String, Int]], count: Int){
 		var key = ""
 		//var check = 0.0
 		println("Maximum Likelihood estimates:")
@@ -191,7 +144,7 @@ class DBN (sim: Simulation) {
 		  println(key+":")
 		  for (j <- CPT.get(key).get.keySet.toList.sorted){
 			  //println(j+" "+CPT.get(key).get.get(j).get)
-		      println(j+": "+CPT.get(key).get.get(j).get./(count))
+		      println(j+": "+CPT.get(key).get.get(j).get.toFloat/(count))
 		      //check += CPT.get(key).get.get(j).get./(count)
 		  }
 		  // simple validation to check if the probabilities sum to 1
@@ -205,7 +158,7 @@ class DBN (sim: Simulation) {
 		//var check = 0.0
 		println("Whole intersection estimates: ")
 		  for (j <- CPT_total.keySet.toList.sorted){ 
-		      println(j +": "+CPT_total.get(j).get./(count))
+		      println(j +": "+CPT_total.get(j).get.toFloat/(count))
 		  }
 		  // simple validation to check if the probabilities sum to 1
 		  //println("Valid: "+check)

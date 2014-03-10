@@ -7,14 +7,15 @@ package utexas.aorta.sim
 import utexas.aorta.ui.GUIDebugger
 import utexas.aorta.analysis.{SimSpeedMonitor, ReplayReader, ReplayWriter, AgentProgressMonitor,
                               REPLDebugger}
-import utexas.aorta.learning.DBN
+import utexas.aorta.learning.{DBN, DBN_segment}
 
 import utexas.aorta.common.{Util, Timer, cfg, Flags}
 
 object Headless {
   def main(args: Array[String]): Unit = {
     val sim = Util.process_args(args)
-    val dbn = new DBN(sim)
+    //val dbn = new DBN(sim)
+    val dbn2 = new DBN_segment(sim)
     // TODO move elsewhere?
     Flags.string("--benchmark") match {
       case Some(fn) => new SimSpeedMonitor(sim, fn)

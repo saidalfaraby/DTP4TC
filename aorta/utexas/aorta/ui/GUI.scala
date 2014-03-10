@@ -11,7 +11,7 @@ import javax.swing.WindowConstants
 import java.io.File
 
 import utexas.aorta.sim.{Simulation, EV_Heartbeat}
-import utexas.aorta.learning.DBN
+import utexas.aorta.learning.{DBN, DBN_segment}
 import utexas.aorta.common.{Util, cfg}
 
 object Status_Bar {
@@ -106,7 +106,8 @@ object GUI extends SimpleSwingApplication {
 
   override def main(args: Array[String]) {
     val sim = Util.process_args(args)
-    val dbn = new DBN(sim)
+    //val dbn = new DBN(sim)
+    val dbn_segment = new DBN_segment(sim)
     canvas_2d = new MapCanvas(sim)
     // TODO doesnt start drawn correctly!
     canvas_2d.repaint
