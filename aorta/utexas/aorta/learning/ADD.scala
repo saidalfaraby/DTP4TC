@@ -52,18 +52,29 @@ class Leaf(label : String) extends GenericNode(label){
  * @param decisionNodeVal - all possible values/states of decision node
  * @param internalNode - in out case these are array of parents labels
  */
-class ADD (decisionNodeName : String, internalNode : Array[String]){
+class ADD (decisionNodeName : String, internalNode : Array[String], lane_config: List[String], action_config: List[String]){
   //Assume the order of internalNode is fix, and the first one is the root
   var root = new Node(internalNode(0))
-  var decisionNodeVal = mutable.ListBuffer[String]()
+  var decisionNodeVal = lane_config//mutable.ListBuffer[String]()
   var refCandidates = mutable.ListBuffer[Leaf]()
-  def this(name: String, root: Node) { this(name, Array("")); this.root = root; }
+  //def this(name: String, root: Node) { this(name, Array("")); this.root = root; }
   def getParents = internalNode
   def getDecisionValues = decisionNodeVal
   def getName = decisionNodeName
+  val Pattern = "(*seg*)".r
+  
+  val parent_values = collection.immutable.HashMap("lane" -> lane_config, "action" -> action_config)
+  
   
   var N = 0//sample size so far
   
+  def get_parent_values(parent: String) : List[String] = {
+    if (parent contains "seg"){
+      return parent_values("lane")
+    }else{
+      return parent_values("action")
+    }
+  }
   
   //now we need to know all possible value of each internal node beforehand
   val domVar = mutable.HashMap[String, mutable.ListBuffer[String]]()
@@ -257,9 +268,9 @@ class Model{
   val actionADD : HashMap[String, mutable.ListBuffer[ADD]] = HashMap()
   
   
-  def addModel(action : String, decisionNode : String, parents : Array[String]){
+  def addModel(action : String, decisionNode : String, parents : Array[String], params : mutable.Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
-    act+= new ADD(decisionNode, parents)
+    act+= new ADD(decisionNode, parents, params(decisionNode), params("Action"))
   }
   def update(action : String, prevState : HashMap[String, String], curState : HashMap[String,String]){
     val actSome = actionADD.get(action)

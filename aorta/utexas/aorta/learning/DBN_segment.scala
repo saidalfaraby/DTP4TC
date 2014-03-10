@@ -33,6 +33,7 @@ class DBN_segment(sim: Simulation) {
 	private var freq = 0.0
 	var CPT = mutable.Map[String, Int]().withDefaultValue(0)
 	var isParentMapInitialized = false
+	val config = new Config()
 	
 	
 
@@ -74,7 +75,7 @@ class DBN_segment(sim: Simulation) {
 		    		  //initialize new ADDs for this action
 		    		  //for each variable in time t+1 effected by this action, initialize the ADD
 		    		  for ((decisionNodeName,parents)<-parentMap){
-		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toArray)
+		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toArray, config.parameters)
 		    		  }
 		    		  
 		    		}
