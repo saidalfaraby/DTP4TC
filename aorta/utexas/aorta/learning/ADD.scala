@@ -2,24 +2,16 @@ package utexas.aorta.learning
 
 import scala.collection.mutable.LinkedHashMap
 import java.io.FileWriter
-import scala.collection.mutable.HashMap
 import scala.collection.mutable
+import scala.collection.immutable
 
 abstract class GenericNode(label : String){
   var parent : Node = null
   var edge : String = null
-  var splitCandidates : List[String]
   def getLabel = label
 }
-/*
-class nullLeaf extends GenericNode{
-  var parent : Node = null
-  var edge : String = null
-  var splitCandidates : List[String]
-}*/
 
-//we will have a fix order of parent values based on the order of parent in internalNode of ADD. 
-class Data(pv : HashMap[String, String], dv : String){
+class Data(pv : immutable.HashMap[String, String], dv : String){
   var parentVal = pv
   var decisionVal = dv
 }
@@ -27,6 +19,7 @@ class Data(pv : HashMap[String, String], dv : String){
 class Node(label : String) extends GenericNode(label){
   val children = LinkedHashMap[String, GenericNode]()
   val score : Double = 0.0
+  var untestedParents : Int //just make sure that the root will have nParent - 1, and -1 for 1-level deeper node
   def getChild(edgeName : String) = children(edgeName)
   def addChild(edgeName : String, child : GenericNode) = children.+=(edgeName -> child)
   override def toString = label
@@ -34,6 +27,7 @@ class Node(label : String) extends GenericNode(label){
 
 class Leaf(label : String, decisionVals : List[String]) extends GenericNode(label){
   def this() {this("", List())}
+  var splitCandidates = mutable.ListBuffer[String]()
   val listData = mutable.ListBuffer[Data]()
   val counter = mutable.HashMap[String, Int]()
   for (k <- decisionVals){
@@ -57,47 +51,50 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
 /**
  * Decision node is a node whose probability of its values are going to be predicted
  * @param decisionNodeName - label of decision node
- * @param decisionNodeVal - all possible values/states of decision node
- * @param internalNode - in out case these are array of parents labels
+ * @param decisionVals - all possible values/states of decision node
+ * @param parentsMap - contain parents labels as key and all possible value of each parent as value
  */
-class ADD (decisionNodeName : String, decisionVals : List[String], parents : Map[String, List[String]]){
+class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : Map[String, List[String]]){
   //Assume the order of internalNode is fix, and the first one is the root
   var root : GenericNode = null
   var decisionNodeVals = decisionVals
   var refCandidates = mutable.ListBuffer[Leaf]()
-  def getParents = parents.keys
+  def getParents = parentsMap.keys
   def getName = decisionNodeName
-  val Pattern = "(*seg*)".r
   val allLeaves = mutable.ListBuffer[Leaf]() //register all leaves to minimize computation of scoring function
-  
-  //val parent_values = collection.immutable.HashMap("lane" -> lane_config, "action" -> action_config)
-  
+  var MDLthreshold = 0.0
   
   var N = 0//sample size so far
-  /*
-  def get_parent_values(parent: String) : List[String] = {
-    if (parent contains "seg"){
-      return parent_values("lane")
-    }else{
-      return parent_values("action")
+  
+  def init(data : mutable.ListBuffer[(Pair[immutable.HashMap[String,String],String])]){
+    root = new Leaf(decisionNodeName, decisionNodeVals)
+    refCandidates.+=(root.asInstanceOf[Leaf])
+    root.asInstanceOf[Leaf].splitCandidates = parentsMap.keys.to[mutable.ListBuffer]
+    N = data.length
+    for (d<- data){
+      root.asInstanceOf[Leaf].addData(new Data(d._1, d._2))
     }
-  }*/
+  }
   
   //now we need to know all possible value of each internal node beforehand
   def addSplit(Y : String,l : Leaf):Node = {
     refCandidates.-=(l)
     val t = new Node(Y)
-    t.splitCandidates = l.splitCandidates
     l.parent.addChild(l.edge, t)
+    t.untestedParents = t.parent.untestedParents - 1
     val temp = mutable.HashMap[String, Leaf]()
-    for (v <- parents(l.edge)){
-      val newL = new Leaf()
+    for (v <- parentsMap(Y)){
+      val newL = new Leaf(decisionNodeName, decisionNodeVals)
       temp.update(v, newL)
       newL.parent = t
       newL.edge = v
       t.addChild(v, newL)
       newL.splitCandidates = l.splitCandidates.diff(List(Y))
-      refCandidates.+=(newL)
+      //add each new leaf to allLeaves list
+      allLeaves+=newL
+      //if this is not the last parent available for splitting, then add this leaf to split candidates
+      if (newL.splitCandidates.length > 0)      
+        refCandidates.+=(newL)
     }
     //split the data from old leaf into the new leaves
     for (d <- l.listData){
@@ -106,15 +103,31 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parents : Map
     return t
   }
   
-  def removeSplit(Y : Node, l : Leaf){
+  //switch a parent of leaves with the previous leaf at the same position. Here we don't copy the data into the leaf
+  //because it still contain the old data we need
+  def switchNode(Y : Node, l : Leaf){
+    Y.parent.addChild(Y.edge, l)
+    refCandidates.+=(l)
+  }
+  
+  //remove a parent of leaves. Then we need to relocate the data.
+  def removeSplit(Y : Node){
+    val l = new Leaf(decisionNodeName, decisionNodeVals)
+    allLeaves.+=(l)
+    l.splitCandidates+=(Y.getLabel)
     Y.parent.addChild(Y.edge, l)
     refCandidates.+=(l)
     Y.parent = null
     Y.edge = null
     //combine the data below the leaves of Y
+    for ( leaf <- Y.children.valuesIterator){
+      allLeaves.-=(leaf.asInstanceOf[Leaf])
+      for (d <- leaf.asInstanceOf[Leaf].listData)
+        l.addData(d)
+    }
   }
   
-  def extend{
+  def extendTree : Tuple3[Double, String, Leaf] ={
     //select a node from refinement candidates with a probability (uniform)
     var l = scala.util.Random.shuffle(refCandidates).head
     var minScore = Double.PositiveInfinity
@@ -125,9 +138,9 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parents : Map
         minScore = score
         bestCandidate = Y
       }
-      removeSplit(t,l)
+      switchNode(t,l)
     }
-    addSplit(bestCandidate, l)
+    return (minScore, bestCandidate, l)
   }
   
   def score : Double ={
@@ -139,7 +152,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parents : Map
         for (v <- testNode.asInstanceOf[Node].children.valuesIterator){
           sum += DLstruct(v)
         }
-        return 1+ Math.log(testNode.asInstanceOf[Node].splitCandidates.length)+sum
+        return 1+ Math.log(testNode.asInstanceOf[Node].untestedParents)+sum
       }
     }
     
@@ -157,11 +170,21 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parents : Map
       return sum
     }
     
-    return DLstruct(root)+DLparam
+    return DLstruct(root)+DLparam+DLdata
   }
   
   def learning(){
-    
+    var score = Double.NegativeInfinity
+    var differ = Double.PositiveInfinity
+    var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
+    while (differ > MDLthreshold){
+      result = extendTree
+      if (result._1 - score > MDLthreshold){
+        addSplit(result._2, result._3)
+      }
+      differ = result._1 - score
+      score = result._1
+    }
   }
   
   /**
@@ -291,7 +314,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parents : Map
  * features for each actions
  */
 class Model{
-  val actionADD : HashMap[String, mutable.ListBuffer[ADD]] = HashMap()
+  val actionADD : mutable.HashMap[String, mutable.ListBuffer[ADD]] = mutable.HashMap()
   
   
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
