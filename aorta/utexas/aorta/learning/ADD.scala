@@ -18,6 +18,12 @@ class nullLeaf extends GenericNode{
   var splitCandidates : List[String]
 }*/
 
+//we will have a fix order of parent values based on the order of parent in internalNode of ADD. 
+class Data(pv : HashMap[String, String], dv : String){
+  var parentVal = pv
+  var decisionVal = dv
+}
+
 class Node(label : String) extends GenericNode(label){
   val children = LinkedHashMap[String, GenericNode]()
   val score : Double = 0.0
@@ -26,22 +32,24 @@ class Node(label : String) extends GenericNode(label){
   override def toString = label
 }
 
-class Leaf(label : String) extends GenericNode(label){
-  def this() {this("")}
-  val valuesMap : LinkedHashMap[String, Int] = LinkedHashMap()
-  //for (v : String <- values){ valuesMap.+=(v -> 0)  }
-  def hit(valueName : String) : Unit = {
-    val prevV = valuesMap.get(valueName)
-    if (prevV != None)
-      valuesMap.update(valueName,prevV.get+1)
-    else 
-      valuesMap.+=(valueName -> 1)
+class Leaf(label : String, decisionVals : List[String]) extends GenericNode(label){
+  def this() {this("", List())}
+  val listData = mutable.ListBuffer[Data]()
+  val counter = mutable.HashMap[String, Int]()
+  for (k <- decisionVals){
+    counter.update(k, 0)
   }
-  def getValue(key : String) = valuesMap(key)
-  def getValues = valuesMap.valuesIterator
+  def addData(data : Data){
+    listData.+=(data)
+    counter.update(data.decisionVal, counter(data.decisionVal)+1)
+  }
+  def removeData(data : Data){
+    listData.-=(data)
+    counter.update(data.decisionVal, counter(data.decisionVal)-1)
+  }
   override def toString : String = {
     var s = ""
-    for (v <- valuesMap.valuesIterator){s+=(v+" ")}
+    for (v <- counter.valuesIterator){s+=(v+" ")}
     s
   }
 }
@@ -52,53 +60,58 @@ class Leaf(label : String) extends GenericNode(label){
  * @param decisionNodeVal - all possible values/states of decision node
  * @param internalNode - in out case these are array of parents labels
  */
-class ADD (decisionNodeName : String, internalNode : Array[String], lane_config: List[String], action_config: List[String]){
+class ADD (decisionNodeName : String, decisionVals : List[String], parents : Map[String, List[String]]){
   //Assume the order of internalNode is fix, and the first one is the root
-  var root = new Node(internalNode(0))
-  var decisionNodeVal = lane_config//mutable.ListBuffer[String]()
+  var root : GenericNode = null
+  var decisionNodeVals = decisionVals
   var refCandidates = mutable.ListBuffer[Leaf]()
-  //def this(name: String, root: Node) { this(name, Array("")); this.root = root; }
-  def getParents = internalNode
-  def getDecisionValues = decisionNodeVal
+  def getParents = parents.keys
   def getName = decisionNodeName
   val Pattern = "(*seg*)".r
+  val allLeaves = mutable.ListBuffer[Leaf]() //register all leaves to minimize computation of scoring function
   
-  val parent_values = collection.immutable.HashMap("lane" -> lane_config, "action" -> action_config)
+  //val parent_values = collection.immutable.HashMap("lane" -> lane_config, "action" -> action_config)
   
   
   var N = 0//sample size so far
-  
+  /*
   def get_parent_values(parent: String) : List[String] = {
     if (parent contains "seg"){
       return parent_values("lane")
     }else{
       return parent_values("action")
     }
-  }
+  }*/
   
   //now we need to know all possible value of each internal node beforehand
-  val domVar = mutable.HashMap[String, mutable.ListBuffer[String]]()
   def addSplit(Y : String,l : Leaf):Node = {
     refCandidates.-=(l)
     val t = new Node(Y)
     t.splitCandidates = l.splitCandidates
     l.parent.addChild(l.edge, t)
-    for (v <- domVar(l.edge)){
+    val temp = mutable.HashMap[String, Leaf]()
+    for (v <- parents(l.edge)){
       val newL = new Leaf()
+      temp.update(v, newL)
       newL.parent = t
       newL.edge = v
       t.addChild(v, newL)
       newL.splitCandidates = l.splitCandidates.diff(List(Y))
       refCandidates.+=(newL)
     }
+    //split the data from old leaf into the new leaves
+    for (d <- l.listData){
+      temp(d.parentVal(Y)).addData(d)
+    }
     return t
   }
   
   def removeSplit(Y : Node, l : Leaf){
-    Y.parent.addChild(l.edge, l)
+    Y.parent.addChild(Y.edge, l)
     refCandidates.+=(l)
     Y.parent = null
     Y.edge = null
+    //combine the data below the leaves of Y
   }
   
   def extend{
@@ -131,7 +144,17 @@ class ADD (decisionNodeName : String, internalNode : Array[String], lane_config:
     }
     
     def DLparam():Double = {
-      return 1./2*(decisionNodeVal.length-1)*refCandidates.length* N
+      return 1./2*(decisionNodeVals.length-1)*refCandidates.length* N
+    }
+    
+    def DLdata() : Double = {
+      var sum = 0.0
+      for (l <- allLeaves){
+        val total = l.counter.valuesIterator.sum
+        for (v <- l.counter.valuesIterator)
+        	sum+= - (v.toFloat/N)*Math.log(v/total)
+      }
+      return sum
     }
     
     return DLstruct(root)+DLparam
@@ -145,6 +168,7 @@ class ADD (decisionNodeName : String, internalNode : Array[String], lane_config:
    * @param state - values/states of all internal nodes at time step n
    * @param value - value/state of decision node at time step n+1
    */
+  /*
   def update(state : Array[String], value : String){
     require(state.length == internalNode.length)
     def recur(parent : Node, edgeNames : Array[String]){
@@ -254,6 +278,8 @@ class ADD (decisionNodeName : String, internalNode : Array[String], lane_config:
     * 
     */
   }
+  * *
+  */
 }
 
 
@@ -268,10 +294,12 @@ class Model{
   val actionADD : HashMap[String, mutable.ListBuffer[ADD]] = HashMap()
   
   
-  def addModel(action : String, decisionNode : String, parents : Array[String], params : mutable.Map[String, List[String]]){
+  def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
-    act+= new ADD(decisionNode, parents, params(decisionNode), params("Action"))
+    act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet))
   }
+  
+  /*
   def update(action : String, prevState : HashMap[String, String], curState : HashMap[String,String]){
     val actSome = actionADD.get(action)
     if (actSome == None)
@@ -288,6 +316,7 @@ class Model{
       })
     }
   }
+  */
   
   def printToDotFile{
     val filename = "test.dot"
@@ -299,14 +328,14 @@ class Model{
     string += "(variables "
     for (add <- listADD){
       string += "("+add.getName+" "
-      string += add.getDecisionValues.mkString(" ")
+      string += add.decisionNodeVals.mkString(" ")
       string += ") "
     }
     string += ")\n"
     for ((k,v)<- actionADD){
       string += "action "+k+"\n"
       for (add <- v){
-        string += add.printToString
+        //string += add.printToString
       }
       string += "endaction\n"
     }

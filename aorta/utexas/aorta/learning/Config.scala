@@ -14,6 +14,7 @@ class Config {
 	     parameters(location(i)+"_seg"+j) = lane_config
 	   }
 	}
-    parameters("Action") = action_config
-  
+    for (a <- action_config){
+    	parameters(a) = action_config
+    }
 }

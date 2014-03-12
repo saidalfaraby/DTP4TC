@@ -75,7 +75,7 @@ class DBN_segment(sim: Simulation) {
 		    		  //initialize new ADDs for this action
 		    		  //for each variable in time t+1 effected by this action, initialize the ADD
 		    		  for ((decisionNodeName,parents)<-parentMap){
-		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toArray, config.parameters)
+		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toList, config.parameters.toMap)
 		    		  }
 		    		  
 		    		}
@@ -90,7 +90,7 @@ class DBN_segment(sim: Simulation) {
 		    		}
 		    		prevState.+=("TrafficSignal" -> previous_actions.get("signals").get.toString())
 		    		curState.+=("TrafficSignal" -> state.actions.get("signals").get.toString())
-		    		treeCPT.update(actionName, prevState, curState)
+		    		//treeCPT.update(actionName, prevState, curState)
 		    		
 		    		//============================================
 		    		
