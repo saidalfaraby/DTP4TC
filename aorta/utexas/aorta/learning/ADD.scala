@@ -76,6 +76,11 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     }
   }
   
+  def addData(data : Pair[immutable.HashMap[String,String],String]){
+    N = N+1
+    root.asInstanceOf[Leaf].addData(new Data(data._1, data._2))
+  }
+  
   //now we need to know all possible value of each internal node beforehand
   def addSplit(Y : String,l : Leaf):Node = {
     refCandidates.-=(l)
@@ -320,6 +325,15 @@ class Model{
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
     act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet))
+  }
+  
+  def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
+	  	var ADD = actionADD.get(action).get
+	  	ADD.foreach(smt => {
+	  		var filter_map = prevState.filterKeys(smt.getParents.toSet)
+	  		var data_add_pair = Pair(filter_map.asInstanceOf[immutable.HashMap[String, String]], curState.get(smt.getName).get)
+	  		smt.addData(data_add_pair)
+	  	})
   }
   
   /*
