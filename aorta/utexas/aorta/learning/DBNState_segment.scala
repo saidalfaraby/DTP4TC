@@ -18,7 +18,8 @@ class DBNState_segment (sim: Simulation){
   var avg_delay = 0.0
   var thres_away = 80.0
   var uniq_roads =  mutable.Map[String, Double]()
-  val segments = 3
+  val config = new Config()
+  val segments = config.segments
 
   var cars_present = Array.ofDim[Int](8,segments)
 
