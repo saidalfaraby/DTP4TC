@@ -83,8 +83,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   def addSplit(Y : String,l : Leaf):Node = {
     refCandidates.-=(l)
     val t = new Node(Y)
-    println(l.toString)
-    println(l.edge)
+    //println(l.toString)
+    //println(l.edge)
     try{
     	l.parent.addChild(l.edge, t)
     	t.untestedParents = t.parent.untestedParents - 1
@@ -161,7 +161,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     var minScore = Double.PositiveInfinity
     var bestCandidate : String = null
     //var i = 0
-    println("l.candidates:" + l.splitCandidates)
+    //println("l.candidates:" + l.splitCandidates)
     for (Y <- l.splitCandidates){
       //println(i)
       //i+=1
@@ -215,24 +215,25 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     val first_ = DLstruct(root)
     val second_ = DLparam
     val third_ = DLdata
-    //println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
+    println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
     
     return first_ + second_ + third_
   }
   
   def learning(){
-    var score = Double.NegativeInfinity
+    var score = Double.PositiveInfinity
     var differ = Double.PositiveInfinity
     var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
     
     while (differ > MDLthreshold){
-      println(differ)
+      println("previously: " + differ)
       result = extendTree
-      println(result)
-      if (result._1 - score > MDLthreshold){
+
+      if (score - result._1 > MDLthreshold){
         addSplit(result._2, result._3)
       }
-      differ = result._1 - score
+      differ = score - result._1
+      println("after: " + differ)
       score = result._1
     }
   }
