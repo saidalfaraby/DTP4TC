@@ -70,7 +70,7 @@ class DBN_segment(sim: Simulation) {
 		    		
 		    		//============================================
 		    		//Initialize ADD for new action, or just update the ADD
-		    		val actionName = previous_actions.get("signals").toString
+		    		val actionName = previous_actions.get("signals").get.toString
 		    		if (!treeCPT.actionADD.contains(actionName)){ //if the action is not initialized yet, than initialize first
 		    		  //initialize new ADDs for this action
 		    		  //for each variable in time t+1 effected by this action, initialize the ADD
