@@ -90,7 +90,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     	t.untestedParents = t.parent.untestedParents - 1
     }catch {
       case e: Exception  => {
-        println("First") 
+        //println("First") 
         root = t 
         t.untestedParents = parentsMap.keySet.size - 1
       }
@@ -149,18 +149,29 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   
   def extendTree : Tuple3[Double, String, Leaf] ={
     //select a node from refinement candidates with a probability (uniform)
-    var l = scala.util.Random.shuffle(refCandidates).head
-    println("strt : "+l.edge)
-    println("l:"+l.toString())
+    var l : Leaf = null
+    try{
+    	l = scala.util.Random.shuffle(refCandidates).head
+    }catch{
+      // ideally we already built the tree
+      case e: Exception => return (Double.NegativeInfinity, null, null)
+    }
+    //println("strt : "+l.edge)
+    //println("l:"+l.toString())
     var minScore = Double.PositiveInfinity
     var bestCandidate : String = null
-    var i = 0
+    //var i = 0
+    println("l.candidates:" + l.splitCandidates)
     for (Y <- l.splitCandidates){
-      println(i)
-      i+=1
+      //println(i)
+      //i+=1
       var t = addSplit(Y, l)
-      if (score < minScore){
-        minScore = score
+      
+      val score_ = score
+      //println("score:"+score_)
+      if (score_ < minScore){
+        //println("found a best candidate")
+        minScore = score_
         bestCandidate = Y
       }
       switchNode(t,l)
@@ -177,6 +188,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
         for (v <- testNode.asInstanceOf[Node].children.valuesIterator){
           sum += DLstruct(v)
         }
+        val test = 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + Math.pow(10, -100))/Math.log(2))+sum
+        //println("test return:" + test)
         return 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + Math.pow(10, -100))/Math.log(2))+sum
       }
     }
@@ -189,13 +202,22 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       var sum = 0.0
       for (l <- allLeaves){
         val total = l.counter.valuesIterator.sum
-        for (v <- l.counter.valuesIterator)
-        	sum+= - (v.toFloat/N)*(Math.log(v/(total + Math.pow(10, -100)))/Math.log(2))
+        for (v <- l.counter.valuesIterator){
+            //println("v:" +v+" N:" + N+" total:"+total)
+        	val tmp = - (v.toFloat/N)*(Math.log((v/(total + Math.pow(10, -100)) + Math.pow(10, -100)))/Math.log(2))
+        	//println("tmp: " + tmp)
+        	sum+= tmp
+        }
       }
       return sum
     }
     
-    return DLstruct(root)+DLparam+DLdata
+    val first_ = DLstruct(root)
+    val second_ = DLparam
+    val third_ = DLdata
+    //println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
+    
+    return first_ + second_ + third_
   }
   
   def learning(){
@@ -206,6 +228,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     while (differ > MDLthreshold){
       println(differ)
       result = extendTree
+      println(result)
       if (result._1 - score > MDLthreshold){
         addSplit(result._2, result._3)
       }
@@ -345,6 +368,8 @@ class Model{
   
   var total_N = 0 
   val N_thres = 5
+  private var cnt = 0
+  private var flag = 1
   
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
@@ -352,22 +377,34 @@ class Model{
   }
   
   def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
-	  	var ADD = actionADD.get(action).get
-	  	ADD.foreach(smt => {
-	  		var filter_map = prevState.filterKeys(smt.getParents.toSet)
-	  		var data_add_pair = Pair(filter_map.toMap, curState.get(smt.getName).get)
-	  		smt.addData(data_add_pair)
-	  	})
-	  	total_N += 1
-	  	if (total_N > N_thres){
-	  	  start_building()
+	  
+       if (total_N == N_thres){
+         if(flag == 1){
+        	 start_building()
+        	 flag == 0
+        	 cnt += 1
+        	 println("Built: " + cnt)
+          }
+	  	  
+	  	  //total_N = 0
+	  	}else{
+	  		var ADD = actionADD.get(action).get
+	  		ADD.foreach(smt => {
+	  			var filter_map = prevState.filterKeys(smt.getParents.toSet)
+	  			var data_add_pair = Pair(filter_map.toMap, curState.get(smt.getName).get)
+	  			smt.addData(data_add_pair)
+	  		})
+	  		total_N += 1
 	  	}
+	  	
+	  
 	  	
   }
   
   def start_building(){
     for (key <- actionADD.keys){
        actionADD(key).foreach(add => {
+         println(key+" " + add.getName)
          add.learning()
        })
     }
