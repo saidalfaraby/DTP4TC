@@ -186,7 +186,7 @@ class DBNState_segment (sim: Simulation){
 
      sim.listen(classOf[EV_Signal_Change], _ match{
        case f: EV_Signal_Change => if (f.greens.size >= 4){
-    	  println(f.greens.toString)
+    	  //println(f.greens.toString)
           var action_list: Seq[String] = {
         	 val result = mutable.ArrayBuffer[String]()
         			 f.greens.foreach { green =>

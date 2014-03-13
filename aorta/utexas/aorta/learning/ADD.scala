@@ -11,7 +11,7 @@ abstract class GenericNode(label : String){
   def getLabel = label
 }
 
-class Data(pv : immutable.HashMap[String, String], dv : String){
+class Data(pv : immutable.Map[String, String], dv : String){
   var parentVal = pv
   var decisionVal = dv
 }
@@ -19,7 +19,7 @@ class Data(pv : immutable.HashMap[String, String], dv : String){
 class Node(label : String) extends GenericNode(label){
   val children = LinkedHashMap[String, GenericNode]()
   val score : Double = 0.0
-  var untestedParents : Int //just make sure that the root will have nParent - 1, and -1 for 1-level deeper node
+  var untestedParents = 0 //just make sure that the root will have nParent - 1, and -1 for 1-level deeper node
   def getChild(edgeName : String) = children(edgeName)
   def addChild(edgeName : String, child : GenericNode) = children.+=(edgeName -> child)
   override def toString = label
@@ -63,20 +63,18 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   def getName = decisionNodeName
   val allLeaves = mutable.ListBuffer[Leaf]() //register all leaves to minimize computation of scoring function
   var MDLthreshold = 0.0
-  
+ 
   var N = 0//sample size so far
   
-  def init(data : mutable.ListBuffer[(Pair[immutable.HashMap[String,String],String])]){
+  init()
+  
+  def init(){
     root = new Leaf(decisionNodeName, decisionNodeVals)
     refCandidates.+=(root.asInstanceOf[Leaf])
     root.asInstanceOf[Leaf].splitCandidates = parentsMap.keys.to[mutable.ListBuffer]
-    N = data.length
-    for (d<- data){
-      root.asInstanceOf[Leaf].addData(new Data(d._1, d._2))
-    }
   }
   
-  def addData(data : Pair[immutable.HashMap[String,String],String]){
+  def addData(data : Pair[immutable.Map[String,String],String]){
     N = N+1
     root.asInstanceOf[Leaf].addData(new Data(data._1, data._2))
   }
@@ -85,8 +83,19 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   def addSplit(Y : String,l : Leaf):Node = {
     refCandidates.-=(l)
     val t = new Node(Y)
-    l.parent.addChild(l.edge, t)
-    t.untestedParents = t.parent.untestedParents - 1
+    println(l.toString)
+    println(l.edge)
+    try{
+    	l.parent.addChild(l.edge, t)
+    	t.untestedParents = t.parent.untestedParents - 1
+    }catch {
+      case e: Exception  => {
+        println("First") 
+        root = t 
+        t.untestedParents = parentsMap.keySet.size - 1
+      }
+    }
+    
     val temp = mutable.HashMap[String, Leaf]()
     for (v <- parentsMap(Y)){
       val newL = new Leaf(decisionNodeName, decisionNodeVals)
@@ -111,7 +120,13 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   //switch a parent of leaves with the previous leaf at the same position. Here we don't copy the data into the leaf
   //because it still contain the old data we need
   def switchNode(Y : Node, l : Leaf){
-    Y.parent.addChild(Y.edge, l)
+    try{
+    	Y.parent.addChild(Y.edge, l)
+    }catch{
+      case e : Exception => {
+    	  root = l
+      }
+    }
     refCandidates.+=(l)
   }
   
@@ -135,9 +150,14 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   def extendTree : Tuple3[Double, String, Leaf] ={
     //select a node from refinement candidates with a probability (uniform)
     var l = scala.util.Random.shuffle(refCandidates).head
+    println("strt : "+l.edge)
+    println("l:"+l.toString())
     var minScore = Double.PositiveInfinity
     var bestCandidate : String = null
+    var i = 0
     for (Y <- l.splitCandidates){
+      println(i)
+      i+=1
       var t = addSplit(Y, l)
       if (score < minScore){
         minScore = score
@@ -157,7 +177,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
         for (v <- testNode.asInstanceOf[Node].children.valuesIterator){
           sum += DLstruct(v)
         }
-        return 1+ Math.log(testNode.asInstanceOf[Node].untestedParents)+sum
+        return 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + Math.pow(10, -100))/Math.log(2))+sum
       }
     }
     
@@ -170,7 +190,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       for (l <- allLeaves){
         val total = l.counter.valuesIterator.sum
         for (v <- l.counter.valuesIterator)
-        	sum+= - (v.toFloat/N)*Math.log(v/total)
+        	sum+= - (v.toFloat/N)*(Math.log(v/(total + Math.pow(10, -100)))/Math.log(2))
       }
       return sum
     }
@@ -182,7 +202,9 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     var score = Double.NegativeInfinity
     var differ = Double.PositiveInfinity
     var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
+    
     while (differ > MDLthreshold){
+      println(differ)
       result = extendTree
       if (result._1 - score > MDLthreshold){
         addSplit(result._2, result._3)
@@ -321,6 +343,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
 class Model{
   val actionADD : mutable.HashMap[String, mutable.ListBuffer[ADD]] = mutable.HashMap()
   
+  var total_N = 0 
+  val N_thres = 5
   
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
@@ -331,10 +355,23 @@ class Model{
 	  	var ADD = actionADD.get(action).get
 	  	ADD.foreach(smt => {
 	  		var filter_map = prevState.filterKeys(smt.getParents.toSet)
-	  		var data_add_pair = Pair(filter_map.asInstanceOf[immutable.HashMap[String, String]], curState.get(smt.getName).get)
+	  		var data_add_pair = Pair(filter_map.toMap, curState.get(smt.getName).get)
 	  		smt.addData(data_add_pair)
 	  	})
+	  	total_N += 1
+	  	if (total_N > N_thres){
+	  	  start_building()
+	  	}
+	  	
   }
+  
+  def start_building(){
+    for (key <- actionADD.keys){
+       actionADD(key).foreach(add => {
+         add.learning()
+       })
+    }
+  } 
   
   /*
   def update(action : String, prevState : HashMap[String, String], curState : HashMap[String,String]){

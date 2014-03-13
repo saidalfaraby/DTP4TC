@@ -7,6 +7,7 @@ import scala.util.matching.Regex
  * This class is an interface to working with result from SPUDD
  */
 class SPUDD {
+  /*
   dotToTree
   //Method for reading the resulting file and convert it to
   //variables and actions name. Or we can also use policy tree structure
@@ -44,6 +45,8 @@ class SPUDD {
     var add = new ADD("Policy", root)
     add.printToString
   }
+  
+  */
   
   
 }

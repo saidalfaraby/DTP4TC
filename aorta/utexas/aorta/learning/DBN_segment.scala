@@ -59,10 +59,10 @@ class DBN_segment(sim: Simulation) {
 		    	case f: EV_Signal_Change => if (f.greens.size >= 4){
 
 		    	if(cnt > 1){
-		    		print("Cars present: ")
-		    		state.print_carsPresent()
-		    		print("Lane traffic: ")
-		    		state.print_traffic()
+		    		//print("Cars present: ")
+		    		//state.print_carsPresent()
+		    		//print("Lane traffic: ")
+		    		//state.print_traffic()
 
 		    		updateCPT(previous_traffic, previous_actions)
 		    		updateCPT_action(previous_traffic, previous_actions)
@@ -90,6 +90,7 @@ class DBN_segment(sim: Simulation) {
 		    		}
 		    		prevState.+=("TrafficSignal" -> previous_actions.get("signals").get.toString())
 		    		curState.+=("TrafficSignal" -> state.actions.get("signals").get.toString())
+		    		treeCPT.gather_data_per_ADD(actionName, prevState, curState)
 		    		//treeCPT.update(actionName, prevState, curState)
 		    		
 		    		//============================================
@@ -101,7 +102,7 @@ class DBN_segment(sim: Simulation) {
 
 
 		    		//println(state.actions_per_lane)
-		    		printCPT_ML(CPT_per_lane, count)
+		    		//printCPT_ML(CPT_per_lane, count)
 		    		//printCPT_Dir(CPT_per_lane, count, count * state.discrete_traffic.size, count.toFloat/state.discrete_traffic.size)
 		    		//printCPT_total(count*state.discrete_traffic.size)
 
@@ -116,7 +117,7 @@ class DBN_segment(sim: Simulation) {
 		    	  previous_actions = state.actions.clone()
 		    	}
 				cnt += 1
-				treeCPT.printToDotFile
+				//treeCPT.printToDotFile
 			}
 		    }
 		)}
