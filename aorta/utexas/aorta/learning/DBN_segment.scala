@@ -67,7 +67,7 @@ class DBN_segment(sim: Simulation) {
 		    		updateCPT(previous_traffic, previous_actions)
 		    		updateCPT_action(previous_traffic, previous_actions)
 		    		isParentMapInitialized = true
-		    		println(parentMap.toString)
+		    		//println(parentMap.toString)
 		    		//============================================
 		    		//Initialize ADD for new action, or just update the ADD
 		    		val actionName = previous_actions.get("signals").get.toString

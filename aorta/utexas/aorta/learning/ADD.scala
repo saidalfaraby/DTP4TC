@@ -5,10 +5,19 @@ import java.io.FileWriter
 import scala.collection.mutable
 import scala.collection.immutable
 
+object GenericNode{
+  var ID = 0
+  def generateID :Int = {
+    ID += 1
+    return ID
+  }
+}
 abstract class GenericNode(label : String){
   var parent : Node = null
   var edge : String = null
   def getLabel = label
+  var ID = GenericNode.generateID
+  override def toString = getLabel
 }
 
 class Data(pv : immutable.Map[String, String], dv : String){
@@ -17,12 +26,11 @@ class Data(pv : immutable.Map[String, String], dv : String){
 }
 
 class Node(label : String) extends GenericNode(label){
-  val children = LinkedHashMap[String, GenericNode]()
+  var children = LinkedHashMap[String, GenericNode]()
   val score : Double = 0.0
   var untestedParents = 0 //just make sure that the root will have nParent - 1, and -1 for 1-level deeper node
   def getChild(edgeName : String) = children(edgeName)
   def addChild(edgeName : String, child : GenericNode) = children.+=(edgeName -> child)
-  override def toString = label
 }
 
 class Leaf(label : String, decisionVals : List[String]) extends GenericNode(label){
@@ -44,11 +52,11 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
     listData.-=(data)
     counter.update(data.decisionVal, counter(data.decisionVal)-1)
   }
-  override def toString : String = {
+/*  override def toString : String = {
     var s = ""
     for (v <- counter.valuesIterator){s+=(v+" ")}
     s
-  }
+  }*/
 }
 
 /**
@@ -90,6 +98,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     //println(l.edge)
     try{
     	l.parent.addChild(l.edge, t)
+    	t.parent = l.parent
+    	t.edge = l.edge
     	t.untestedParents = t.parent.untestedParents - 1
     }catch {
       case e: Exception  => {
@@ -107,9 +117,9 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       newL.parent = t
       newL.edge = v
       t.addChild(v, newL)
-      println("oldL : "+l.splitCandidates.toString)
+      //println("oldL : "+l.splitCandidates.toString)
       newL.splitCandidates = l.splitCandidates.diff(List(Y))
-      println("newL : "+newL.splitCandidates.toString)
+      //println("newL : "+newL.splitCandidates.toString)
       //add each new leaf to allLeaves list
       allLeaves+=newL
       //if this is not the last parent available for splitting, then add this leaf to split candidates
@@ -126,13 +136,18 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   //switch a parent of leaves with the previous leaf at the same position. Here we don't copy the data into the leaf
   //because it still contain the old data we need
   def switchNode(Y : Node, l : Leaf){
-    try{
+    try
     	Y.parent.addChild(Y.edge, l)
-    }catch{
-      case e : Exception => {
-    	  root = l
-      }
+    catch{
+      case e : Exception =>   root = l
     }
+    Y.parent = null
+    Y.edge = null
+    for (child <- Y.children.valuesIterator){
+      refCandidates.-=(child.asInstanceOf[Leaf])
+      allLeaves.+=(child.asInstanceOf[Leaf])
+    }
+    Y.children = LinkedHashMap[String, GenericNode]()
     refCandidates.+=(l)
   }
   
@@ -232,8 +247,9 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
     
     //while (differ > MDLthreshold){
-    do {
+    while (refCandidates.length > 0) {
       println("previously: " + curr_score)
+      println("refCandidates " + refCandidates.toString)
       result = extendTree
       println(result._1)
       differ = curr_score - result._1
@@ -241,9 +257,10 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
         addSplit(result._2, result._3)
         curr_score = result._1
       }
+      refCandidates.-=(result._3)
       println("after: " + curr_score)
       println("differ : " + differ)
-    } while (differ > MDLthreshold)
+    } 
   }
   
   /**
@@ -288,28 +305,45 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     }
     recur(root, state)
   }
-  
+  */
   def printTree {
     //traverse breadth first
     var queue : Array[GenericNode] = Array(root)
-    var remaining = 0
+    //println("root name : "+root.getLabel)
+    //println("root parent : "+root.parent.getLabel)
+//    var remaining = 0
+    var dotRelation = ""
+    var dotShape = ""
     while (queue.length > 0){
-      if (remaining==0) {
+     /* if (remaining==0) {
         println()
         remaining=queue.length
-      }
+      }*/
       var curNode = queue(0)
+      try{
+//    	  println(curNode.parent.getLabel)
+    	  dotRelation+= "\""+curNode.parent.ID+"\" -> \""+curNode.ID+"\" [label = \""+curNode.edge+"\"];\n"
+      } catch {
+        case e : Exception => //println("root : "+root.getLabel+" curNode : "+curNode.getLabel)
+      }
+      
       //remove proceeded node
       queue = queue.tail
-      print (curNode.toString+"  ")
+      //print (curNode.toString+"  ")
       //expand current Node
       if (!curNode.isInstanceOf[Leaf]){
+        dotShape +="{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];\""+curNode.ID+"\" [label=\""+curNode.getLabel+"\"];}\n"
         for (nextNode <- curNode.asInstanceOf[Node].children.valuesIterator) queue :+= nextNode
+      } else {
+        dotShape +="{ rank = same; node [shape=box, style=filled, color=goldenrod];\""+curNode.ID+"\" [label=\""+curNode.getLabel+"\"];}\n"
       }
-      remaining-=1
+      //remaining-=1
     }
+    println(dotShape)
+    println(dotRelation)
 
   }
+  /*
   
   /**
    * This method will print the ADD into a dot file
@@ -376,7 +410,7 @@ class Model{
   val actionADD : mutable.HashMap[String, mutable.ListBuffer[ADD]] = mutable.HashMap()
   
   var total_N = 0 
-  val N_thres = 5
+  val N_thres = 2
   private var cnt = 0
   private var flag = 1
   
@@ -393,6 +427,7 @@ class Model{
         	 flag = 0
         	 cnt += 1
         	 println("Built: " + cnt)
+        	 actionADD(actionADD.keys.head)(5).printTree
           }
 	  	  
 	  	  //total_N = 0
