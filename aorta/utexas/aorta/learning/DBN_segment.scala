@@ -67,7 +67,7 @@ class DBN_segment(sim: Simulation) {
 		    		updateCPT(previous_traffic, previous_actions)
 		    		updateCPT_action(previous_traffic, previous_actions)
 		    		isParentMapInitialized = true
-		    		
+		    		println(parentMap.toString)
 		    		//============================================
 		    		//Initialize ADD for new action, or just update the ADD
 		    		val actionName = previous_actions.get("signals").get.toString
@@ -134,6 +134,12 @@ class DBN_segment(sim: Simulation) {
 	     key2 = "P("+state.actions.getOrElse("signals", "None").toString()+"_(t+1)|"+previous_actions.getOrElse("signals", "None").toString()+"_(t),"+previous_traffic.deep.toString()+"_(t))"
 	     CPT_per_lane.get("Action").get(key2) += 1
 	     CPT_total(key2) += 1
+	     if (!isParentMapInitialized){
+	       val keys = parentMap.keySet.toList
+	       val vals = mutable.ListBuffer("TrafficSignal") ++ keys
+	       parentMap.+=("TrafficSignal" -> vals)
+	     }
+	       
 
 	}
 
@@ -176,15 +182,25 @@ class DBN_segment(sim: Simulation) {
 				  		 }
 				  		 // the segment immediately after the intersection, it has more dependencies
 				  		 else{
+				  		   var indices = Tuple3(0,0,0)
+				  		   if (i == 7)
+				  			 indices = Tuple3(0,1,2)
+				  		   else if (i == 6)
+				  		     indices = Tuple3(0,1,3)
+				  		   else if (i == 5)
+				  		     indices = Tuple3(0,2,3)
+				  		   else if (i == 4)
+				  		   	  indices = Tuple3(1,2,3)
+				  		   	  
 				  		   key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+
-				  				   "_"+location(i)+"_seg"+j+"(t),"+previous_traffic(0)(state.segments-1)+"_"+location(0)+"_seg"+
-				  				   (state.segments - 1)+"(t),"+ previous_traffic(1)(state.segments-1)+"_"+location(1)+"_seg"+
-				  				   (state.segments - 1)+"(t)," + previous_traffic(2)(state.segments-1)+"_"+location(2)+"_seg"+
+				  				   "_"+location(i)+"_seg"+j+"(t),"+previous_traffic(indices._1)(state.segments-1)+"_"+location(indices._1)+"_seg"+
+				  				   (state.segments - 1)+"(t),"+ previous_traffic(indices._2)(state.segments-1)+"_"+location(indices._2)+"_seg"+
+				  				   (state.segments - 1)+"(t)," + previous_traffic(indices._3)(state.segments-1)+"_"+location(indices._3)+"_seg"+
 				  				   (state.segments - 1)+"(t)," + previous_actions.getOrElse("signals", "None").toString()+"_(t))"
 				  			if (!isParentMapInitialized)
 				  			  parentMap.+=(location(i)+"_seg"+j -> mutable.ListBuffer(location(i)+"_seg"+j, 
-				  			    location(0)+"_seg"+(state.segments - 1),location(1)+"_seg"+(state.segments - 1), 
-				  			    location(2)+"_seg"+(state.segments - 1), "TrafficSignal"))
+				  			    location(indices._1)+"_seg"+(state.segments - 1),location(indices._2)+"_seg"+(state.segments - 1), 
+				  			    location(indices._3)+"_seg"+(state.segments - 1), "TrafficSignal"))
 				  		 }
 				  	 }
 				      CPT(key) += 1

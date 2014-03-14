@@ -35,6 +35,9 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
   }
   def addData(data : Data){
     listData.+=(data)
+    //println("decVal "+data.decisionVal.toString())
+    //println("parentVal "+data.parentVal.toString)
+    //println(counter.keySet.toString)
     counter.update(data.decisionVal, counter(data.decisionVal)+1)
   }
   def removeData(data : Data){
@@ -97,13 +100,16 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     }
     
     val temp = mutable.HashMap[String, Leaf]()
+    //println("Y : "+Y)
     for (v <- parentsMap(Y)){
       val newL = new Leaf(decisionNodeName, decisionNodeVals)
       temp.update(v, newL)
       newL.parent = t
       newL.edge = v
       t.addChild(v, newL)
+      println("oldL : "+l.splitCandidates.toString)
       newL.splitCandidates = l.splitCandidates.diff(List(Y))
+      println("newL : "+newL.splitCandidates.toString)
       //add each new leaf to allLeaves list
       allLeaves+=newL
       //if this is not the last parent available for splitting, then add this leaf to split candidates
@@ -154,7 +160,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     	l = scala.util.Random.shuffle(refCandidates).head
     }catch{
       // ideally we already built the tree
-      case e: Exception => return (Double.NegativeInfinity, null, null)
+      case e: Exception => {println("no body in refCandidates");return (Double.PositiveInfinity, null, null)}
     }
     //println("strt : "+l.edge)
     //println("l:"+l.toString())
@@ -215,27 +221,29 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     val first_ = DLstruct(root)
     val second_ = DLparam
     val third_ = DLdata
-    println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
+    //println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
     
     return first_ + second_ + third_
   }
   
   def learning(){
-    var score = Double.PositiveInfinity
+    var curr_score = Double.PositiveInfinity
     var differ = Double.PositiveInfinity
     var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
     
-    while (differ > MDLthreshold){
-      println("previously: " + differ)
+    //while (differ > MDLthreshold){
+    do {
+      println("previously: " + curr_score)
       result = extendTree
-
-      if (score - result._1 > MDLthreshold){
+      println(result._1)
+      differ = curr_score - result._1
+      if (curr_score - result._1 > MDLthreshold){
         addSplit(result._2, result._3)
+        curr_score = result._1
       }
-      differ = score - result._1
-      println("after: " + differ)
-      score = result._1
-    }
+      println("after: " + curr_score)
+      println("differ : " + differ)
+    } while (differ > MDLthreshold)
   }
   
   /**
@@ -382,7 +390,7 @@ class Model{
        if (total_N == N_thres){
          if(flag == 1){
         	 start_building()
-        	 flag == 0
+        	 flag = 0
         	 cnt += 1
         	 println("Built: " + cnt)
           }
@@ -393,6 +401,7 @@ class Model{
 	  		ADD.foreach(smt => {
 	  			var filter_map = prevState.filterKeys(smt.getParents.toSet)
 	  			var data_add_pair = Pair(filter_map.toMap, curState.get(smt.getName).get)
+	  			//println("data add pair : "+data_add_pair)
 	  			smt.addData(data_add_pair)
 	  		})
 	  		total_N += 1
@@ -403,7 +412,11 @@ class Model{
   }
   
   def start_building(){
+    val total = actionADD.keys.size
+    var i=0
     for (key <- actionADD.keys){
+      println(i+" of "+total)
+      i+=1
        actionADD(key).foreach(add => {
          println(key+" " + add.getName)
          add.learning()
