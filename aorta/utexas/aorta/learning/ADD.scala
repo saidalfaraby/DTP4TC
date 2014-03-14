@@ -256,8 +256,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       if (curr_score - result._1 > MDLthreshold){
         addSplit(result._2, result._3)
         curr_score = result._1
-      }
-      refCandidates.-=(result._3)
+      } else 
+        refCandidates.-=(result._3)
       println("after: " + curr_score)
       println("differ : " + differ)
     } 
