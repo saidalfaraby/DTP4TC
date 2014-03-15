@@ -17,7 +17,7 @@ abstract class GenericNode(label : String){
   var edge : String = null
   def getLabel = label
   var ID = GenericNode.generateID
-  override def toString = getLabel
+  override def toString = getLabel+" "+ID
 }
 
 class Data(pv : immutable.Map[String, String], dv : String){
@@ -37,7 +37,7 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
   def this() {this("", List())}
   var splitCandidates = mutable.ListBuffer[String]()
   val listData = mutable.ListBuffer[Data]()
-  val counter = mutable.HashMap[String, Int]()
+  val counter = mutable.LinkedHashMap[String, Int]()
   for (k <- decisionVals){
     counter.update(k, 0)
   }
@@ -52,11 +52,11 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
     listData.-=(data)
     counter.update(data.decisionVal, counter(data.decisionVal)-1)
   }
-/*  override def toString : String = {
+  def getValuesString : String = {
     var s = ""
     for (v <- counter.valuesIterator){s+=(v+" ")}
     s
-  }*/
+  }
 }
 
 /**
@@ -78,6 +78,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   var N = 0//sample size so far
   
   init()
+  
+  def getScore = score
   
   def init(){
     root = new Leaf(decisionNodeName, decisionNodeVals)
@@ -306,7 +308,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     recur(root, state)
   }
   */
-  def printTree {
+  def printTree(fileName : String) {
     //traverse breadth first
     var queue : Array[GenericNode] = Array(root)
     //println("root name : "+root.getLabel)
@@ -314,6 +316,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
 //    var remaining = 0
     var dotRelation = ""
     var dotShape = ""
+    var dotString = ""
     while (queue.length > 0){
      /* if (remaining==0) {
         println()
@@ -331,16 +334,31 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       queue = queue.tail
       //print (curNode.toString+"  ")
       //expand current Node
+      var scoreVal = ""
+      if (curNode==root){
+        scoreVal += "score="+getScore+"\\nN="+N+"\\n"
+      }
       if (!curNode.isInstanceOf[Leaf]){
-        dotShape +="{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];\""+curNode.ID+"\" [label=\""+curNode.getLabel+"\"];}\n"
+        dotShape +="{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];\""+curNode.ID+"\" [label=\""+scoreVal+curNode.getLabel+"\"];}\n"
         for (nextNode <- curNode.asInstanceOf[Node].children.valuesIterator) queue :+= nextNode
       } else {
-        dotShape +="{ rank = same; node [shape=box, style=filled, color=goldenrod];\""+curNode.ID+"\" [label=\""+curNode.getLabel+"\"];}\n"
+        dotShape +="{ rank = same; node [shape=box, style=filled, color=goldenrod];\""+curNode.ID+"\" [label=\""+scoreVal+curNode.getLabel+"\\n"+curNode.asInstanceOf[Leaf].getValuesString+"\"];}\n"
       }
       //remaining-=1
     }
     println(dotShape)
     println(dotRelation)
+    dotString = "digraph \"DD\" {\nsize = \"7.5,10\"\nratio=1.0;\ncenter = true;\nedge [dir = none];\n"
+    dotString += dotShape+dotRelation+"\n}"
+    val fw = new FileWriter(fileName)
+    try {
+    	fw.write(dotString)
+    }
+    finally fw.close()
+
+
+
+
 
   }
   /*
@@ -410,7 +428,7 @@ class Model{
   val actionADD : mutable.HashMap[String, mutable.ListBuffer[ADD]] = mutable.HashMap()
   
   var total_N = 0 
-  val N_thres = 2
+  val N_thres = 1000
   private var cnt = 0
   private var flag = 1
   
@@ -420,18 +438,22 @@ class Model{
   }
   
   def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
-	  
+	  println("N Data : "+total_N)
        if (total_N == N_thres){
          if(flag == 1){
         	 start_building()
         	 flag = 0
         	 cnt += 1
         	 println("Built: " + cnt)
-        	 actionADD(actionADD.keys.head)(5).printTree
+        	 val chAction = actionADD.keys.head
+        	 val chADD = actionADD(chAction)(16)
+        	 println("Chosen Action : "+chAction.toString+" Chosen ADD : "+chADD.getName)
+//        	 chADD.printTree(chAction+"__"+chADD.getName+".dot")
           }
 	  	  
 	  	  //total_N = 0
 	  	}else{
+	  	  if (flag ==1){
 	  		var ADD = actionADD.get(action).get
 	  		ADD.foreach(smt => {
 	  			var filter_map = prevState.filterKeys(smt.getParents.toSet)
@@ -439,8 +461,10 @@ class Model{
 	  			//println("data add pair : "+data_add_pair)
 	  			smt.addData(data_add_pair)
 	  		})
-	  		total_N += 1
+	  	  }
+	  		
 	  	}
+	  total_N += 1
 	  	
 	  
 	  	
@@ -455,6 +479,7 @@ class Model{
        actionADD(key).foreach(add => {
          println(key+" " + add.getName)
          add.learning()
+         add.printTree(key+"__"+add.getName+".dot")
        })
     }
   } 

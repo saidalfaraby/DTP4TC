@@ -70,11 +70,13 @@ class DBN_segment(sim: Simulation) {
 		    		//println(parentMap.toString)
 		    		//============================================
 		    		//Initialize ADD for new action, or just update the ADD
+		    		
 		    		val actionName = previous_actions.get("signals").get.toString
 		    		if (!treeCPT.actionADD.contains(actionName)){ //if the action is not initialized yet, than initialize first
 		    		  //initialize new ADDs for this action
 		    		  //for each variable in time t+1 effected by this action, initialize the ADD
 		    		  for ((decisionNodeName,parents)<-parentMap){
+		    		    //println(decisionNodeName)
 		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toList, config.parameters.toMap)
 		    		  }
 		    		  
