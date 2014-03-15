@@ -1,0 +1,38 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"9334" [label="score=22.346530307781364\nN=250\nNorth_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"9343" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"9353" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"9363" [label="TrafficSignal"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9344" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9345" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9346" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9347" [label="North_in_seg2\n139 1 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9354" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9355" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9356" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9357" [label="North_in_seg2\n3 33 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9364" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9365" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9366" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"9367" [label="North_in_seg2\n0 3 71 "];}
+"9334" -> "9343" [label = "low"];
+"9334" -> "9353" [label = "medium"];
+"9334" -> "9363" [label = "high"];
+"9343" -> "9344" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"9343" -> "9345" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"9343" -> "9346" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"9343" -> "9347" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"9353" -> "9354" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"9353" -> "9355" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"9353" -> "9356" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"9353" -> "9357" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"9363" -> "9364" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"9363" -> "9365" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"9363" -> "9366" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"9363" -> "9367" [label = "ArrayBuffer(11, 2, 6, 7)"];
+
+}
