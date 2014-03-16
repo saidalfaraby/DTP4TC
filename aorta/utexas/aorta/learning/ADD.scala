@@ -112,7 +112,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     }
     
     val temp = mutable.HashMap[String, Leaf]()
-    //println("Y : "+Y)
+//    println("Y ins: "+Y)
     for (v <- parentsMap(Y)){
       val newL = new Leaf(decisionNodeName, decisionNodeVals)
       temp.update(v, newL)
@@ -174,7 +174,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     //select a node from refinement candidates with a probability (uniform)
     var l : Leaf = null
     try{
-    	l = scala.util.Random.shuffle(refCandidates).head
+    	//l = scala.util.Random.shuffle(refCandidates).head
+      l = refCandidates.head
     }catch{
       // ideally we already built the tree
       case e: Exception => {println("no body in refCandidates");return (Double.PositiveInfinity, null, null)}
@@ -184,16 +185,17 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     var minScore = Double.PositiveInfinity
     var bestCandidate : String = null
     //var i = 0
-    //println("l.candidates:" + l.splitCandidates)
+//    println("l.candidates:" + l.splitCandidates)
     for (Y <- l.splitCandidates){
       //println(i)
       //i+=1
+//      println("Y : "+Y)
       var t = addSplit(Y, l)
       
       val score_ = score
-      //println("score:"+score_)
+//      println("score:"+score_)
       if (score_ < minScore){
-        //println("found a best candidate")
+//        println("found a best candidate")
         minScore = score_
         bestCandidate = Y
       }
@@ -213,7 +215,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
         }
         val test = 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + Math.pow(10, -100))/Math.log(2))+sum
         //println("test return:" + test)
-        return 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + Math.pow(10, -100))/Math.log(2))+sum
+        return 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + 1)/Math.log(2))+sum
       }
     }
     
@@ -225,22 +227,27 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       var sum = 0.0
       for (l <- allLeaves){
         val total = l.counter.valuesIterator.sum
+        val nVal = l.counter.size
         for (v <- l.counter.valuesIterator){
-            //println("v:" +v+" N:" + N+" total:"+total)
-        	val tmp = - (v.toFloat/N)*(Math.log((v/(total + Math.pow(10, -100)) + Math.pow(10, -100)))/Math.log(2))
+            //println("v:" +v+" N:" + N+" total:"+total+" nVal : "+nVal)
+        	val tmp = - ((v.toFloat+1)/N)*(Math.log((v.toFloat+1)/(total + nVal))/Math.log(2))
         	//println("tmp: " + tmp)
         	sum+= tmp
         }
       }
       return sum
+        
     }
     
     val first_ = DLstruct(root)
     val second_ = DLparam
     val third_ = DLdata
-    //println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
-    
-    return first_ + second_ + third_
+    println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
+    val total =first_ + second_ + third_ 
+    if (total !=Double.PositiveInfinity && total !=Double.NegativeInfinity && !total.isNaN())
+      return total
+      else
+        return 999999
   }
   
   def learning(){
@@ -251,11 +258,15 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     //while (differ > MDLthreshold){
     while (refCandidates.length > 0) {
       println("previously: " + curr_score)
+
       println("refCandidates " + refCandidates.toString)
       result = extendTree
-      println(result._1)
+//      println(result._1)
+//      println(result._2)
+//      println("refCandidates after extend "+refCandidates.toString)
       differ = curr_score - result._1
       if (curr_score - result._1 > MDLthreshold){
+//      if (true){
         addSplit(result._2, result._3)
         curr_score = result._1
       } else 
@@ -473,13 +484,22 @@ class Model{
   def start_building(){
     val total = actionADD.keys.size
     var i=0
+    
+    
+    
     for (key <- actionADD.keys){
       println(i+" of "+total)
       i+=1
        actionADD(key).foreach(add => {
          println(key+" " + add.getName)
-         add.learning()
-         add.printTree(key+"__"+add.getName+".dot")
+         val fw = new FileWriter("testFull.txt", true)
+         try {
+        	 fw.write(key+" " + add.getName +"\n")
+         } finally fw.close()
+//         if (add.getName!="TrafficSignal"){
+           add.learning()
+           add.printTree(key+"__"+add.getName+".dot")
+//         }
        })
     }
   } 
