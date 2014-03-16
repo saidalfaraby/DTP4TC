@@ -1,0 +1,104 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26159" [label="score=1104.0001433832201\nN=250\nEast_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26172" [label="East_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26185" [label="East_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26198" [label="East_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26207" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26217" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26227" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26237" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26247" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26257" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26267" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26277" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"26287" [label="TrafficSignal"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26208" [label="East_out_seg2\n147 4 6 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26209" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26210" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26211" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26218" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26219" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26220" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26221" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26228" [label="East_out_seg2\n0 1 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26229" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26230" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26231" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26238" [label="East_out_seg2\n1 12 3 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26239" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26240" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26241" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26248" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26249" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26250" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26251" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26258" [label="East_out_seg2\n0 4 2 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26259" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26260" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26261" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26268" [label="East_out_seg2\n3 1 20 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26269" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26270" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26271" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26278" [label="East_out_seg2\n3 0 14 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26279" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26280" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26281" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26288" [label="East_out_seg2\n2 0 27 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26289" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26290" [label="East_out_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"26291" [label="East_out_seg2\n0 0 0 "];}
+"26159" -> "26172" [label = "low"];
+"26159" -> "26185" [label = "medium"];
+"26159" -> "26198" [label = "high"];
+"26172" -> "26207" [label = "low"];
+"26172" -> "26217" [label = "medium"];
+"26172" -> "26227" [label = "high"];
+"26185" -> "26237" [label = "low"];
+"26185" -> "26247" [label = "medium"];
+"26185" -> "26257" [label = "high"];
+"26198" -> "26267" [label = "low"];
+"26198" -> "26277" [label = "medium"];
+"26198" -> "26287" [label = "high"];
+"26207" -> "26208" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26207" -> "26209" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26207" -> "26210" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26207" -> "26211" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26217" -> "26218" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26217" -> "26219" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26217" -> "26220" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26217" -> "26221" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26227" -> "26228" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26227" -> "26229" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26227" -> "26230" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26227" -> "26231" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26237" -> "26238" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26237" -> "26239" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26237" -> "26240" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26237" -> "26241" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26247" -> "26248" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26247" -> "26249" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26247" -> "26250" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26247" -> "26251" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26257" -> "26258" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26257" -> "26259" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26257" -> "26260" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26257" -> "26261" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26267" -> "26268" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26267" -> "26269" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26267" -> "26270" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26267" -> "26271" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26277" -> "26278" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26277" -> "26279" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26277" -> "26280" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26277" -> "26281" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"26287" -> "26288" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"26287" -> "26289" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"26287" -> "26290" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"26287" -> "26291" [label = "ArrayBuffer(11, 2, 6, 7)"];
+
+}

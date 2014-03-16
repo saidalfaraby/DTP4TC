@@ -1,0 +1,104 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1855" [label="score=848.319802160923\nN=250\nEast_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1868" [label="East_out_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1881" [label="East_out_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1894" [label="East_out_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1903" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1913" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1923" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1933" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1943" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1953" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1963" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1973" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1983" [label="TrafficSignal"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1904" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1905" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1906" [label="East_out_seg1\n192 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1907" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1914" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1915" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1916" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1917" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1924" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1925" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1926" [label="East_out_seg1\n1 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1927" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1934" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1935" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1936" [label="East_out_seg1\n3 14 1 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1937" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1944" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1945" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1946" [label="East_out_seg1\n0 0 1 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1947" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1954" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1955" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1956" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1957" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1964" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1965" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1966" [label="East_out_seg1\n1 3 32 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1967" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1974" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1975" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1976" [label="East_out_seg1\n0 0 2 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1977" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1984" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1985" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1986" [label="East_out_seg1\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1987" [label="East_out_seg1\n0 0 0 "];}
+"1855" -> "1868" [label = "low"];
+"1855" -> "1881" [label = "medium"];
+"1855" -> "1894" [label = "high"];
+"1868" -> "1903" [label = "low"];
+"1868" -> "1913" [label = "medium"];
+"1868" -> "1923" [label = "high"];
+"1881" -> "1933" [label = "low"];
+"1881" -> "1943" [label = "medium"];
+"1881" -> "1953" [label = "high"];
+"1894" -> "1963" [label = "low"];
+"1894" -> "1973" [label = "medium"];
+"1894" -> "1983" [label = "high"];
+"1903" -> "1904" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1903" -> "1905" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1903" -> "1906" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1903" -> "1907" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1913" -> "1914" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1913" -> "1915" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1913" -> "1916" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1913" -> "1917" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1923" -> "1924" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1923" -> "1925" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1923" -> "1926" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1923" -> "1927" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1933" -> "1934" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1933" -> "1935" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1933" -> "1936" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1933" -> "1937" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1943" -> "1944" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1943" -> "1945" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1943" -> "1946" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1943" -> "1947" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1953" -> "1954" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1953" -> "1955" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1953" -> "1956" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1953" -> "1957" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1963" -> "1964" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1963" -> "1965" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1963" -> "1966" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1963" -> "1967" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1973" -> "1974" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1973" -> "1975" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1973" -> "1976" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1973" -> "1977" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1983" -> "1984" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1983" -> "1985" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1983" -> "1986" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1983" -> "1987" [label = "ArrayBuffer(11, 2, 6, 7)"];
+
+}

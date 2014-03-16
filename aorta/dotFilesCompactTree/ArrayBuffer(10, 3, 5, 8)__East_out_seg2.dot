@@ -1,0 +1,14 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"3862" [label="score=115.93490163887938\nN=250\nEast_out_seg2"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"3863" [label="East_out_seg2\n146 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"3864" [label="East_out_seg2\n2 21 1 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"3865" [label="East_out_seg2\n0 7 73 "];}
+"3862" -> "3863" [label = "low"];
+"3862" -> "3864" [label = "medium"];
+"3862" -> "3865" [label = "high"];
+
+}

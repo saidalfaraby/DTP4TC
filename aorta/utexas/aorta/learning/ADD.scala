@@ -17,7 +17,7 @@ abstract class GenericNode(label : String){
   var edge : String = null
   def getLabel = label
   var ID = GenericNode.generateID
-  override def toString = getLabel+" "+ID
+  override def toString = getLabel
 }
 
 class Data(pv : immutable.Map[String, String], dv : String){
@@ -43,9 +43,6 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
   }
   def addData(data : Data){
     listData.+=(data)
-    //println("decVal "+data.decisionVal.toString())
-    //println("parentVal "+data.parentVal.toString)
-    //println(counter.keySet.toString)
     counter.update(data.decisionVal, counter(data.decisionVal)+1)
   }
   def removeData(data : Data){
@@ -65,7 +62,7 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
  * @param decisionVals - all possible values/states of decision node
  * @param parentsMap - contain parents labels as key and all possible value of each parent as value
  */
-class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : Map[String, List[String]]){
+class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : Map[String, List[String]], typeTree : String){
   //Assume the order of internalNode is fix, and the first one is the root
   var root : GenericNode = null
   var decisionNodeVals = decisionVals
@@ -74,6 +71,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   def getName = decisionNodeName
   val allLeaves = mutable.ListBuffer[Leaf]() //register all leaves to minimize computation of scoring function
   var MDLthreshold = 0.0
+  
+  var typeOfTree = typeTree  //"COMPACT" //"FULL"
  
   var N = 0//sample size so far
   
@@ -96,8 +95,6 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   def addSplit(Y : String,l : Leaf):Node = {
     refCandidates.-=(l)
     val t = new Node(Y)
-    //println(l.toString)
-    //println(l.edge)
     try{
     	l.parent.addChild(l.edge, t)
     	t.parent = l.parent
@@ -105,7 +102,6 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     	t.untestedParents = t.parent.untestedParents - 1
     }catch {
       case e: Exception  => {
-        //println("First") 
         root = t 
         t.untestedParents = parentsMap.keySet.size - 1
       }
@@ -119,9 +115,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       newL.parent = t
       newL.edge = v
       t.addChild(v, newL)
-      //println("oldL : "+l.splitCandidates.toString)
       newL.splitCandidates = l.splitCandidates.diff(List(Y))
-      //println("newL : "+newL.splitCandidates.toString)
       //add each new leaf to allLeaves list
       allLeaves+=newL
       //if this is not the last parent available for splitting, then add this leaf to split candidates
@@ -147,7 +141,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     Y.edge = null
     for (child <- Y.children.valuesIterator){
       refCandidates.-=(child.asInstanceOf[Leaf])
-      allLeaves.+=(child.asInstanceOf[Leaf])
+      allLeaves.-=(child.asInstanceOf[Leaf])
     }
     Y.children = LinkedHashMap[String, GenericNode]()
     refCandidates.+=(l)
@@ -174,28 +168,20 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     //select a node from refinement candidates with a probability (uniform)
     var l : Leaf = null
     try{
-    	//l = scala.util.Random.shuffle(refCandidates).head
-      l = refCandidates.head
+      if (typeOfTree == "COMPACT")
+    	l = scala.util.Random.shuffle(refCandidates).head
+    	else if(typeOfTree == "FULL")
+    	  l = refCandidates.head
     }catch{
       // ideally we already built the tree
       case e: Exception => {println("no body in refCandidates");return (Double.PositiveInfinity, null, null)}
     }
-    //println("strt : "+l.edge)
-    //println("l:"+l.toString())
     var minScore = Double.PositiveInfinity
     var bestCandidate : String = null
-    //var i = 0
-//    println("l.candidates:" + l.splitCandidates)
     for (Y <- l.splitCandidates){
-      //println(i)
-      //i+=1
-//      println("Y : "+Y)
       var t = addSplit(Y, l)
-      
       val score_ = score
-//      println("score:"+score_)
       if (score_ < minScore){
-//        println("found a best candidate")
         minScore = score_
         bestCandidate = Y
       }
@@ -213,29 +199,26 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
         for (v <- testNode.asInstanceOf[Node].children.valuesIterator){
           sum += DLstruct(v)
         }
-        val test = 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + Math.pow(10, -100))/Math.log(2))+sum
-        //println("test return:" + test)
         return 1+ (Math.log(testNode.asInstanceOf[Node].untestedParents + 1)/Math.log(2))+sum
       }
     }
     
     def DLparam():Double = {
-      return 1./2*(decisionNodeVals.length-1)*refCandidates.length* N
+      return 1./2*(decisionNodeVals.length-1)*allLeaves.length* (Math.log(N)/Math.log(2))
     }
     
     def DLdata() : Double = {
       var sum = 0.0
+      println("N leaves : "+allLeaves.length)
       for (l <- allLeaves){
         val total = l.counter.valuesIterator.sum
         val nVal = l.counter.size
         for (v <- l.counter.valuesIterator){
-            //println("v:" +v+" N:" + N+" total:"+total+" nVal : "+nVal)
         	val tmp = - ((v.toFloat+1)/N)*(Math.log((v.toFloat+1)/(total + nVal))/Math.log(2))
-        	//println("tmp: " + tmp)
         	sum+= tmp
         }
       }
-      return sum
+      return sum*N
         
     }
     
@@ -255,18 +238,18 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     var differ = Double.PositiveInfinity
     var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
     
-    //while (differ > MDLthreshold){
     while (refCandidates.length > 0) {
       println("previously: " + curr_score)
-
       println("refCandidates " + refCandidates.toString)
       result = extendTree
-//      println(result._1)
-//      println(result._2)
-//      println("refCandidates after extend "+refCandidates.toString)
       differ = curr_score - result._1
-      if (curr_score - result._1 > MDLthreshold){
-//      if (true){
+      var testCond = false
+      if (typeOfTree == "COMPACT")
+        testCond = curr_score - result._1 > MDLthreshold
+        else
+          testCond = true
+        //      if (curr_score - result._1 > MDLthreshold){
+      if (testCond){
         addSplit(result._2, result._3)
         curr_score = result._1
       } else 
@@ -280,62 +263,15 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
    * @param state - values/states of all internal nodes at time step n
    * @param value - value/state of decision node at time step n+1
    */
-  /*
-  def update(state : Array[String], value : String){
-    require(state.length == internalNode.length)
-    def recur(parent : Node, edgeNames : Array[String]){
-
-      //println(count)
-      val edgeLabel = edgeNames.head
-
-      if (edgeNames.length == 1) {
-        //check if the current value is already registered in decisionNodeVal or not
-        if (!decisionNodeVal.contains(value))
-          decisionNodeVal+= value
-        try { //get leaf
-          val leaf = parent.getChild(edgeLabel).asInstanceOf[Leaf]
-          leaf.hit(value)
-        } catch { //leaf doesn't exist, create the new one
-          case e:Exception => {
-            val leaf = new Leaf(decisionNodeName)//create new leaf
-            leaf.hit(value)
-            parent.addChild(edgeLabel,leaf)//add to parent
-          }
-        }
-      } else { //internal node
-      var childNode : Node = null
-        try { // get internal node
-          childNode = parent.getChild(edgeLabel).asInstanceOf[Node]
-        } catch { //internal node doesn't exist, create the new one
-          case e:Exception => {
-            val nodeName = internalNode(internalNode.length-edgeNames.length+1)
-            childNode = new Node(nodeName)
-            parent.addChild(edgeLabel,childNode)//add to parent
-          }
-        }
-        recur(childNode.asInstanceOf[Node],edgeNames.tail)
-      }
-    }
-    recur(root, state)
-  }
-  */
   def printTree(fileName : String) {
     //traverse breadth first
     var queue : Array[GenericNode] = Array(root)
-    //println("root name : "+root.getLabel)
-    //println("root parent : "+root.parent.getLabel)
-//    var remaining = 0
     var dotRelation = ""
     var dotShape = ""
     var dotString = ""
     while (queue.length > 0){
-     /* if (remaining==0) {
-        println()
-        remaining=queue.length
-      }*/
       var curNode = queue(0)
       try{
-//    	  println(curNode.parent.getLabel)
     	  dotRelation+= "\""+curNode.parent.ID+"\" -> \""+curNode.ID+"\" [label = \""+curNode.edge+"\"];\n"
       } catch {
         case e : Exception => //println("root : "+root.getLabel+" curNode : "+curNode.getLabel)
@@ -343,7 +279,6 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       
       //remove proceeded node
       queue = queue.tail
-      //print (curNode.toString+"  ")
       //expand current Node
       var scoreVal = ""
       if (curNode==root){
@@ -368,14 +303,11 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     finally fw.close()
 
 
-
-
-
   }
-  /*
+  
   
   /**
-   * This method will print the ADD into a dot file
+   * This method will print the ADD into a dat file
    * @param filename - filename where the data will be appended to
    */
   def printToString() : String = {
@@ -399,36 +331,18 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
           count -=1
         }
       } else if (node.isInstanceOf[Leaf]){
-        if (node.asInstanceOf[Leaf].getValues.length>0){
-          //string += node.toString
-          decisionNodeVal.foreach(f => {
-            if (node.asInstanceOf[Leaf].valuesMap.contains(f))
-              string+= f+"="+node.asInstanceOf[Leaf].valuesMap(f)+" "})
-        } else {
+        if (node.asInstanceOf[Leaf].counter.size>0)
+          string += node.asInstanceOf[Leaf].getValuesString
+        else 
           string += node.asInstanceOf[Leaf].getLabel
-        }
-        
       }
       string += ")"
     }
     traverseHelper(root)
     string += "\n"
     string
-    /*
-    val fw = new FileWriter(filename, true)
-    try {
-    	fw.write(string)
-    }
-    finally fw.close() 
-    * 
-    */
   }
-  * *
-  */
 }
-
-
-
 
 
 /**
@@ -442,10 +356,11 @@ class Model{
   val N_thres = 1000
   private var cnt = 0
   private var flag = 1
+  var typeOfTree =  "FULL"//"COMPACT" //
   
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
-    act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet))
+    act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet), typeOfTree)
   }
   
   def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
@@ -459,6 +374,7 @@ class Model{
         	 val chAction = actionADD.keys.head
         	 val chADD = actionADD(chAction)(16)
         	 println("Chosen Action : "+chAction.toString+" Chosen ADD : "+chADD.getName)
+        	 printToDatFile
 //        	 chADD.printTree(chAction+"__"+chADD.getName+".dot")
           }
 	  	  
@@ -492,39 +408,19 @@ class Model{
       i+=1
        actionADD(key).foreach(add => {
          println(key+" " + add.getName)
-         val fw = new FileWriter("testFull.txt", true)
-         try {
-        	 fw.write(key+" " + add.getName +"\n")
-         } finally fw.close()
-//         if (add.getName!="TrafficSignal"){
-           add.learning()
+         if (add.getName=="TrafficSignal" && typeOfTree == "FULL"){
+           //do nothing
+         } else {
+           add.learning
            add.printTree(key+"__"+add.getName+".dot")
-//         }
+         }
        })
     }
   } 
   
-  /*
-  def update(action : String, prevState : HashMap[String, String], curState : HashMap[String,String]){
-    val actSome = actionADD.get(action)
-    if (actSome == None)
-      throw new Exception("action not found, add new action using addModel")
-    else{
-      val act = actSome.get
-      act.iterator.foreach(add => {
-        val decisionVal = curState.getOrElse(add.getName, throw new Exception(add.getName+" is not in current State Map"))
-        val parentVal = Array.fill[String](add.getParents.length)("")
-        for (i <- 0 until add.getParents.length){
-          parentVal(i) = curState.getOrElse(add.getParents(i), throw new Exception(add.getParents(i)+" is not in the previous State Map"))
-        }
-        add.update(parentVal, decisionVal)
-      })
-    }
-  }
-  */
   
-  def printToDotFile{
-    val filename = "test.dot"
+  def printToDatFile{
+    val filename = "test.dat"
     var string = ""
     if (actionADD.keySet.size >0){
     //assume all actions have the same ADD, take the first action, find all possible
@@ -537,21 +433,22 @@ class Model{
       string += ") "
     }
     string += ")\n"
+    string += "unnormalised\n"
     for ((k,v)<- actionADD){
       string += "action "+k+"\n"
       for (add <- v){
-        //string += add.printToString
+        string += add.printToString
       }
       string += "endaction\n"
     }
     }
     print(string)
-    /*
-    val fw = new FileWriter(filename, true)
+    
+    val fw = new FileWriter(filename)
     try {
     	fw.write(string)
     }
     finally fw.close()
-    */
+    
   }
 }

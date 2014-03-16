@@ -1,0 +1,38 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1224" [label="score=332.92788617072335\nN=250\nNorth_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1233" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1243" [label="TrafficSignal"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"1253" [label="TrafficSignal"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1234" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1235" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1236" [label="North_in_seg2\n141 2 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1237" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1244" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1245" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1246" [label="North_in_seg2\n2 32 1 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1247" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1254" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1255" [label="North_in_seg2\n0 0 0 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1256" [label="North_in_seg2\n0 1 71 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"1257" [label="North_in_seg2\n0 0 0 "];}
+"1224" -> "1233" [label = "low"];
+"1224" -> "1243" [label = "medium"];
+"1224" -> "1253" [label = "high"];
+"1233" -> "1234" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1233" -> "1235" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1233" -> "1236" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1233" -> "1237" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1243" -> "1244" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1243" -> "1245" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1243" -> "1246" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1243" -> "1247" [label = "ArrayBuffer(11, 2, 6, 7)"];
+"1253" -> "1254" [label = "ArrayBuffer(1, 3, 4, 5)"];
+"1253" -> "1255" [label = "ArrayBuffer(10, 3, 5, 8)"];
+"1253" -> "1256" [label = "ArrayBuffer(11, 12, 7, 9)"];
+"1253" -> "1257" [label = "ArrayBuffer(11, 2, 6, 7)"];
+
+}
