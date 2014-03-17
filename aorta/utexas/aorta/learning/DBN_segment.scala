@@ -67,7 +67,7 @@ class DBN_segment(sim: Simulation) {
 		    		updateCPT(previous_traffic, previous_actions)
 		    		updateCPT_action(previous_traffic, previous_actions)
 		    		isParentMapInitialized = true
-		    		//println(parentMap.toString)
+		    		println(parentMap.toString)
 		    		//============================================
 		    		//Initialize ADD for new action, or just update the ADD
 		    		
@@ -195,14 +195,14 @@ class DBN_segment(sim: Simulation) {
 				  		   	  indices = Tuple3(1,2,3)
 				  		   	  
 				  		   key = "P("+state.discrete_traffic(i)(j)+"_"+location(i)+"_seg"+j+"(t+1)|"+previous_traffic(i)(j)+
-				  				   "_"+location(i)+"_seg"+j+"(t),"+previous_traffic(indices._1)(state.segments-1)+"_"+location(indices._1)+"_seg"+
-				  				   (state.segments - 1)+"(t),"+ previous_traffic(indices._2)(state.segments-1)+"_"+location(indices._2)+"_seg"+
-				  				   (state.segments - 1)+"(t)," + previous_traffic(indices._3)(state.segments-1)+"_"+location(indices._3)+"_seg"+
-				  				   (state.segments - 1)+"(t)," + previous_actions.getOrElse("signals", "None").toString()+"_(t))"
+				  				   "_"+location(i)+"_seg"+j+"(t),"+previous_traffic(indices._1)(0)+"_"+location(indices._1)+"_seg"+
+				  				   (0)+"(t),"+ previous_traffic(indices._2)(0)+"_"+location(indices._2)+"_seg"+
+				  				   (0)+"(t)," + previous_traffic(indices._3)(0)+"_"+location(indices._3)+"_seg"+
+				  				   (0)+"(t)," + previous_actions.getOrElse("signals", "None").toString()+"_(t))"
 				  			if (!isParentMapInitialized)
 				  			  parentMap.+=(location(i)+"_seg"+j -> mutable.ListBuffer(location(i)+"_seg"+j, 
-				  			    location(indices._1)+"_seg"+(state.segments - 1),location(indices._2)+"_seg"+(state.segments - 1), 
-				  			    location(indices._3)+"_seg"+(state.segments - 1), "TrafficSignal"))
+				  			    location(indices._1)+"_seg"+(0),location(indices._2)+"_seg"+(0), 
+				  			    location(indices._3)+"_seg"+(0), "TrafficSignal"))
 				  		 }
 				  	 }
 				      CPT(key) += 1
