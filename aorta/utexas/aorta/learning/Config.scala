@@ -8,6 +8,7 @@ class Config {
     val action_config = List("ArrayBuffer(1, 3, 4, 5)", "ArrayBuffer(10, 3, 5, 8)", "ArrayBuffer(11, 12, 7, 9)", "ArrayBuffer(11, 2, 6, 7)")
     val segments = 3
 	var parameters = mutable.Map[String, List[String]]()
+	val keep_gathering = false
 	
 	for (i <- 0 to location.length - 1){
 	   for (j <- 0 to segments - 1){

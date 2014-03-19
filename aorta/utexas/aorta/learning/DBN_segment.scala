@@ -67,7 +67,8 @@ class DBN_segment(sim: Simulation) {
 		    		updateCPT(previous_traffic, previous_actions)
 		    		updateCPT_action(previous_traffic, previous_actions)
 		    		isParentMapInitialized = true
-		    		println(parentMap.toString)
+		    		//println(parentMap.toString)
+		    		//println(previous_actions)
 		    		//============================================
 		    		//Initialize ADD for new action, or just update the ADD
 		    		
@@ -92,7 +93,7 @@ class DBN_segment(sim: Simulation) {
 		    		}
 		    		prevState.+=("TrafficSignal" -> previous_actions.get("signals").get.toString())
 		    		curState.+=("TrafficSignal" -> state.actions.get("signals").get.toString())
-		    		treeCPT.gather_data_per_ADD(actionName, prevState, curState)
+		    		treeCPT.gather_data_per_ADD(actionName, prevState, curState, config.keep_gathering)
 		    		//treeCPT.update(actionName, prevState, curState)
 		    		
 		    		//============================================

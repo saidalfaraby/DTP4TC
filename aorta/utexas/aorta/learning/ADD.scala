@@ -350,23 +350,51 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
  * features for each actions
  */
 class Model{
-  val actionADD : mutable.HashMap[String, mutable.ListBuffer[ADD]] = mutable.HashMap()
   
-  var total_N = 0 
+  import scala.util.Marshal
+  import java.io._
+
+  var actionADD : mutable.HashMap[String, mutable.ListBuffer[ADD]] = mutable.HashMap()
+  val tolerance = 0.1
+  val discount = 0.9
+  
+  var total_N = 0
   val N_thres = 1000
   private var cnt = 0
   private var flag = 1
-  var typeOfTree =  "FULL"//"COMPACT" //
+  var typeOfTree =  "COMPACT"//"FULL" //
+  val path = "previousDATA/prevdata.data"
+  var list_Data = new mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]
   
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
     act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet), typeOfTree)
   }
   
-  def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
-	  println("N Data : "+total_N)
-       if (total_N == N_thres){
+  def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String], keep_gathering : Boolean){
+	 // keep gathering data only for this episode
+    // save them to disk after it finishes
+       println("N Data : "+total_N)
+       // if it is an episode that we want to build the trees
+       //val action_to_check = "ArrayBuffer(1, 3, 4, 5)"
+        //var cnt2 = 0
+       if (total_N == N_thres && !keep_gathering){
          if(flag == 1){
+//           list_Data.foreach(t => {
+//        	   if (t._1 == action_to_check)
+//        	     cnt2 += 1
+//           })
+           
+           list_Data.foreach(t => {
+        	var ADD = actionADD.get(t._1).get
+	  		ADD.foreach(smt => {
+	  			var filter_map = t._2.filterKeys(smt.getParents.toSet)
+	  			var data_add_pair = Pair(filter_map.toMap, t._3.get(smt.getName).get)
+	  			//println("data add pair : "+data_add_pair)
+	  			smt.addData(data_add_pair)
+	  		})
+           })
+             
         	 start_building()
         	 flag = 0
         	 cnt += 1
@@ -375,26 +403,66 @@ class Model{
         	 val chADD = actionADD(chAction)(16)
         	 println("Chosen Action : "+chAction.toString+" Chosen ADD : "+chADD.getName)
         	 printToDatFile
+        	 //println(action_to_check+": "+ cnt2)
 //        	 chADD.printTree(chAction+"__"+chADD.getName+".dot")
           }
 	  	  
 	  	  //total_N = 0
-	  	}else{
+	  	}else if (total_N == N_thres){
+	  	  println("Finished gathering data. Saving to disk...")
+	  	  println("List size:" + list_Data.size)
+	  	  //println(list_Data)
+	  	   saveprevdata(path)
+	  	   println("Done.")
+	  	}
+	  	else{
+	  	  // load beforehand from disk the previous counts
+	  	  if (total_N == 0){
+	  	    println("Loading data gathered previously...")
+	  	    println(list_Data.size)
+	  	    try{
+	  	    	list_Data = loadprevdata(path)
+	  	    }catch{
+	  	      case e : Exception =>{
+	  	        println("First time gathering data. Using new hashmap...")
+	  	        
+	  	      }
+	  	    }
+	  	    println("Done.")
+	  	    println("Loaded list size:" + list_Data.size)
+	  	    //println(list_Data)
+	  	    
+	  	  }
 	  	  if (flag ==1){
-	  		var ADD = actionADD.get(action).get
-	  		ADD.foreach(smt => {
-	  			var filter_map = prevState.filterKeys(smt.getParents.toSet)
-	  			var data_add_pair = Pair(filter_map.toMap, curState.get(smt.getName).get)
-	  			//println("data add pair : "+data_add_pair)
-	  			smt.addData(data_add_pair)
-	  		})
+	  	    list_Data.append(Tuple3(action, prevState, curState))
+//	  		var ADD = actionADD.get(action).get
+//	  		ADD.foreach(smt => {
+//	  			var filter_map = prevState.filterKeys(smt.getParents.toSet)
+//	  			var data_add_pair = Pair(filter_map.toMap, curState.get(smt.getName).get)
+//	  			//println("data add pair : "+data_add_pair)
+//	  			smt.addData(data_add_pair)
+//	  		})
 	  	  }
 	  		
 	  	}
 	  total_N += 1
 	  	
-	  
 	  	
+  }
+  
+  // Save previous ADD's to disk
+  def saveprevdata(path : String){
+    val out = new FileOutputStream(path)
+    out.write(Marshal.dump(list_Data))
+    out.close
+    
+  }
+  
+  // Load previous ADD's and continue working
+  def loadprevdata(path : String) : mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]] = {   
+    val in = new FileInputStream(path)
+    val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
+    Marshal.load[mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]](bytes)
   }
   
   def start_building(){
@@ -426,21 +494,59 @@ class Model{
     //assume all actions have the same ADD, take the first action, find all possible
     //values for each features/variable
     val listADD = actionADD(actionADD.keySet.head)
+    val actionMap = mutable.HashMap[String, String]()
+    var count = 0
+    actionADD.keysIterator.foreach(f=> {count = count+1;actionMap.+=(f-> ("action_"+count))})
     string += "(variables "
     for (add <- listADD){
       string += "("+add.getName+" "
-      string += add.decisionNodeVals.mkString(" ")
+      //string += add.decisionNodeVals.mkString(" ")
+      for (a <- add.decisionNodeVals){
+        if (actionMap.contains(a))
+          string += actionMap(a)+" "
+          else
+            string += a+" "
+      }
       string += ") "
     }
     string += ")\n"
     string += "unnormalised\n"
     for ((k,v)<- actionADD){
-      string += "action "+k+"\n"
+      string += "action "+actionMap(k)+"\n"
       for (add <- v){
         string += add.printToString
       }
       string += "endaction\n"
     }
+    string += """reward [+ (South_in_seg0 (low	(5.0))
+				(medium	(-1.0))
+				(high (-10.0)))
+			(South_out_seg0 (low (5.0))
+				(medium (-1.0))
+				(high (-10.0)))
+			(North_in_seg0 (low (5.0))
+				(medium (-1.0))
+				(high (-10.0)))
+			(North_out_seg0 (low (5.0))
+				(medium (-1.0))
+				(high (-10.0)))
+			(East_in_seg0 (low (5.0))
+				(medium (-1.0))
+				(high (-10.0)))
+			(East_out_seg0 (low (5.0))
+				(medium (-1.0))
+				(high (-10.0)))
+			(West_in_seg0 (low (5.0))
+				(medium (-1.0))
+				(high (-10.0)))
+			(West_out_seg0 (low (5.0))
+				(medium (-1.0))
+				(high (-10.0)))]
+    		
+    		"""
+
+    string += "discount "+discount+"\n"
+    string += "tolerance "+tolerance+"\n"
     }
     print(string)
     
