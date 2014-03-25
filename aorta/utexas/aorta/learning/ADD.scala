@@ -230,7 +230,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     if (total !=Double.PositiveInfinity && total !=Double.NegativeInfinity && !total.isNaN())
       return total
       else
-        return 999999
+        return 999999 //just to make sure if total =  NaN then return big number. But this shouldn't happen anymore. Will check later.
   }
   
   def learning(){
@@ -307,8 +307,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   
   
   /**
-   * This method will print the ADD into a dat file
-   * @param filename - filename where the data will be appended to
+   * This method return a string of the ADD as a dat file format
    */
   def printToString() : String = {
     //traverse depth first
@@ -463,6 +462,7 @@ class Model{
     val in = new FileInputStream(path)
     val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
     Marshal.load[mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]](bytes)
+    //new mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]
   }
   
   def start_building(){
