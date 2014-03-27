@@ -10,7 +10,7 @@ import utexas.aorta.sim.intersections.{Intersection, Phase, SystemWallets, Polic
 import utexas.aorta.sim.make.{Scenario, MkAgent, Factory, RouterType}
 import utexas.aorta.sim.drivers.Agent
 import utexas.aorta.sim.{Simulation, EV_AgentSpawned, EV_Reroute, EV_AgentQuit, EV_TurnFinished,
-                         EV_IntersectionOutcome, EV_Transition, EV_Signal_Change}
+                         EV_IntersectionOutcome, EV_Transition, EV_Signal_Change, EV_Heartbeat}
 import utexas.aorta.common.{Util, cfg, StateWriter, StateReader, Flags, AgentID, Publisher,
                             VertexID, EdgeID, RoadID, Timer}
 import utexas.aorta.analysis.RerouteCountMonitor
@@ -48,6 +48,16 @@ class DBN_segment(sim: Simulation) {
 	
 	var parentMap = mutable.HashMap[String, mutable.ListBuffer[String]]()
 	
+	sim.listen(classOf[EV_Heartbeat], _ match { case e: EV_Heartbeat => {
+	  print("Tes")
+      if (e.live_agents == 0 && e.done_agents > 0){
+        treeCPT.saveprevdata("previousDATA/prevdata.data")
+        treeCPT.showStat
+        if (!config.keep_gathering){
+          treeCPT.buildTree
+        }
+      }
+  }})
 	
 	// query for stats
 	val check_stats = new Thread(new Runnable {
@@ -93,7 +103,7 @@ class DBN_segment(sim: Simulation) {
 		    		}
 		    		prevState.+=("TrafficSignal" -> previous_actions.get("signals").get.toString())
 		    		curState.+=("TrafficSignal" -> state.actions.get("signals").get.toString())
-		    		treeCPT.gather_data_per_ADD(actionName, prevState, curState, config.keep_gathering)
+		    		treeCPT.gather_data_per_ADD(actionName, prevState, curState)
 		    		//treeCPT.update(actionName, prevState, curState)
 		    		
 		    		//============================================

@@ -71,6 +71,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   def getName = decisionNodeName
   val allLeaves = mutable.ListBuffer[Leaf]() //register all leaves to minimize computation of scoring function
   var MDLthreshold = 0.0
+  var totalValuesOnData = mutable.LinkedHashMap[String, Int]()
+  decisionVals.foreach(f => totalValuesOnData.+=((f,0)))
   
   var typeOfTree = typeTree  //"COMPACT" //"FULL"
  
@@ -88,6 +90,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   
   def addData(data : Pair[immutable.Map[String,String],String]){
     N = N+1
+    totalValuesOnData.update(data._2, totalValuesOnData(data._2)+1)
     root.asInstanceOf[Leaf].addData(new Data(data._1, data._2))
   }
   
@@ -209,7 +212,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     
     def DLdata() : Double = {
       var sum = 0.0
-      println("N leaves : "+allLeaves.length)
+//      println("N leaves : "+allLeaves.length)
       for (l <- allLeaves){
         val total = l.counter.valuesIterator.sum
         val nVal = l.counter.size
@@ -225,7 +228,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     val first_ = DLstruct(root)
     val second_ = DLparam
     val third_ = DLdata
-    println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
+//    println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
     val total =first_ + second_ + third_ 
     if (total !=Double.PositiveInfinity && total !=Double.NegativeInfinity && !total.isNaN())
       return total
@@ -239,8 +242,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
     
     while (refCandidates.length > 0) {
-      println("previously: " + curr_score)
-      println("refCandidates " + refCandidates.toString)
+//      println("previously: " + curr_score)
+//      println("refCandidates " + refCandidates.toString)
       result = extendTree
       differ = curr_score - result._1
       var testCond = false
@@ -254,8 +257,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
         curr_score = result._1
       } else 
         refCandidates.-=(result._3)
-      println("after: " + curr_score)
-      println("differ : " + differ)
+//      println("after: " + curr_score)
+//      println("differ : " + differ)
     } 
   }
   
@@ -292,8 +295,8 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       }
       //remaining-=1
     }
-    println(dotShape)
-    println(dotRelation)
+//    println(dotShape)
+//    println(dotRelation)
     dotString = "digraph \"DD\" {\nsize = \"7.5,10\"\nratio=1.0;\ncenter = true;\nedge [dir = none];\n"
     dotString += dotShape+dotRelation+"\n}"
     val fw = new FileWriter(fileName)
@@ -357,6 +360,8 @@ class Model{
   val tolerance = 0.1
   val discount = 0.9
   
+  val config = new Config
+  
   var total_N = 0
   val N_thres = 1000
   private var cnt = 0
@@ -364,90 +369,70 @@ class Model{
   var typeOfTree =  "COMPACT"//"FULL" //
   val path = "previousDATA/prevdata.data"
   var list_Data = new mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]
+  var totalValueInData = mutable.HashMap[String, mutable.HashMap[String,mutable.LinkedHashMap[String, Int]]]()
   
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
     act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet), typeOfTree)
   }
   
-  def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String], keep_gathering : Boolean){
-	 // keep gathering data only for this episode
-    // save them to disk after it finishes
-       println("N Data : "+total_N)
-       // if it is an episode that we want to build the trees
-       //val action_to_check = "ArrayBuffer(1, 3, 4, 5)"
-        //var cnt2 = 0
-       if (total_N == N_thres && !keep_gathering){
-         if(flag == 1){
-//           list_Data.foreach(t => {
-//        	   if (t._1 == action_to_check)
-//        	     cnt2 += 1
-//           })
-           
-           list_Data.foreach(t => {
-        	var ADD = actionADD.get(t._1).get
-	  		ADD.foreach(smt => {
-	  			var filter_map = t._2.filterKeys(smt.getParents.toSet)
-	  			var data_add_pair = Pair(filter_map.toMap, t._3.get(smt.getName).get)
-	  			//println("data add pair : "+data_add_pair)
-	  			smt.addData(data_add_pair)
-	  		})
-           })
-             
-        	 start_building()
-        	 flag = 0
-        	 cnt += 1
-        	 println("Built: " + cnt)
-        	 val chAction = actionADD.keys.head
-        	 val chADD = actionADD(chAction)(16)
-        	 println("Chosen Action : "+chAction.toString+" Chosen ADD : "+chADD.getName)
-        	 printToDatFile
-        	 //println(action_to_check+": "+ cnt2)
-//        	 chADD.printTree(chAction+"__"+chADD.getName+".dot")
+  def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
+    //compute simple statistics of the data
+    val actionStat = totalValueInData.getOrElseUpdate(action, new mutable.HashMap[String, mutable.LinkedHashMap[String,Int]])
+    for ((key,value) <- prevState){
+      //val varName = actionStat.getOrElseUpdate(key, new mutable.HashMap[String, Int])
+      var varName = mutable.LinkedHashMap[String,Int]()
+      try {
+        varName = actionStat(key)
+      } catch {
+        case e:Exception => {
+          for (value <-config.parameters(key)){
+            varName.update(value, 0)
           }
-	  	  
-	  	  //total_N = 0
-	  	}else if (total_N == N_thres){
-	  	  println("Finished gathering data. Saving to disk...")
-	  	  println("List size:" + list_Data.size)
-	  	  //println(list_Data)
-	  	   saveprevdata(path)
-	  	   println("Done.")
-	  	}
-	  	else{
-	  	  // load beforehand from disk the previous counts
-	  	  if (total_N == 0){
-	  	    println("Loading data gathered previously...")
-	  	    println(list_Data.size)
-	  	    try{
-	  	    	list_Data = loadprevdata(path)
-	  	    }catch{
-	  	      case e : Exception =>{
-	  	        println("First time gathering data. Using new hashmap...")
-	  	        
-	  	      }
-	  	    }
-	  	    println("Done.")
-	  	    println("Loaded list size:" + list_Data.size)
-	  	    //println(list_Data)
-	  	    
-	  	  }
-	  	  if (flag ==1){
-	  	    list_Data.append(Tuple3(action, prevState, curState))
-//	  		var ADD = actionADD.get(action).get
-//	  		ADD.foreach(smt => {
-//	  			var filter_map = prevState.filterKeys(smt.getParents.toSet)
-//	  			var data_add_pair = Pair(filter_map.toMap, curState.get(smt.getName).get)
-//	  			//println("data add pair : "+data_add_pair)
-//	  			smt.addData(data_add_pair)
-//	  		})
-	  	  }
-	  		
-	  	}
-	  total_N += 1
-	  	
-	  	
+          actionStat.update(key, varName)
+        }
+      }
+      
+      varName.update(value, varName.getOrElse(value, 0)+1)
+    }
+    //print(totalValueInData.toString)
+    //--------------------------------------
+    if (total_N == 0){
+      println("Loading data gathered previously...")
+	  println(list_Data.size)
+	  try{
+	    list_Data = loadprevdata(path)
+	  }catch{
+	    case e : Exception =>{
+	      println("First time gathering data. Using new hashmap...")
+	    }
+	  }
+	  println("Done.")
+	  println("Loaded list size:" + list_Data.size)
+    }
+    list_Data.append(Tuple3(action, prevState, curState))
+    total_N +=1
   }
+  
+  def buildTree(){
+    print("Building the Tree")
+    list_Data.foreach(t => {
+      var ADD = actionADD.get(t._1).get
+	  ADD.foreach(smt => {
+	    var filter_map = t._2.filterKeys(smt.getParents.toSet)
+	    var data_add_pair = Pair(filter_map.toMap, t._3.get(smt.getName).get)
+	    smt.addData(data_add_pair)
+	  })
+    })
+             
+    start_building()
+    val chAction = actionADD.keys.head
+    val chADD = actionADD(chAction)(16)
+//    println("Chosen Action : "+chAction.toString+" Chosen ADD : "+chADD.getName)
+    printToDatFile
+  }
+  
+  
   
   // Save previous ADD's to disk
   def saveprevdata(path : String){
@@ -457,25 +442,73 @@ class Model{
     
   }
   
+  def showStat{
+    val inOut = mutable.LinkedHashMap[String, mutable.LinkedHashMap[String,Int]]()
+    inOut.update("In", new mutable.LinkedHashMap[String,Int])
+    inOut.update("Out", new mutable.LinkedHashMap[String,Int])
+    for ((key,value) <- totalValueInData){
+      print("Action : "+key+"\n")
+      for ((key2, value2) <- value){
+        print(key2+"\t:")
+        var temp = mutable.LinkedHashMap[String, Int]()
+        if (key2.contains("in"))
+          temp = inOut("In")
+        else if (key2.contains("out"))
+          temp = inOut("Out")
+        for ((key3, value3) <- value2){
+          temp.update(key3, temp.getOrElse(key3, 0)+value3)
+          print(key3+" = "+value3+"\t")
+        }
+        print("\n")
+      }
+      print("\n")
+    }
+    
+    println("In Out Statistics for All Actions")
+    println("Outgoing Lane :")
+    inOut("Out").foreach(f => print(f._1+" = "+f._2+"\t"))
+    println
+    println("Incoming Lane :")
+    inOut("In").foreach(f => print(f._1+" = "+f._2+"\t"))
+  }
+  
   // Load previous ADD's and continue working
   def loadprevdata(path : String) : mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]] = {   
     val in = new FileInputStream(path)
     val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
-    Marshal.load[mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]](bytes)
+    val loadData =Marshal.load[mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]](bytes)
+    loadData.foreach(l => {
+      //compute simple statistics of the data
+      val actionStat = totalValueInData.getOrElseUpdate(l._1, new mutable.HashMap[String, mutable.LinkedHashMap[String,Int]])
+      for ((key,value) <- l._2){
+        //val varName = actionStat.getOrElseUpdate(key, new mutable.HashMap[String, Int])
+        var varName = mutable.LinkedHashMap[String,Int]()
+        try {
+          varName = actionStat(key)
+        } catch {
+          case e:Exception => {
+            for (value <-config.parameters(key)){
+              varName.update(value, 0)
+            }
+            actionStat.update(key, varName)
+          }
+        }
+        varName.update(value, varName.getOrElse(value, 0)+1)
+      }
+    //--------------------------------------
+    })
     //new mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]
+    return loadData
   }
   
   def start_building(){
     val total = actionADD.keys.size
     var i=0
-    
-    
-    
     for (key <- actionADD.keys){
-      println(i+" of "+total)
+//      println(i+" of "+total)
       i+=1
        actionADD(key).foreach(add => {
-         println(key+" " + add.getName)
+//         println(key+" " + add.getName)
          if (add.getName=="TrafficSignal" && typeOfTree == "FULL"){
            //do nothing
          } else {
@@ -548,7 +581,7 @@ class Model{
     string += "discount "+discount+"\n"
     string += "tolerance "+tolerance+"\n"
     }
-    print(string)
+//    print(string)
     
     val fw = new FileWriter(filename)
     try {
@@ -558,3 +591,4 @@ class Model{
     
   }
 }
+
