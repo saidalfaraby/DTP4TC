@@ -62,7 +62,7 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
  * @param decisionVals - all possible values/states of decision node
  * @param parentsMap - contain parents labels as key and all possible value of each parent as value
  */
-class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : Map[String, List[String]], typeTree : String){
+class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : Map[String, List[String]], typeTree : String, sf : String){
   //Assume the order of internalNode is fix, and the first one is the root
   var root : GenericNode = null
   var decisionNodeVals = decisionVals
@@ -75,6 +75,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   decisionVals.foreach(f => totalValuesOnData.+=((f,0)))
   
   var typeOfTree = typeTree  //"COMPACT" //"FULL"
+  var scoringFunction = sf
  
   var N = 0//sample size so far
   
@@ -96,6 +97,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   
   //now we need to know all possible value of each internal node beforehand
   def addSplit(Y : String,l : Leaf):Node = {
+    allLeaves.-=(l)
     refCandidates.-=(l)
     val t = new Node(Y)
     try{
@@ -135,6 +137,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   //switch a parent of leaves with the previous leaf at the same position. Here we don't copy the data into the leaf
   //because it still contain the old data we need
   def switchNode(Y : Node, l : Leaf){
+    allLeaves.+=(l)
     try
     	Y.parent.addChild(Y.edge, l)
     catch{
@@ -218,6 +221,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
         val nVal = l.counter.size
         for (v <- l.counter.valuesIterator){
         	val tmp = - ((v.toFloat+1)/N)*(Math.log((v.toFloat+1)/(total + nVal))/Math.log(2))
+        	//val tmp = - ((v.toFloat)/N)*(Math.log((v.toFloat)/(total))/Math.log(2))
         	sum+= tmp
         }
       }
@@ -228,10 +232,20 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     val first_ = DLstruct(root)
     val second_ = DLparam
     val third_ = DLdata
-//    println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
+    //println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
     val total =first_ + second_ + third_ 
-    if (total !=Double.PositiveInfinity && total !=Double.NegativeInfinity && !total.isNaN())
-      return total
+//    println("remember score only depend on entropy now")
+    if (total !=Double.PositiveInfinity && total !=Double.NegativeInfinity && !total.isNaN()){
+      if (scoringFunction == "MDL")
+        return total
+      if (scoringFunction == "BIC")
+        return second_ + third_
+        else if (scoringFunction == "Entropy")
+          return third_
+          else
+            return total
+    }
+      
       else
         return 999999 //just to make sure if total =  NaN then return big number. But this shouldn't happen anymore. Will check later.
   }
@@ -247,9 +261,10 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       result = extendTree
       differ = curr_score - result._1
       var testCond = false
-      if (typeOfTree == "COMPACT")
-        testCond = curr_score - result._1 > MDLthreshold
-        else
+      if (typeOfTree == "COMPACT"){
+        println("Different : "+(curr_score-result._1))
+        testCond = curr_score - result._1 >= MDLthreshold
+      }else
           testCond = true
         //      if (curr_score - result._1 > MDLthreshold){
       if (testCond){
@@ -260,6 +275,10 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
 //      println("after: " + curr_score)
 //      println("differ : " + differ)
     } 
+  }
+  
+  def pruning{
+    
   }
   
   /**
@@ -367,13 +386,15 @@ class Model{
   private var cnt = 0
   private var flag = 1
   var typeOfTree =  "COMPACT"//"FULL" //
-  val path = "previousDATA/prevdata.data"
+  var scoringFunction = "Entropy"// "MDL" //"BIC" "Entropy" 
+  val path = "previousDATA/prevdata8actions_5000.data"
   var list_Data = new mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]
   var totalValueInData = mutable.HashMap[String, mutable.HashMap[String,mutable.LinkedHashMap[String, Int]]]()
   
+  
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
     val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
-    act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet), typeOfTree)
+    act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet), typeOfTree, scoringFunction)
   }
   
   def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
@@ -401,7 +422,7 @@ class Model{
       println("Loading data gathered previously...")
 	  println(list_Data.size)
 	  try{
-	    list_Data = loadprevdata(path)
+	    loadprevdata(path)
 	  }catch{
 	    case e : Exception =>{
 	      println("First time gathering data. Using new hashmap...")
@@ -417,12 +438,22 @@ class Model{
   def buildTree(){
     print("Building the Tree")
     list_Data.foreach(t => {
-      var ADD = actionADD.get(t._1).get
-	  ADD.foreach(smt => {
-	    var filter_map = t._2.filterKeys(smt.getParents.toSet)
-	    var data_add_pair = Pair(filter_map.toMap, t._3.get(smt.getName).get)
-	    smt.addData(data_add_pair)
+      //-----------------DATA SEPARATE ACTION--------------
+//      var ADD = actionADD.get(t._1).get
+//	  ADD.foreach(smt => {
+//	    var filter_map = t._2.filterKeys(smt.getParents.toSet)
+//	    var data_add_pair = Pair(filter_map.toMap, t._3.get(smt.getName).get)
+//	    smt.addData(data_add_pair)
+//	  })
+	  //-----------------DATA ALL ACTION--------------
+	  for (key <- actionADD.keys){
+	    var ADD = actionADD(key)
+	    ADD.foreach(smt => {
+	      var filter_map = t._2.filterKeys(smt.getParents.toSet)
+	      var data_add_pair = Pair(filter_map.toMap, t._3.get(smt.getName).get)
+	      smt.addData(data_add_pair)
 	  })
+	  }
     })
              
     start_building()
@@ -436,10 +467,11 @@ class Model{
   
   // Save previous ADD's to disk
   def saveprevdata(path : String){
+    println("Saving data")
     val out = new FileOutputStream(path)
     out.write(Marshal.dump(list_Data))
     out.close
-    
+    println("Finish saving data")
   }
   
   def showStat{
@@ -473,11 +505,12 @@ class Model{
   }
   
   // Load previous ADD's and continue working
-  def loadprevdata(path : String) : mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]] = {   
+  //def loadprevdata(path : String) : mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]] = {
+  def loadprevdata(path : String){
     val in = new FileInputStream(path)
     val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
-    val loadData =Marshal.load[mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]](bytes)
-    loadData.foreach(l => {
+    list_Data =Marshal.load[mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]](bytes)
+    list_Data.foreach(l => {
       //compute simple statistics of the data
       val actionStat = totalValueInData.getOrElseUpdate(l._1, new mutable.HashMap[String, mutable.LinkedHashMap[String,Int]])
       for ((key,value) <- l._2){
@@ -498,7 +531,7 @@ class Model{
     //--------------------------------------
     })
     //new mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]
-    return loadData
+//    return loadData
   }
   
   def start_building(){
@@ -510,6 +543,7 @@ class Model{
        actionADD(key).foreach(add => {
 //         println(key+" " + add.getName)
          if (add.getName=="TrafficSignal" && typeOfTree == "FULL"){
+//         if (add.getName=="TrafficSignal"){
            //do nothing
          } else {
            add.learning
@@ -589,6 +623,16 @@ class Model{
     }
     finally fw.close()
     
+  }
+}
+
+
+object ADD {
+  def main(args: Array[String]): Unit = {
+    var model = new Model
+    model.loadprevdata(model.path)
+    model.buildTree
+    sys.exit
   }
 }
 

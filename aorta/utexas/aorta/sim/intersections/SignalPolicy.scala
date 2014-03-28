@@ -81,7 +81,7 @@ class SignalPolicy(
           started_at = sim.tick
           
           //println(current_phase.turns.toSet.size)
-          //println(policy_type)
+          //println("Duration : "+current_phase.duration)
           sim.publish(EV_Signal_Change(current_phase.turns.toSet))
         }
         case None =>  // shouldn't happen...
@@ -156,7 +156,7 @@ class SignalPolicy(
       turns_seen ++= phase.turns
     }
     Util.assert_eq(turns_seen.size, intersection.v.turns.size)
-
+//    println(phase_ls.toString)
     return phase_ls
   }
 
@@ -220,8 +220,14 @@ object Phase {
 
     // Try to have turns in the same and opposite (antiparallel) direction grouped
     return phase_maker(i.v, (remaining: Iterable[Turn], start: Turn) => {
+//      println("Remaining : "+remaining.toString)
+//      println("i.v : "+i.v.toString)
       val pair = remaining.partition(t => parallel(t, start))
+//      println("Pair : "+pair.toString)
+//      println("Pair 1 : "+pair._1)
+//      println("Pair 2 : "+pair._2)
       pair._1.toList ++ pair._2.toList
+      remaining.toList
     })
   }
   
@@ -245,6 +251,7 @@ object Phase {
   // Least number of phases can be modeled as graph coloring, but we're just
   // going to do a simple greedy approach.
   private def phase_maker(vert: Vertex, order: (Iterable[Turn], Turn) => Iterable[Turn]): List[Phase] = {
+//    println("phase maker "+vert.id)
     val turns_remaining = new mutable.TreeSet[Turn]()
     turns_remaining ++= vert.turns
 
@@ -253,7 +260,7 @@ object Phase {
       val this_group = new mutable.HashSet[Turn]()
       this_group += turns_remaining.head
       turns_remaining -= this_group.head
-
+      
       // conflict relation is symmetric, but not transitive... so do quadratic
       // conflict checking
       for (candidate <- order(turns_remaining, this_group.head)) {
@@ -265,6 +272,7 @@ object Phase {
 
       groups += this_group.toSet
     }
+    
     return turn_groups_to_phases(maximize_groups(groups.toList, vert.turns))
   }
 

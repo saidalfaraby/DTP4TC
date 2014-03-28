@@ -16,6 +16,7 @@ import java.text.DecimalFormat
 class Intersection(val v: Vertex, policy_type: IntersectionType.Value,
                    val ordering_type: OrderingType.Value, sim: Simulation)
 {
+  
   val policy = Factory.make_policy(this, policy_type, ordering_type, sim)
 
   // Multiple agents can be on the same turn; the corresponding queue will

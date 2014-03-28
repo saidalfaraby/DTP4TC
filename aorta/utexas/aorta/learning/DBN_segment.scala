@@ -19,7 +19,7 @@ import Array._
 
 
 class DBN_segment(sim: Simulation) {
-
+	var monitor = new Monitoring(sim)
 
 	var state = new DBNState_segment(sim)
 	var treeCPT = new Model()
@@ -49,13 +49,12 @@ class DBN_segment(sim: Simulation) {
 	var parentMap = mutable.HashMap[String, mutable.ListBuffer[String]]()
 	
 	sim.listen(classOf[EV_Heartbeat], _ match { case e: EV_Heartbeat => {
-	  print("Tes")
       if (e.live_agents == 0 && e.done_agents > 0){
-        treeCPT.saveprevdata("previousDATA/prevdata.data")
+        treeCPT.saveprevdata(treeCPT.path)
         treeCPT.showStat
-        if (!config.keep_gathering){
-          treeCPT.buildTree
-        }
+//        if (!config.keep_gathering){
+//          treeCPT.buildTree
+//        }
       }
   }})
 	
@@ -69,29 +68,36 @@ class DBN_segment(sim: Simulation) {
 		    	case f: EV_Signal_Change => if (f.greens.size >= 4){
 
 		    	if(cnt > 1){
-		    		//print("Cars present: ")
-		    		//state.print_carsPresent()
-		    		//print("Lane traffic: ")
-		    		//state.print_traffic()
-
 		    		updateCPT(previous_traffic, previous_actions)
 		    		updateCPT_action(previous_traffic, previous_actions)
+		    		if (!isParentMapInitialized){
+		    		  // initialized All actions and all Tree
+		    			config.action_config.foreach(actionName => {
+		    			for ((decisionNodeName,parents)<-parentMap)
+		    				treeCPT.addModel(actionName, decisionNodeName, parents.toList, config.parameters.toMap)
+		    			})
+		    			 if (!config.keep_gathering){
+		    			     treeCPT.loadprevdata(treeCPT.path)
+		    				 treeCPT.buildTree
+		    			 }
+		    		}
 		    		isParentMapInitialized = true
 		    		//println(parentMap.toString)
 		    		//println(previous_actions)
 		    		//============================================
 		    		//Initialize ADD for new action, or just update the ADD
 		    		
+		    		//=================
 		    		val actionName = previous_actions.get("signals").get.toString
-		    		if (!treeCPT.actionADD.contains(actionName)){ //if the action is not initialized yet, than initialize first
-		    		  //initialize new ADDs for this action
-		    		  //for each variable in time t+1 effected by this action, initialize the ADD
-		    		  for ((decisionNodeName,parents)<-parentMap){
-		    		    //println(decisionNodeName)
-		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toList, config.parameters.toMap)
-		    		  }
-		    		  
-		    		}
+//		    		if (!treeCPT.actionADD.contains(actionName)){ //if the action is not initialized yet, than initialize first
+//		    		  //initialize new ADDs for this action
+//		    		  //for each variable in time t+1 effected by this action, initialize the ADD
+//		    		  for ((decisionNodeName,parents)<-parentMap){
+//		    		    treeCPT.addModel(actionName, decisionNodeName, parents.toList, config.parameters.toMap)
+//		    		  }
+//		    		}
+		    		//======================
+		    		
 		    		//update the ADD
 		    		val prevState = mutable.HashMap[String, String]()
 		    		val curState = mutable.HashMap[String, String]()
@@ -122,7 +128,6 @@ class DBN_segment(sim: Simulation) {
 		    		count += 1
 		    		//printCPT(CPT)
 		    		state.reset_carsPresent()
-		    		//Thread.sleep(1500)
 		    		
 		    		
 		    	}else{
