@@ -1,4 +1,5 @@
-========= INIT ==============
+INIT
+=====
 - We used Scala IDE for the project
     - Can be downloaded here: http://scala-ide.org/
 - Egit plugin for eclipse can quickly clone the git repository where we have the eclipse project (easier than importing the project from disk)
@@ -11,7 +12,8 @@
     - Right click on project -> Scala -> Add Scala Library to Build Path
 
 
-========= CODE =============
+CODE
+=====
 - All of our contribution are in the utexas.aorta.learning package
     - DBNState_segment.scala
         - Contains the class that parses all the necessary statistics so as to determine the state
@@ -36,7 +38,8 @@
             - Specify scoring function (MDL, BIC, Entropy)
             - Specify type of tree (Full, Compact)
 
-======== MISC STUFF ===========
+MISC STUFF
+===========
 - All the differen scenarios we created are under the aorta/scenarios folder
     - e.g. only_traffic_signals_one_500
         - Dummy map we used (one intersection)
@@ -45,7 +48,8 @@
 - The necessary maps can be found at aorta/maps
 - The data are stored in the folder aorta/previousDATA with the extension .data
 
-======== EXECUTION ============
+EXECUTION
+==========
 - In order to run the code we created some run configurations on eclipse depending on the type of execution
     - GUI, Launches a simulation with the GUI
         - project : aorta_sim
