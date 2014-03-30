@@ -34,9 +34,9 @@ CODE
             - Merge data from different episodes
     - Tree.scala
         - Contains everything needed for constructing the tree
-        - Tree class:
+        - Tree class
             - handling individual tree, and also for learning local structure in the data, using a scoring function.
-        -Model class:
+        - Model class
             - Hold trees for all actions, also for specifying some configurations for constructing the tree.
                 - Specify scoring function (MDL, BIC, Entropy)
                 - Specify type of tree (Full, Compact)
