@@ -32,11 +32,13 @@ CODE
         - Contains misc usefull methods
             - Show stats of the data
             - Merge data from different episodes
-    - ADD.scala
+    - Tree.scala
         - Contains everything needed for constructing the tree
-        - In the Model class inside
+	- Tree class for handling individual tree, and also for learning local structure in the data, using a scoring function.
+	- Model class : hold trees for all actions, also for specifying some configurations for constructing the tree.
             - Specify scoring function (MDL, BIC, Entropy)
             - Specify type of tree (Full, Compact)
+	    - Print Conditional Probability Tree to dat format
 
 MISC STUFF
 ===========
