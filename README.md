@@ -1,5 +1,3 @@
-=============== README ===============
-
 ========= INIT ==============
 - We used Scala IDE for the project
     - Can be downloaded here: http://scala-ide.org/
