@@ -1,0 +1,15 @@
+#!/bin/csh -f
+set bn = $1
+set nb = $2
+set na = $3
+set b=0
+set a=0
+while ($b < $nb)
+  @ a = 0
+  while ($a < $na)
+     echo obsreg$bn\_$b\_$a.ppm
+     ppmtogif obsreg$bn\_$b\_$a.ppm > obsreg$bn\_$b\_$a.gif
+     @ a = $a + 1;
+  end
+  @ b = $b + 1
+end

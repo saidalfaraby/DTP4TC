@@ -1,0 +1,821 @@
+Terminals unused in grammar
+
+   INTGR
+   VALUE
+   VAL
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: mdp
+
+    2 mdp: varilist actslist reward disc tolhor
+
+    3 varilist: OPP VARIABLES varlist CLP
+
+    4 varlist: vardec
+    5        | varlist vardec
+
+    6 vardec: OPP varname vallist CLP
+
+    7 varname: NAME
+
+    8 vallist: vallist NAME
+    9        | NAME NAME
+
+   10 actslist: actslist action
+   11         | action
+
+   12 action: simpleaction
+
+   13 simpleaction: actionname actioncost acttreelist ENDACTION
+
+   14 actionname: ACTION NAME
+
+   15 actioncost: /* empty */
+   16           | REAL
+
+   17 acttreelist: acttreelist acttree
+   18            | acttree
+
+   19 $@1: /* empty */
+
+   20 acttree: NAME $@1 theadd
+
+   21 $@2: /* empty */
+
+   22 theadd: OSB CONJ $@2 con_dis_add CSB
+
+   23 $@3: /* empty */
+
+   24 theadd: OSB DISJ $@3 con_dis_add CSB
+
+   25 $@4: /* empty */
+
+   26 theadd: OPP NAME $@4 currentadd CLP
+   27       | OPP primeadd CLP
+
+   28 con_dis_add: con_dis_add theadd
+   29            | theadd
+
+   30 currentadd: currentadd subadd
+   31           | subadd
+
+   32 $@5: /* empty */
+
+   33 subadd: OPP NAME $@5 theadd CLP
+
+   34 primeadd: primeadd constadd
+   35         | constadd
+
+   36 constadd: REAL
+
+   37 $@6: /* empty */
+
+   38 reward: REWARD $@6 theadd
+
+   39 disc: DISCOUNT REAL
+
+   40 tolhor: tol
+   41       | hor
+
+   42 tol: TOLERANCE REAL
+
+   43 hor: HORIZON REAL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+NAME (258) 7 8 9 14 20 26 33
+REAL (259) 16 36 39 42 43
+INTGR (260)
+OPP (261) 3 6 26 27 33
+CLP (262) 3 6 26 27 33
+VARIABLES (263) 3
+DISCOUNT (264) 39
+TOLERANCE (265) 42
+REWARD (266) 38
+VALUE (267)
+ACTION (268) 14
+ENDACTION (269) 13
+DISJ (270) 24
+CONJ (271) 22
+OSB (272) 22 24
+CSB (273) 22 24
+HORIZON (274) 43
+VAL (275)
+
+
+Nonterminals, with rules where they appear
+
+$accept (21)
+    on left: 0
+input (22)
+    on left: 1, on right: 0
+mdp (23)
+    on left: 2, on right: 1
+varilist (24)
+    on left: 3, on right: 2
+varlist (25)
+    on left: 4 5, on right: 3 5
+vardec (26)
+    on left: 6, on right: 4 5
+varname (27)
+    on left: 7, on right: 6
+vallist (28)
+    on left: 8 9, on right: 6 8
+actslist (29)
+    on left: 10 11, on right: 2 10
+action (30)
+    on left: 12, on right: 10 11
+simpleaction (31)
+    on left: 13, on right: 12
+actionname (32)
+    on left: 14, on right: 13
+actioncost (33)
+    on left: 15 16, on right: 13
+acttreelist (34)
+    on left: 17 18, on right: 13 17
+acttree (35)
+    on left: 20, on right: 17 18
+$@1 (36)
+    on left: 19, on right: 20
+theadd (37)
+    on left: 22 24 26 27, on right: 20 28 29 33 38
+$@2 (38)
+    on left: 21, on right: 22
+$@3 (39)
+    on left: 23, on right: 24
+$@4 (40)
+    on left: 25, on right: 26
+con_dis_add (41)
+    on left: 28 29, on right: 22 24 28
+currentadd (42)
+    on left: 30 31, on right: 26 30
+subadd (43)
+    on left: 33, on right: 30 31
+$@5 (44)
+    on left: 32, on right: 33
+primeadd (45)
+    on left: 34 35, on right: 27 34
+constadd (46)
+    on left: 36, on right: 34 35
+reward (47)
+    on left: 38, on right: 2
+$@6 (48)
+    on left: 37, on right: 38
+disc (49)
+    on left: 39, on right: 2
+tolhor (50)
+    on left: 40 41, on right: 2
+tol (51)
+    on left: 42, on right: 40
+hor (52)
+    on left: 43, on right: 41
+
+
+State 0
+
+    0 $accept: . input $end
+
+    OPP  shift, and go to state 1
+
+    input     go to state 2
+    mdp       go to state 3
+    varilist  go to state 4
+
+
+State 1
+
+    3 varilist: OPP . VARIABLES varlist CLP
+
+    VARIABLES  shift, and go to state 5
+
+
+State 2
+
+    0 $accept: input . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    1 input: mdp .
+
+    $default  reduce using rule 1 (input)
+
+
+State 4
+
+    2 mdp: varilist . actslist reward disc tolhor
+
+    ACTION  shift, and go to state 7
+
+    actslist      go to state 8
+    action        go to state 9
+    simpleaction  go to state 10
+    actionname    go to state 11
+
+
+State 5
+
+    3 varilist: OPP VARIABLES . varlist CLP
+
+    OPP  shift, and go to state 12
+
+    varlist  go to state 13
+    vardec   go to state 14
+
+
+State 6
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+State 7
+
+   14 actionname: ACTION . NAME
+
+    NAME  shift, and go to state 15
+
+
+State 8
+
+    2 mdp: varilist actslist . reward disc tolhor
+   10 actslist: actslist . action
+
+    REWARD  shift, and go to state 16
+    ACTION  shift, and go to state 7
+
+    action        go to state 17
+    simpleaction  go to state 10
+    actionname    go to state 11
+    reward        go to state 18
+
+
+State 9
+
+   11 actslist: action .
+
+    $default  reduce using rule 11 (actslist)
+
+
+State 10
+
+   12 action: simpleaction .
+
+    $default  reduce using rule 12 (action)
+
+
+State 11
+
+   13 simpleaction: actionname . actioncost acttreelist ENDACTION
+
+    REAL  shift, and go to state 19
+
+    $default  reduce using rule 15 (actioncost)
+
+    actioncost  go to state 20
+
+
+State 12
+
+    6 vardec: OPP . varname vallist CLP
+
+    NAME  shift, and go to state 21
+
+    varname  go to state 22
+
+
+State 13
+
+    3 varilist: OPP VARIABLES varlist . CLP
+    5 varlist: varlist . vardec
+
+    OPP  shift, and go to state 12
+    CLP  shift, and go to state 23
+
+    vardec  go to state 24
+
+
+State 14
+
+    4 varlist: vardec .
+
+    $default  reduce using rule 4 (varlist)
+
+
+State 15
+
+   14 actionname: ACTION NAME .
+
+    $default  reduce using rule 14 (actionname)
+
+
+State 16
+
+   38 reward: REWARD . $@6 theadd
+
+    $default  reduce using rule 37 ($@6)
+
+    $@6  go to state 25
+
+
+State 17
+
+   10 actslist: actslist action .
+
+    $default  reduce using rule 10 (actslist)
+
+
+State 18
+
+    2 mdp: varilist actslist reward . disc tolhor
+
+    DISCOUNT  shift, and go to state 26
+
+    disc  go to state 27
+
+
+State 19
+
+   16 actioncost: REAL .
+
+    $default  reduce using rule 16 (actioncost)
+
+
+State 20
+
+   13 simpleaction: actionname actioncost . acttreelist ENDACTION
+
+    NAME  shift, and go to state 28
+
+    acttreelist  go to state 29
+    acttree      go to state 30
+
+
+State 21
+
+    7 varname: NAME .
+
+    $default  reduce using rule 7 (varname)
+
+
+State 22
+
+    6 vardec: OPP varname . vallist CLP
+
+    NAME  shift, and go to state 31
+
+    vallist  go to state 32
+
+
+State 23
+
+    3 varilist: OPP VARIABLES varlist CLP .
+
+    $default  reduce using rule 3 (varilist)
+
+
+State 24
+
+    5 varlist: varlist vardec .
+
+    $default  reduce using rule 5 (varlist)
+
+
+State 25
+
+   38 reward: REWARD $@6 . theadd
+
+    OPP  shift, and go to state 33
+    OSB  shift, and go to state 34
+
+    theadd  go to state 35
+
+
+State 26
+
+   39 disc: DISCOUNT . REAL
+
+    REAL  shift, and go to state 36
+
+
+State 27
+
+    2 mdp: varilist actslist reward disc . tolhor
+
+    TOLERANCE  shift, and go to state 37
+    HORIZON    shift, and go to state 38
+
+    tolhor  go to state 39
+    tol     go to state 40
+    hor     go to state 41
+
+
+State 28
+
+   20 acttree: NAME . $@1 theadd
+
+    $default  reduce using rule 19 ($@1)
+
+    $@1  go to state 42
+
+
+State 29
+
+   13 simpleaction: actionname actioncost acttreelist . ENDACTION
+   17 acttreelist: acttreelist . acttree
+
+    NAME       shift, and go to state 28
+    ENDACTION  shift, and go to state 43
+
+    acttree  go to state 44
+
+
+State 30
+
+   18 acttreelist: acttree .
+
+    $default  reduce using rule 18 (acttreelist)
+
+
+State 31
+
+    9 vallist: NAME . NAME
+
+    NAME  shift, and go to state 45
+
+
+State 32
+
+    6 vardec: OPP varname vallist . CLP
+    8 vallist: vallist . NAME
+
+    NAME  shift, and go to state 46
+    CLP   shift, and go to state 47
+
+
+State 33
+
+   26 theadd: OPP . NAME $@4 currentadd CLP
+   27       | OPP . primeadd CLP
+
+    NAME  shift, and go to state 48
+    REAL  shift, and go to state 49
+
+    primeadd  go to state 50
+    constadd  go to state 51
+
+
+State 34
+
+   22 theadd: OSB . CONJ $@2 con_dis_add CSB
+   24       | OSB . DISJ $@3 con_dis_add CSB
+
+    DISJ  shift, and go to state 52
+    CONJ  shift, and go to state 53
+
+
+State 35
+
+   38 reward: REWARD $@6 theadd .
+
+    $default  reduce using rule 38 (reward)
+
+
+State 36
+
+   39 disc: DISCOUNT REAL .
+
+    $default  reduce using rule 39 (disc)
+
+
+State 37
+
+   42 tol: TOLERANCE . REAL
+
+    REAL  shift, and go to state 54
+
+
+State 38
+
+   43 hor: HORIZON . REAL
+
+    REAL  shift, and go to state 55
+
+
+State 39
+
+    2 mdp: varilist actslist reward disc tolhor .
+
+    $default  reduce using rule 2 (mdp)
+
+
+State 40
+
+   40 tolhor: tol .
+
+    $default  reduce using rule 40 (tolhor)
+
+
+State 41
+
+   41 tolhor: hor .
+
+    $default  reduce using rule 41 (tolhor)
+
+
+State 42
+
+   20 acttree: NAME $@1 . theadd
+
+    OPP  shift, and go to state 33
+    OSB  shift, and go to state 34
+
+    theadd  go to state 56
+
+
+State 43
+
+   13 simpleaction: actionname actioncost acttreelist ENDACTION .
+
+    $default  reduce using rule 13 (simpleaction)
+
+
+State 44
+
+   17 acttreelist: acttreelist acttree .
+
+    $default  reduce using rule 17 (acttreelist)
+
+
+State 45
+
+    9 vallist: NAME NAME .
+
+    $default  reduce using rule 9 (vallist)
+
+
+State 46
+
+    8 vallist: vallist NAME .
+
+    $default  reduce using rule 8 (vallist)
+
+
+State 47
+
+    6 vardec: OPP varname vallist CLP .
+
+    $default  reduce using rule 6 (vardec)
+
+
+State 48
+
+   26 theadd: OPP NAME . $@4 currentadd CLP
+
+    $default  reduce using rule 25 ($@4)
+
+    $@4  go to state 57
+
+
+State 49
+
+   36 constadd: REAL .
+
+    $default  reduce using rule 36 (constadd)
+
+
+State 50
+
+   27 theadd: OPP primeadd . CLP
+   34 primeadd: primeadd . constadd
+
+    REAL  shift, and go to state 49
+    CLP   shift, and go to state 58
+
+    constadd  go to state 59
+
+
+State 51
+
+   35 primeadd: constadd .
+
+    $default  reduce using rule 35 (primeadd)
+
+
+State 52
+
+   24 theadd: OSB DISJ . $@3 con_dis_add CSB
+
+    $default  reduce using rule 23 ($@3)
+
+    $@3  go to state 60
+
+
+State 53
+
+   22 theadd: OSB CONJ . $@2 con_dis_add CSB
+
+    $default  reduce using rule 21 ($@2)
+
+    $@2  go to state 61
+
+
+State 54
+
+   42 tol: TOLERANCE REAL .
+
+    $default  reduce using rule 42 (tol)
+
+
+State 55
+
+   43 hor: HORIZON REAL .
+
+    $default  reduce using rule 43 (hor)
+
+
+State 56
+
+   20 acttree: NAME $@1 theadd .
+
+    $default  reduce using rule 20 (acttree)
+
+
+State 57
+
+   26 theadd: OPP NAME $@4 . currentadd CLP
+
+    OPP  shift, and go to state 62
+
+    currentadd  go to state 63
+    subadd      go to state 64
+
+
+State 58
+
+   27 theadd: OPP primeadd CLP .
+
+    $default  reduce using rule 27 (theadd)
+
+
+State 59
+
+   34 primeadd: primeadd constadd .
+
+    $default  reduce using rule 34 (primeadd)
+
+
+State 60
+
+   24 theadd: OSB DISJ $@3 . con_dis_add CSB
+
+    OPP  shift, and go to state 33
+    OSB  shift, and go to state 34
+
+    theadd       go to state 65
+    con_dis_add  go to state 66
+
+
+State 61
+
+   22 theadd: OSB CONJ $@2 . con_dis_add CSB
+
+    OPP  shift, and go to state 33
+    OSB  shift, and go to state 34
+
+    theadd       go to state 65
+    con_dis_add  go to state 67
+
+
+State 62
+
+   33 subadd: OPP . NAME $@5 theadd CLP
+
+    NAME  shift, and go to state 68
+
+
+State 63
+
+   26 theadd: OPP NAME $@4 currentadd . CLP
+   30 currentadd: currentadd . subadd
+
+    OPP  shift, and go to state 62
+    CLP  shift, and go to state 69
+
+    subadd  go to state 70
+
+
+State 64
+
+   31 currentadd: subadd .
+
+    $default  reduce using rule 31 (currentadd)
+
+
+State 65
+
+   29 con_dis_add: theadd .
+
+    $default  reduce using rule 29 (con_dis_add)
+
+
+State 66
+
+   24 theadd: OSB DISJ $@3 con_dis_add . CSB
+   28 con_dis_add: con_dis_add . theadd
+
+    OPP  shift, and go to state 33
+    OSB  shift, and go to state 34
+    CSB  shift, and go to state 71
+
+    theadd  go to state 72
+
+
+State 67
+
+   22 theadd: OSB CONJ $@2 con_dis_add . CSB
+   28 con_dis_add: con_dis_add . theadd
+
+    OPP  shift, and go to state 33
+    OSB  shift, and go to state 34
+    CSB  shift, and go to state 73
+
+    theadd  go to state 72
+
+
+State 68
+
+   33 subadd: OPP NAME . $@5 theadd CLP
+
+    $default  reduce using rule 32 ($@5)
+
+    $@5  go to state 74
+
+
+State 69
+
+   26 theadd: OPP NAME $@4 currentadd CLP .
+
+    $default  reduce using rule 26 (theadd)
+
+
+State 70
+
+   30 currentadd: currentadd subadd .
+
+    $default  reduce using rule 30 (currentadd)
+
+
+State 71
+
+   24 theadd: OSB DISJ $@3 con_dis_add CSB .
+
+    $default  reduce using rule 24 (theadd)
+
+
+State 72
+
+   28 con_dis_add: con_dis_add theadd .
+
+    $default  reduce using rule 28 (con_dis_add)
+
+
+State 73
+
+   22 theadd: OSB CONJ $@2 con_dis_add CSB .
+
+    $default  reduce using rule 22 (theadd)
+
+
+State 74
+
+   33 subadd: OPP NAME $@5 . theadd CLP
+
+    OPP  shift, and go to state 33
+    OSB  shift, and go to state 34
+
+    theadd  go to state 75
+
+
+State 75
+
+   33 subadd: OPP NAME $@5 theadd . CLP
+
+    CLP  shift, and go to state 76
+
+
+State 76
+
+   33 subadd: OPP NAME $@5 theadd CLP .
+
+    $default  reduce using rule 33 (subadd)

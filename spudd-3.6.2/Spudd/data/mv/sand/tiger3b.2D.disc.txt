@@ -1,0 +1,56 @@
+(variables  (obs_step one two)  (tiger_loc  left right)  (tiger_size small big))
+(observations (tiger_vs 0))
+belief	      
+	tiger_size (0.5 0.5)
+	tiger_loc  (0.5 0.5)
+        obs_step   (1.0 0.0)
+endbelief
+unnormalized
+action listen
+   tiger_size	(SAMEtiger_size)
+   tiger_loc	(SAMEtiger_loc)
+   obs_step     (obs_step	(one	(0.0 1.0))
+				(two	(1.0 0.0)))
+   observe
+	tiger_vs  (obs_step	(one	(tiger_size	(small	(observe 0.7744 0.2256))
+							(big	(observe 0.2256 0.7744))))
+				(two	(tiger_loc	(left	(observe 0.85 0.15))
+							(right	(observe 0.15 0.85)))))
+   endobserve
+   cost   (obs_step	(one	(1.0))
+			(two	(0.0)))
+endaction
+action open_left
+   tiger_size	(obs_step	(one	(0.5 0.5))	
+				(two	(SAMEtiger_size)))
+   tiger_loc	(obs_step	(one	(0.5 0.5))
+				(two	(SAMEtiger_loc)))
+   obs_step     (obs_step	(one	(0.0 1.0))
+				(two	(1.0 0.0)))
+   observe
+	tiger_vs	(observe 0.5 0.5)
+   endobserve
+   cost	  (obs_step	(one	(tiger_loc	(left	(tiger_size	(small	(10.0))
+									(big	(100.0))))
+						(right   (-10.0))))
+			(two	(0.0)))
+endaction
+action open_right
+   tiger_size	(obs_step	(one	(0.5 0.5))	
+				(two	(SAMEtiger_size)))
+   tiger_loc	(obs_step	(one	(0.5 0.5))
+				(two	(SAMEtiger_loc)))
+   obs_step     (obs_step	(one	(0.0 1.0))
+				(two	(1.0 0.0)))
+   observe
+	tiger_vs	(observe 0.5 0.5)
+   endobserve
+   cost	  (obs_step	(one	(tiger_loc	(left	(-10.0))
+						(right   (tiger_size	(small	(10.0))
+									(big	(100.0))))))
+			(two	(0.0)))
+endaction
+reward  (0.0)
+discount (obs_step	(two	(1.0))
+			(one	(0.75)))
+horizon 100

@@ -1,0 +1,12 @@
+#!/bin/csh -f
+set inputfile = $1
+set dom = $2
+set nsamples = $3
+set bdom = $4
+set basepath = /h/23/jhoey/project/pomdp/
+#set basepath = /project/pomdp/
+
+mkdir $basepath/$dom.$bdom.bf/
+echo gspudd $inputfile  $basepath/$dom.$bdom.bf/ -nsam $nsamples -bf $basepath/$bdom/beliefs.mdp >& $basepath/$dom.$bdom.bf/command.txt
+time gspudd $inputfile $basepath/$dom.$bdom.bf/ -nsam $nsamples -bf $basepath/$bdom/beliefs.mdp >& $basepath/$dom.$bdom.bf/output.txt 
+

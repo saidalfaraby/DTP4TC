@@ -1,0 +1,1274 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a0" [label="huc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a1" [label="w"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a2" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a3" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a4" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a5" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a6" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a7"  [label = "   28.90464177021078    28.90464177021078 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a8"  [label = "   28.94480337684259    28.94480337684259 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a9" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a10"  [label = "   13.21449592265625    13.21449592265625 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a11"  [label = "   27.80545229492324    27.80545229492324 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a12"  [label = "   28.50273307749205    28.50273307749205 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a13" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a14" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a15"  [label = "   28.60560865880482    28.60560865880482 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a16"  [label = "   28.66728735015268    28.66728735015268 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a17" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a18"  [label = "   27.48913484144854    27.48913484144854 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a19"  [label = "   27.87999021724529    27.87999021724529 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a20" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a21" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a22" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a23"  [label = "   28.93585404686438    28.93585404686438 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a24"  [label = "   28.97714314039344    28.97714314039344 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a25" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a26"  [label = "   27.83255155938291    27.83255155938291 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a27"  [label = "   28.56625125015939    28.56625125015939 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a28" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a29" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a30"  [label = "   28.64811893088351    28.64811893088351 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a31"  [label = "   28.70679367493881    28.70679367493881 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a32" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a33"  [label = "   27.53308389467485    27.53308389467485 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a34"  [label = "   27.97381850189694    27.97381850189694 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a35" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a36" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a37" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a38"  [label = "   28.95909691563229    28.95909691563229 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a39"  [label = "   28.99941527217075    28.99941527217075 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a40" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a41"  [label = "   27.85304296230050    27.85304296230050 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a42"  [label = "   28.59407304488260    28.59407304488260 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a43" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a44" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a45"  [label = "   28.70945173926814    28.70945173926814 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a46"  [label = "   28.75919704675440    28.75919704675440 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a47" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a48"  [label = "   27.59604821697719    27.59604821697719 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a49"  [label = "   28.30200475140412    28.30200475140412 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a50" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a51" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a52" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a53" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a54"  [label = "   26.51282176086384    26.51282176086384 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a55"  [label = "   26.85793325604562    26.85793325604562 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a56" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a57"  [label = "   25.17047914417771    25.17047914417771 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a58"  [label = "   27.73658111290238    27.73658111290238 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a59" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a60" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a61"  [label = "   25.82838550108413    25.82838550108413 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a62"  [label = "   26.17095585421037    26.17095585421037 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a63" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a64"  [label = "   24.49019256878554    24.49019256878554 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a65"  [label = "   26.95595081667439    26.95595081667439 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a66" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a67" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a68" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a69"  [label = "   26.58985363659740    26.58985363659740 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a70"  [label = "   26.95053537868784    26.95053537868784 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a71" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a72"  [label = "   25.22968830462654    25.22968830462654 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a73"  [label = "   27.78471595499174    27.78471595499174 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a74" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a75" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a76"  [label = "   25.93579047821261    25.93579047821261 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a77"  [label = "   26.28257761630416    26.28257761630416 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a78" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a79"  [label = "   24.59843043408685    24.59843043408685 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a80"  [label = "   27.11744435297076    27.11744435297076 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a81" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a82" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a83" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a84"  [label = "   26.63031032139890    26.63031032139890 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a85"  [label = "   26.97773860095631    26.97773860095631 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a86" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a87"  [label = "   25.26116988144778    25.26116988144778 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a88"  [label = "   27.78733254406745    27.78733254406745 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a89" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a90" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a91"  [label = "   26.20516003237812    26.20516003237812 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a92"  [label = "   26.57745731674402    26.57745731674402 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a93" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a94"  [label = "   24.82259055984397    24.82259055984397 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a95"  [label = "   27.43170064599176    27.43170064599176 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a96" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a97" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a98" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a99" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a100" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a101"  [label = "   29.39270138624567    29.39270138624567 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a102"  [label = "   29.42646012667464    29.42646012667464 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a103" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a104"  [label = "   13.67968318800224    13.67968318800224 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a105"  [label = "   28.69860165361279    28.69860165361279 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a106"  [label = "   29.09071398984690    29.09071398984690 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a107" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a108" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a109"  [label = "   29.10022500444360    29.10022500444360 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a110"  [label = "   29.15691123605653    29.15691123605653 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a111" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a112"  [label = "   27.94035228248600    27.94035228248600 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a113"  [label = "   28.33089178315880    28.33089178315880 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a114" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a115" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a116" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a117"  [label = "   29.42530718522298    29.42530718522298 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a118"  [label = "   29.46020903217972    29.46020903217972 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a119" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a120"  [label = "   28.75009274623299    28.75009274623299 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a121"  [label = "   29.14447158682147    29.14447158682147 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a122" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a123" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a124"  [label = "   29.14249445589971    29.14249445589971 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a125"  [label = "   29.19634379541920    29.19634379541920 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a126" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a127"  [label = "   28.08837596560956    28.08837596560956 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a128"  [label = "   28.49461519282039    28.49461519282039 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a129" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a130" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a131" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a132"  [label = "   29.44984417527890    29.44984417527890 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a133"  [label = "   29.48448016738526    29.48448016738526 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a134" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a135"  [label = "   28.54157725364282    28.54157725364282 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a136"  [label = "   29.12820077473127    29.12820077473127 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a137" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a138" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a139"  [label = "   29.20329410537429    29.20329410537429 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a140"  [label = "   29.24729421996318    29.24729421996318 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a141" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a142"  [label = "   28.28494289848161    28.28494289848161 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a143"  [label = "   28.84356924597042    28.84356924597042 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a144" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a145" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a146" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a147" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a148"  [label = "   27.12783218899702    27.12783218899702 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a149"  [label = "   27.53541777747370    27.53541777747370 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a150" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a151"  [label = "   26.16569665060255    26.16569665060255 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a152"  [label = "   28.62185159732328    28.62185159732328 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a153" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a154" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a155"  [label = "   26.39559410768780    26.39559410768780 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a156"  [label = "   26.80477795719033    26.80477795719033 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a157" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a158"  [label = "   24.94754753160047    24.94754753160047 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a159"  [label = "   27.83262600085662    27.83262600085662 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a160" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a161" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a162" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a163"  [label = "   27.16370163103783    27.16370163103783 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a164"  [label = "   27.59854657743536    27.59854657743536 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a165" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a166"  [label = "   26.22105081273840    26.22105081273840 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a167"  [label = "   28.65411789744478    28.65411789744478 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a168" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a169" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a170"  [label = "   26.50106796297068    26.50106796297068 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a171"  [label = "   26.84485171064079    26.84485171064079 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a172" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a173"  [label = "   25.16847631193684    25.16847631193684 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a174"  [label = "   27.99743535890328    27.99743535890328 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a175" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a176" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a177" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a178"  [label = "   27.20044950770795    27.20044950770795 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a179"  [label = "   27.54766427498881    27.54766427498881 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a180" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a181"  [label = "   25.99257934781910    25.99257934781910 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a182"  [label = "   28.59860994379639    28.59860994379639 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a183" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a184" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a185"  [label = "   26.78182215963941    26.78182215963941 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a186"  [label = "   27.15497342913713    27.15497342913713 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a187" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a188"  [label = "   25.55496262675867    25.55496262675867 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a189"  [label = "   28.27103697859582    28.27103697859582 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a190" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a191" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a192" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a193" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a194" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a195"  [label = "   29.54460615833434    29.54460615833434 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a196" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a197"  [label = "   13.79018042557130    13.79018042557130 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a198"  [label = "   28.94703273521756    28.94703273521756 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a199"  [label = "   29.31629382648762    29.31629382648762 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a200" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a201" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a202"  [label = "   29.28192979768016    29.28192979768016 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a203"  [label = "   29.31468713844128    29.31468713844128 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a204" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a205"  [label = "   28.04035228248600    28.04035228248600 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a206"  [label = "   28.43089178315880    28.43089178315880 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a207" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a208" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a209" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a210"  [label = "   29.57935023620178    29.57935023620178 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a211" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a212"  [label = "   29.02794973931971    29.02794973931971 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a213"  [label = "   29.39636161422222    29.39636161422222 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a214" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a215" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a216"  [label = "   29.32121813929712    29.32121813929712 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a217"  [label = "   29.34979935460586    29.34979935460586 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a218" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a219"  [label = "   28.46959974849502    28.46959974849502 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a220"  [label = "   28.85796247590729    28.85796247590729 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a221" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a222" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a223" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a224"  [label = "   29.60507886126460    29.60507886126460 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a225" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a226"  [label = "   29.07957999413964    29.07957999413964 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a227"  [label = "   29.44885222811986    29.44885222811986 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a228" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a229" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a230"  [label = "   29.37034494125743    29.37034494125743 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a231"  [label = "   29.37795363677995    29.37795363677995 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a232" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a233"  [label = "   28.83478492576597    28.83478492576597 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a234"  [label = "   29.20692172256391    29.20692172256391 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a235" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a236" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a237" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a238" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a239"  [label = "   27.57042450690774    27.57042450690774 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a240"  [label = "   27.87918754860856    27.87918754860856 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a241" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a242"  [label = "   26.60950858601214    26.60950858601214 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a243"  [label = "   28.90385008752237    28.90385008752237 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a244" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a245" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a246"  [label = "   26.94121935314545    26.94121935314545 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a247"  [label = "   27.26784573475402    27.26784573475402 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a248" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a249"  [label = "   25.04754753160047    25.04754753160047 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a250"  [label = "   28.02967985563001    28.02967985563001 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a251" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a252" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a253" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a254"  [label = "   27.68451080594847    27.68451080594847 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a255"  [label = "   28.01595315554254    28.01595315554254 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a256" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a257"  [label = "   26.77589993743355    26.77589993743355 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a258"  [label = "   28.96576713102293    28.96576713102293 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a259" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a260" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a261"  [label = "   27.03793186727307    27.03793186727307 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a262"  [label = "   27.38147542121346    27.38147542121346 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a263" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a264"  [label = "   25.60439048134538    25.60439048134538 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a265"  [label = "   28.35288176175280    28.35288176175280 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a266" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a267" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a268" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a269"  [label = "   27.74275157434575    27.74275157434575 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a270"  [label = "   28.07647414075664    28.07647414075664 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a271" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a272"  [label = "   26.85485228740437    26.85485228740437 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a273"  [label = "   28.98593063036735    28.98593063036735 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a274" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a275" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a276"  [label = "   27.35669504658208    27.35669504658208 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a277"  [label = "   27.72212596334477    27.72212596334477 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a278" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a279"  [label = "   26.44113744431061    26.44113744431061 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a280"  [label = "   28.68743369021795    28.68743369021795 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a281" [label="w"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a282" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a283" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a284" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a285" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a286" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a287"  [label = "   22.96966727749779    22.96966727749779 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a288"  [label = "   23.32755742264456    23.32755742264456 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a289" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a290"  [label = "   -0.57568450291502    -0.57568450291502 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a291"  [label = "   20.50660853062241    20.50660853062241 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a292"  [label = "   21.24464674886130    21.24464674886130 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a293" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a294" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a295"  [label = "   22.25531369216245    22.25531369216245 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a296"  [label = "   22.64996219118401    22.64996219118401 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a297" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a298"  [label = "   19.85085650495974    19.85085650495974 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a299"  [label = "   20.60507427202693    20.60507427202693 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a300" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a301" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a302" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a303"  [label = "   23.02765622119080    23.02765622119080 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a304"  [label = "   23.39536446740043    23.39536446740043 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a305" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a306"  [label = "   20.55143123110612    20.55143123110612 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a307"  [label = "   21.29580418752038    21.29580418752038 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a308" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a309" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a310"  [label = "   22.36444375094050    22.36444375094050 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a311"  [label = "   22.75405073837106    22.75405073837106 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a312" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a313"  [label = "   19.95320623168806    19.95320623168806 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a314"  [label = "   20.70535163194857    20.70535163194857 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a315" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a316" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a317" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a318"  [label = "   23.05399249522486    23.05399249522486 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a319"  [label = "   23.41100400805608    23.41100400805608 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a320" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a321"  [label = "   20.57625011787349    20.57625011787349 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a322"  [label = "   21.31492682354947    21.31492682354947 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a323" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a324" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a325"  [label = "   22.59963718008600    22.59963718008600 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a326"  [label = "   22.98027588470873    22.98027588470873 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a327" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a328"  [label = "   20.13523271322360    20.13523271322360 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a329"  [label = "   20.88415365633877    20.88415365633877 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a330" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a331" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a332" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a333" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a334"  [label = "   16.26832371196066    16.26832371196066 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a335"  [label = "   17.14683093290242    17.14683093290242 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a336" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a337"  [label = "   14.41071618972239    14.41071618972239 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a338"  [label = "   19.19705583622003    19.19705583622003 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a339" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a340" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a341"  [label = "   15.02196641744185    15.02196641744185 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a342"  [label = "   16.14772526209129    16.14772526209129 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a343" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a344"  [label = "   13.91675533243557    13.91675533243557 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a345"  [label = "   18.59779194702774    18.59779194702774 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a346" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a347" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a348" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a349"  [label = "   16.34611592026911    16.34611592026911 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a350"  [label = "   17.25280082924045    17.25280082924045 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a351" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a352"  [label = "   14.43984883823075    14.43984883823075 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a353"  [label = "   19.23638906868571    19.23638906868571 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a354" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a355" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a356"  [label = "   15.15345420181446    15.15345420181446 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a357"  [label = "   16.23190849819390    16.23190849819390 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a358" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a359"  [label = "   13.99281017792114    13.99281017792114 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a360"  [label = "   18.69003658940942    18.69003658940942 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a361" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a362" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a363" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a364"  [label = "   16.31277814599699    16.31277814599699 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a365"  [label = "   17.17563714915620    17.17563714915620 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a366" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a367"  [label = "   14.45834199111067    14.45834199111067 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a368"  [label = "   19.25602632357989    19.25602632357989 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a369" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a370" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a371"  [label = "   15.66803184158300    15.66803184158300 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a372"  [label = "   16.58104511558538    16.58104511558538 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a373" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a374"  [label = "   14.11124816542196    14.11124816542196 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a375"  [label = "   18.83261885874391    18.83261885874391 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a376" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a377" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a378" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a379" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a380" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a381"  [label = "   24.05121914488127    24.05121914488127 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a382"  [label = "   24.48561670151686    24.48561670151686 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a383" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a384"  [label = "   -0.11049723756900    -0.11049723756900 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a385"  [label = "   21.83418559022624    21.83418559022624 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a386"  [label = "   22.64592369119056    22.64592369119056 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a387" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a388" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a389"  [label = "   23.27937423866602    23.27937423866602 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a390"  [label = "   23.68328745593576    23.68328745593576 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a391" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a392"  [label = "   20.34291525470871    20.34291525470871 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a393"  [label = "   21.09776903616949    21.09776903616949 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a394" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a395" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a396" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a397"  [label = "   24.06386159014955    24.06386159014955 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a398"  [label = "   24.51221167036361    24.51221167036361 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a399" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a400"  [label = "   21.89359375314351    21.89359375314351 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a401"  [label = "   22.71224449832491    22.71224449832491 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a402" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a403" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a404"  [label = "   23.35846577172211    23.35846577172211 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a405"  [label = "   23.73650239507379    23.73650239507379 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a406" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a407"  [label = "   20.62652249744044    20.62652249744044 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a408"  [label = "   21.37837132508467    21.37837132508467 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a409" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a410" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a411" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a412"  [label = "   24.02525209693310    24.02525209693310 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a413"  [label = "   24.39537353226181    24.39537353226181 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a414" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a415"  [label = "   21.49437735769436    21.49437735769436 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a416"  [label = "   22.24783558113715    22.24783558113715 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a417" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a418" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a419"  [label = "   23.57176703377758    23.57176703377758 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a420"  [label = "   23.96944845051866    23.96944845051866 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a421" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a422"  [label = "   21.05055720336965    21.05055720336965 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a423"  [label = "   21.81101157468664    21.81101157468664 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a424" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a425" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a426" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a427" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a428"  [label = "   17.48486519238789    17.48486519238789 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a429"  [label = "   18.59471278596894    18.59471278596894 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a430" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a431"  [label = "   15.90913087245035    15.90913087245035 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a432"  [label = "   20.95421207440731    20.95421207440731 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a433" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a434" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a435"  [label = "   16.08950122339800    16.08950122339800 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a436"  [label = "   17.03089742305025    17.03089742305025 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a437" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a438"  [label = "   14.79287895375192    14.79287895375192 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a439"  [label = "   19.52334546394225    19.52334546394225 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a440" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a441" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a442" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a443"  [label = "   17.45518170445805    17.45518170445805 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a444"  [label = "   18.64979207151968    18.64979207151968 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a445" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a446"  [label = "   15.91491405224536    15.91491405224536 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a447"  [label = "   20.95714057409012    20.95714057409012 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a448" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a449" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a450"  [label = "   16.02913522435464    16.02913522435464 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a451"  [label = "   17.00237778690603    17.00237778690603 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a452" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a453"  [label = "   14.99753144882544    14.99753144882544 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a454"  [label = "   19.77433673239983    19.77433673239983 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a455" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a456" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a457" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a458"  [label = "   17.00293336866696    17.00293336866696 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a459"  [label = "   17.89667064238161    17.89667064238161 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a460" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a461"  [label = "   15.67671983342245    15.67671983342245 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a462"  [label = "   20.62509941690458    20.62509941690458 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a463" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a464" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a465"  [label = "   16.36626687664758    16.36626687664758 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a466"  [label = "   17.41280673190769    17.41280673190769 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a467" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a468"  [label = "   15.27688151518779    15.27688151518779 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a469"  [label = "   20.12188921322042    20.12188921322042 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a470" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a471" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a472" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a473" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a474" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a475"  [label = "   24.57363868454343    24.57363868454343 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a476"  [label = "   24.92846772210459    24.92846772210459 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a477" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a478"  [label = "    0.00000000000000     0.00000000000000 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a479"  [label = "   22.32943929310470    22.32943929310470 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a480"  [label = "   23.09528206064585    23.09528206064585 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a481" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a482" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a483"  [label = "   23.88737915960850    23.88737915960850 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a484"  [label = "   24.23045460717512    24.23045460717512 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a485" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a486"  [label = "   20.44291525470871    20.44291525470871 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a487"  [label = "   21.19776903616949    21.19776903616949 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a488" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a489" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a490" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a491"  [label = "   24.66578132673195    24.66578132673195 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a492"  [label = "   25.03733191266607    25.03733191266607 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a493" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a494"  [label = "   22.50380020409970    22.50380020409970 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a495"  [label = "   23.28112829749524    23.28112829749524 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a496" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a497" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a498"  [label = "   23.99779132143565    23.99779132143565 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a499"  [label = "   24.35765885914029    24.35765885914029 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a500" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a501"  [label = "   21.24204331540145    21.24204331540145 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a502"  [label = "   21.99279613185030    21.99279613185030 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a503" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a504" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a505" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a506"  [label = "   24.71796454124947    24.71796454124947 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a507"  [label = "   25.09171975419712    25.09171975419712 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a508" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a509"  [label = "   22.59380278015213    22.59380278015213 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a510"  [label = "   23.37344011659356    23.37344011659356 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a511" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a512" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a513"  [label = "   24.29587114925919    24.29587114925919 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a514"  [label = "   24.69545032271592    24.69545032271592 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a515" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a516"  [label = "   22.17049165264693    22.17049165264693 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a517"  [label = "   22.95741117577343    22.95741117577343 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a518" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a519" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a520" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a521" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a522"  [label = "   18.00865851196355    18.00865851196355 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a523"  [label = "   19.02662327506014    19.02662327506014 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a524" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a525"  [label = "   16.37463434394017    16.37463434394017 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a526"  [label = "   21.37430834114065    21.37430834114065 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a527" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a528" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a529"  [label = "   16.71414820833315    16.71414820833315 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a530"  [label = "   17.57471334397495    17.57471334397495 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a531" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a532"  [label = "   15.01543507629580    15.01543507629580 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a533"  [label = "   19.73729678924021    19.73729678924021 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a534" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a535" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a536" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a537"  [label = "   18.16254036676915    18.16254036676915 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a538"  [label = "   19.22372213376551    19.22372213376551 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a539" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a540"  [label = "   16.47676967352136    16.47676967352136 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a541"  [label = "   21.47751532394958    21.47751532394958 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a542" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a543" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a544"  [label = "   16.84087930675024    16.84087930675024 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a545"  [label = "   17.73137504680633    17.73137504680633 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a546" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a547"  [label = "   15.53667450075589    15.53667450075589 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a548"  [label = "   20.29247936735587    20.29247936735587 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a549" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a550" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a551" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a552"  [label = "   18.21433078028437    18.21433078028437 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a553"  [label = "   19.26764744087913    19.26764744087913 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a554" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a555"  [label = "   16.53600023406700    16.53600023406700 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a556"  [label = "   21.43907149627959    21.43907149627959 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a557" [label="l"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a558" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a559"  [label = "   17.62225158310277    17.62225158310277 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a560"  [label = "   18.74060424716622    18.74060424716622 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a561" [label="batt"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a562"  [label = "   16.12727102227754    16.12727102227754 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a563"  [label = "   20.95267690052772    20.95267690052772 "];}
+"a6" -> "a7" [label = "dead"];
+"a6" -> "a7" [label = "low"];
+"a6" -> "a8" [label = "high"];
+"a5" -> "a6" [label = "office"];
+"a9" -> "a10" [label = "dead"];
+"a9" -> "a11" [label = "low"];
+"a9" -> "a12" [label = "high"];
+"a5" -> "a9" [label = "shop"];
+"a4" -> "a5" [label = "yes"];
+"a14" -> "a15" [label = "dead"];
+"a14" -> "a15" [label = "low"];
+"a14" -> "a16" [label = "high"];
+"a13" -> "a14" [label = "office"];
+"a17" -> "a10" [label = "dead"];
+"a17" -> "a18" [label = "low"];
+"a17" -> "a19" [label = "high"];
+"a13" -> "a17" [label = "shop"];
+"a4" -> "a13" [label = "no"];
+"a3" -> "a4" [label = "heavy"];
+"a22" -> "a23" [label = "dead"];
+"a22" -> "a23" [label = "low"];
+"a22" -> "a24" [label = "high"];
+"a21" -> "a22" [label = "office"];
+"a25" -> "a10" [label = "dead"];
+"a25" -> "a26" [label = "low"];
+"a25" -> "a27" [label = "high"];
+"a21" -> "a25" [label = "shop"];
+"a20" -> "a21" [label = "yes"];
+"a29" -> "a30" [label = "dead"];
+"a29" -> "a30" [label = "low"];
+"a29" -> "a31" [label = "high"];
+"a28" -> "a29" [label = "office"];
+"a32" -> "a10" [label = "dead"];
+"a32" -> "a33" [label = "low"];
+"a32" -> "a34" [label = "high"];
+"a28" -> "a32" [label = "shop"];
+"a20" -> "a28" [label = "no"];
+"a3" -> "a20" [label = "light"];
+"a37" -> "a38" [label = "dead"];
+"a37" -> "a38" [label = "low"];
+"a37" -> "a39" [label = "high"];
+"a36" -> "a37" [label = "office"];
+"a40" -> "a10" [label = "dead"];
+"a40" -> "a41" [label = "low"];
+"a40" -> "a42" [label = "high"];
+"a36" -> "a40" [label = "shop"];
+"a35" -> "a36" [label = "yes"];
+"a44" -> "a45" [label = "dead"];
+"a44" -> "a45" [label = "low"];
+"a44" -> "a46" [label = "high"];
+"a43" -> "a44" [label = "office"];
+"a47" -> "a10" [label = "dead"];
+"a47" -> "a48" [label = "low"];
+"a47" -> "a49" [label = "high"];
+"a43" -> "a47" [label = "shop"];
+"a35" -> "a43" [label = "no"];
+"a3" -> "a35" [label = "no"];
+"a2" -> "a3" [label = "yes"];
+"a53" -> "a54" [label = "dead"];
+"a53" -> "a54" [label = "low"];
+"a53" -> "a55" [label = "high"];
+"a52" -> "a53" [label = "office"];
+"a56" -> "a10" [label = "dead"];
+"a56" -> "a57" [label = "low"];
+"a56" -> "a58" [label = "high"];
+"a52" -> "a56" [label = "shop"];
+"a51" -> "a52" [label = "yes"];
+"a60" -> "a61" [label = "dead"];
+"a60" -> "a61" [label = "low"];
+"a60" -> "a62" [label = "high"];
+"a59" -> "a60" [label = "office"];
+"a63" -> "a10" [label = "dead"];
+"a63" -> "a64" [label = "low"];
+"a63" -> "a65" [label = "high"];
+"a59" -> "a63" [label = "shop"];
+"a51" -> "a59" [label = "no"];
+"a50" -> "a51" [label = "heavy"];
+"a68" -> "a69" [label = "dead"];
+"a68" -> "a69" [label = "low"];
+"a68" -> "a70" [label = "high"];
+"a67" -> "a68" [label = "office"];
+"a71" -> "a10" [label = "dead"];
+"a71" -> "a72" [label = "low"];
+"a71" -> "a73" [label = "high"];
+"a67" -> "a71" [label = "shop"];
+"a66" -> "a67" [label = "yes"];
+"a75" -> "a76" [label = "dead"];
+"a75" -> "a76" [label = "low"];
+"a75" -> "a77" [label = "high"];
+"a74" -> "a75" [label = "office"];
+"a78" -> "a10" [label = "dead"];
+"a78" -> "a79" [label = "low"];
+"a78" -> "a80" [label = "high"];
+"a74" -> "a78" [label = "shop"];
+"a66" -> "a74" [label = "no"];
+"a50" -> "a66" [label = "light"];
+"a83" -> "a84" [label = "dead"];
+"a83" -> "a84" [label = "low"];
+"a83" -> "a85" [label = "high"];
+"a82" -> "a83" [label = "office"];
+"a86" -> "a10" [label = "dead"];
+"a86" -> "a87" [label = "low"];
+"a86" -> "a88" [label = "high"];
+"a82" -> "a86" [label = "shop"];
+"a81" -> "a82" [label = "yes"];
+"a90" -> "a91" [label = "dead"];
+"a90" -> "a91" [label = "low"];
+"a90" -> "a92" [label = "high"];
+"a89" -> "a90" [label = "office"];
+"a93" -> "a10" [label = "dead"];
+"a93" -> "a94" [label = "low"];
+"a93" -> "a95" [label = "high"];
+"a89" -> "a93" [label = "shop"];
+"a81" -> "a89" [label = "no"];
+"a50" -> "a81" [label = "no"];
+"a2" -> "a50" [label = "no"];
+"a1" -> "a2" [label = "drenched"];
+"a100" -> "a101" [label = "dead"];
+"a100" -> "a101" [label = "low"];
+"a100" -> "a102" [label = "high"];
+"a99" -> "a100" [label = "office"];
+"a103" -> "a104" [label = "dead"];
+"a103" -> "a105" [label = "low"];
+"a103" -> "a106" [label = "high"];
+"a99" -> "a103" [label = "shop"];
+"a98" -> "a99" [label = "yes"];
+"a108" -> "a109" [label = "dead"];
+"a108" -> "a109" [label = "low"];
+"a108" -> "a110" [label = "high"];
+"a107" -> "a108" [label = "office"];
+"a111" -> "a104" [label = "dead"];
+"a111" -> "a112" [label = "low"];
+"a111" -> "a113" [label = "high"];
+"a107" -> "a111" [label = "shop"];
+"a98" -> "a107" [label = "no"];
+"a97" -> "a98" [label = "heavy"];
+"a116" -> "a117" [label = "dead"];
+"a116" -> "a117" [label = "low"];
+"a116" -> "a118" [label = "high"];
+"a115" -> "a116" [label = "office"];
+"a119" -> "a104" [label = "dead"];
+"a119" -> "a120" [label = "low"];
+"a119" -> "a121" [label = "high"];
+"a115" -> "a119" [label = "shop"];
+"a114" -> "a115" [label = "yes"];
+"a123" -> "a124" [label = "dead"];
+"a123" -> "a124" [label = "low"];
+"a123" -> "a125" [label = "high"];
+"a122" -> "a123" [label = "office"];
+"a126" -> "a104" [label = "dead"];
+"a126" -> "a127" [label = "low"];
+"a126" -> "a128" [label = "high"];
+"a122" -> "a126" [label = "shop"];
+"a114" -> "a122" [label = "no"];
+"a97" -> "a114" [label = "light"];
+"a131" -> "a132" [label = "dead"];
+"a131" -> "a132" [label = "low"];
+"a131" -> "a133" [label = "high"];
+"a130" -> "a131" [label = "office"];
+"a134" -> "a104" [label = "dead"];
+"a134" -> "a135" [label = "low"];
+"a134" -> "a136" [label = "high"];
+"a130" -> "a134" [label = "shop"];
+"a129" -> "a130" [label = "yes"];
+"a138" -> "a139" [label = "dead"];
+"a138" -> "a139" [label = "low"];
+"a138" -> "a140" [label = "high"];
+"a137" -> "a138" [label = "office"];
+"a141" -> "a104" [label = "dead"];
+"a141" -> "a142" [label = "low"];
+"a141" -> "a143" [label = "high"];
+"a137" -> "a141" [label = "shop"];
+"a129" -> "a137" [label = "no"];
+"a97" -> "a129" [label = "no"];
+"a96" -> "a97" [label = "yes"];
+"a147" -> "a148" [label = "dead"];
+"a147" -> "a148" [label = "low"];
+"a147" -> "a149" [label = "high"];
+"a146" -> "a147" [label = "office"];
+"a150" -> "a104" [label = "dead"];
+"a150" -> "a151" [label = "low"];
+"a150" -> "a152" [label = "high"];
+"a146" -> "a150" [label = "shop"];
+"a145" -> "a146" [label = "yes"];
+"a154" -> "a155" [label = "dead"];
+"a154" -> "a155" [label = "low"];
+"a154" -> "a156" [label = "high"];
+"a153" -> "a154" [label = "office"];
+"a157" -> "a104" [label = "dead"];
+"a157" -> "a158" [label = "low"];
+"a157" -> "a159" [label = "high"];
+"a153" -> "a157" [label = "shop"];
+"a145" -> "a153" [label = "no"];
+"a144" -> "a145" [label = "heavy"];
+"a162" -> "a163" [label = "dead"];
+"a162" -> "a163" [label = "low"];
+"a162" -> "a164" [label = "high"];
+"a161" -> "a162" [label = "office"];
+"a165" -> "a104" [label = "dead"];
+"a165" -> "a166" [label = "low"];
+"a165" -> "a167" [label = "high"];
+"a161" -> "a165" [label = "shop"];
+"a160" -> "a161" [label = "yes"];
+"a169" -> "a170" [label = "dead"];
+"a169" -> "a170" [label = "low"];
+"a169" -> "a171" [label = "high"];
+"a168" -> "a169" [label = "office"];
+"a172" -> "a104" [label = "dead"];
+"a172" -> "a173" [label = "low"];
+"a172" -> "a174" [label = "high"];
+"a168" -> "a172" [label = "shop"];
+"a160" -> "a168" [label = "no"];
+"a144" -> "a160" [label = "light"];
+"a177" -> "a178" [label = "dead"];
+"a177" -> "a178" [label = "low"];
+"a177" -> "a179" [label = "high"];
+"a176" -> "a177" [label = "office"];
+"a180" -> "a104" [label = "dead"];
+"a180" -> "a181" [label = "low"];
+"a180" -> "a182" [label = "high"];
+"a176" -> "a180" [label = "shop"];
+"a175" -> "a176" [label = "yes"];
+"a184" -> "a185" [label = "dead"];
+"a184" -> "a185" [label = "low"];
+"a184" -> "a186" [label = "high"];
+"a183" -> "a184" [label = "office"];
+"a187" -> "a104" [label = "dead"];
+"a187" -> "a188" [label = "low"];
+"a187" -> "a189" [label = "high"];
+"a183" -> "a187" [label = "shop"];
+"a175" -> "a183" [label = "no"];
+"a144" -> "a175" [label = "no"];
+"a96" -> "a144" [label = "no"];
+"a1" -> "a96" [label = "sprinkled"];
+"a194" -> "a195" [label = "dead"];
+"a194" -> "a195" [label = "low"];
+"a194" -> "a195" [label = "high"];
+"a193" -> "a194" [label = "office"];
+"a196" -> "a197" [label = "dead"];
+"a196" -> "a198" [label = "low"];
+"a196" -> "a199" [label = "high"];
+"a193" -> "a196" [label = "shop"];
+"a192" -> "a193" [label = "yes"];
+"a201" -> "a202" [label = "dead"];
+"a201" -> "a202" [label = "low"];
+"a201" -> "a203" [label = "high"];
+"a200" -> "a201" [label = "office"];
+"a204" -> "a197" [label = "dead"];
+"a204" -> "a205" [label = "low"];
+"a204" -> "a206" [label = "high"];
+"a200" -> "a204" [label = "shop"];
+"a192" -> "a200" [label = "no"];
+"a191" -> "a192" [label = "heavy"];
+"a209" -> "a210" [label = "dead"];
+"a209" -> "a210" [label = "low"];
+"a209" -> "a210" [label = "high"];
+"a208" -> "a209" [label = "office"];
+"a211" -> "a197" [label = "dead"];
+"a211" -> "a212" [label = "low"];
+"a211" -> "a213" [label = "high"];
+"a208" -> "a211" [label = "shop"];
+"a207" -> "a208" [label = "yes"];
+"a215" -> "a216" [label = "dead"];
+"a215" -> "a216" [label = "low"];
+"a215" -> "a217" [label = "high"];
+"a214" -> "a215" [label = "office"];
+"a218" -> "a197" [label = "dead"];
+"a218" -> "a219" [label = "low"];
+"a218" -> "a220" [label = "high"];
+"a214" -> "a218" [label = "shop"];
+"a207" -> "a214" [label = "no"];
+"a191" -> "a207" [label = "light"];
+"a223" -> "a224" [label = "dead"];
+"a223" -> "a224" [label = "low"];
+"a223" -> "a224" [label = "high"];
+"a222" -> "a223" [label = "office"];
+"a225" -> "a197" [label = "dead"];
+"a225" -> "a226" [label = "low"];
+"a225" -> "a227" [label = "high"];
+"a222" -> "a225" [label = "shop"];
+"a221" -> "a222" [label = "yes"];
+"a229" -> "a230" [label = "dead"];
+"a229" -> "a230" [label = "low"];
+"a229" -> "a231" [label = "high"];
+"a228" -> "a229" [label = "office"];
+"a232" -> "a197" [label = "dead"];
+"a232" -> "a233" [label = "low"];
+"a232" -> "a234" [label = "high"];
+"a228" -> "a232" [label = "shop"];
+"a221" -> "a228" [label = "no"];
+"a191" -> "a221" [label = "no"];
+"a190" -> "a191" [label = "yes"];
+"a238" -> "a239" [label = "dead"];
+"a238" -> "a239" [label = "low"];
+"a238" -> "a240" [label = "high"];
+"a237" -> "a238" [label = "office"];
+"a241" -> "a197" [label = "dead"];
+"a241" -> "a242" [label = "low"];
+"a241" -> "a243" [label = "high"];
+"a237" -> "a241" [label = "shop"];
+"a236" -> "a237" [label = "yes"];
+"a245" -> "a246" [label = "dead"];
+"a245" -> "a246" [label = "low"];
+"a245" -> "a247" [label = "high"];
+"a244" -> "a245" [label = "office"];
+"a248" -> "a197" [label = "dead"];
+"a248" -> "a249" [label = "low"];
+"a248" -> "a250" [label = "high"];
+"a244" -> "a248" [label = "shop"];
+"a236" -> "a244" [label = "no"];
+"a235" -> "a236" [label = "heavy"];
+"a253" -> "a254" [label = "dead"];
+"a253" -> "a254" [label = "low"];
+"a253" -> "a255" [label = "high"];
+"a252" -> "a253" [label = "office"];
+"a256" -> "a197" [label = "dead"];
+"a256" -> "a257" [label = "low"];
+"a256" -> "a258" [label = "high"];
+"a252" -> "a256" [label = "shop"];
+"a251" -> "a252" [label = "yes"];
+"a260" -> "a261" [label = "dead"];
+"a260" -> "a261" [label = "low"];
+"a260" -> "a262" [label = "high"];
+"a259" -> "a260" [label = "office"];
+"a263" -> "a197" [label = "dead"];
+"a263" -> "a264" [label = "low"];
+"a263" -> "a265" [label = "high"];
+"a259" -> "a263" [label = "shop"];
+"a251" -> "a259" [label = "no"];
+"a235" -> "a251" [label = "light"];
+"a268" -> "a269" [label = "dead"];
+"a268" -> "a269" [label = "low"];
+"a268" -> "a270" [label = "high"];
+"a267" -> "a268" [label = "office"];
+"a271" -> "a197" [label = "dead"];
+"a271" -> "a272" [label = "low"];
+"a271" -> "a273" [label = "high"];
+"a267" -> "a271" [label = "shop"];
+"a266" -> "a267" [label = "yes"];
+"a275" -> "a276" [label = "dead"];
+"a275" -> "a276" [label = "low"];
+"a275" -> "a277" [label = "high"];
+"a274" -> "a275" [label = "office"];
+"a278" -> "a197" [label = "dead"];
+"a278" -> "a279" [label = "low"];
+"a278" -> "a280" [label = "high"];
+"a274" -> "a278" [label = "shop"];
+"a266" -> "a274" [label = "no"];
+"a235" -> "a266" [label = "no"];
+"a190" -> "a235" [label = "no"];
+"a1" -> "a190" [label = "dry"];
+"a0" -> "a1" [label = "yes"];
+"a286" -> "a287" [label = "dead"];
+"a286" -> "a287" [label = "low"];
+"a286" -> "a288" [label = "high"];
+"a285" -> "a286" [label = "office"];
+"a289" -> "a290" [label = "dead"];
+"a289" -> "a291" [label = "low"];
+"a289" -> "a292" [label = "high"];
+"a285" -> "a289" [label = "shop"];
+"a284" -> "a285" [label = "yes"];
+"a294" -> "a295" [label = "dead"];
+"a294" -> "a295" [label = "low"];
+"a294" -> "a296" [label = "high"];
+"a293" -> "a294" [label = "office"];
+"a297" -> "a290" [label = "dead"];
+"a297" -> "a298" [label = "low"];
+"a297" -> "a299" [label = "high"];
+"a293" -> "a297" [label = "shop"];
+"a284" -> "a293" [label = "no"];
+"a283" -> "a284" [label = "heavy"];
+"a302" -> "a303" [label = "dead"];
+"a302" -> "a303" [label = "low"];
+"a302" -> "a304" [label = "high"];
+"a301" -> "a302" [label = "office"];
+"a305" -> "a290" [label = "dead"];
+"a305" -> "a306" [label = "low"];
+"a305" -> "a307" [label = "high"];
+"a301" -> "a305" [label = "shop"];
+"a300" -> "a301" [label = "yes"];
+"a309" -> "a310" [label = "dead"];
+"a309" -> "a310" [label = "low"];
+"a309" -> "a311" [label = "high"];
+"a308" -> "a309" [label = "office"];
+"a312" -> "a290" [label = "dead"];
+"a312" -> "a313" [label = "low"];
+"a312" -> "a314" [label = "high"];
+"a308" -> "a312" [label = "shop"];
+"a300" -> "a308" [label = "no"];
+"a283" -> "a300" [label = "light"];
+"a317" -> "a318" [label = "dead"];
+"a317" -> "a318" [label = "low"];
+"a317" -> "a319" [label = "high"];
+"a316" -> "a317" [label = "office"];
+"a320" -> "a290" [label = "dead"];
+"a320" -> "a321" [label = "low"];
+"a320" -> "a322" [label = "high"];
+"a316" -> "a320" [label = "shop"];
+"a315" -> "a316" [label = "yes"];
+"a324" -> "a325" [label = "dead"];
+"a324" -> "a325" [label = "low"];
+"a324" -> "a326" [label = "high"];
+"a323" -> "a324" [label = "office"];
+"a327" -> "a290" [label = "dead"];
+"a327" -> "a328" [label = "low"];
+"a327" -> "a329" [label = "high"];
+"a323" -> "a327" [label = "shop"];
+"a315" -> "a323" [label = "no"];
+"a283" -> "a315" [label = "no"];
+"a282" -> "a283" [label = "yes"];
+"a333" -> "a334" [label = "dead"];
+"a333" -> "a334" [label = "low"];
+"a333" -> "a335" [label = "high"];
+"a332" -> "a333" [label = "office"];
+"a336" -> "a290" [label = "dead"];
+"a336" -> "a337" [label = "low"];
+"a336" -> "a338" [label = "high"];
+"a332" -> "a336" [label = "shop"];
+"a331" -> "a332" [label = "yes"];
+"a340" -> "a341" [label = "dead"];
+"a340" -> "a341" [label = "low"];
+"a340" -> "a342" [label = "high"];
+"a339" -> "a340" [label = "office"];
+"a343" -> "a290" [label = "dead"];
+"a343" -> "a344" [label = "low"];
+"a343" -> "a345" [label = "high"];
+"a339" -> "a343" [label = "shop"];
+"a331" -> "a339" [label = "no"];
+"a330" -> "a331" [label = "heavy"];
+"a348" -> "a349" [label = "dead"];
+"a348" -> "a349" [label = "low"];
+"a348" -> "a350" [label = "high"];
+"a347" -> "a348" [label = "office"];
+"a351" -> "a290" [label = "dead"];
+"a351" -> "a352" [label = "low"];
+"a351" -> "a353" [label = "high"];
+"a347" -> "a351" [label = "shop"];
+"a346" -> "a347" [label = "yes"];
+"a355" -> "a356" [label = "dead"];
+"a355" -> "a356" [label = "low"];
+"a355" -> "a357" [label = "high"];
+"a354" -> "a355" [label = "office"];
+"a358" -> "a290" [label = "dead"];
+"a358" -> "a359" [label = "low"];
+"a358" -> "a360" [label = "high"];
+"a354" -> "a358" [label = "shop"];
+"a346" -> "a354" [label = "no"];
+"a330" -> "a346" [label = "light"];
+"a363" -> "a364" [label = "dead"];
+"a363" -> "a364" [label = "low"];
+"a363" -> "a365" [label = "high"];
+"a362" -> "a363" [label = "office"];
+"a366" -> "a290" [label = "dead"];
+"a366" -> "a367" [label = "low"];
+"a366" -> "a368" [label = "high"];
+"a362" -> "a366" [label = "shop"];
+"a361" -> "a362" [label = "yes"];
+"a370" -> "a371" [label = "dead"];
+"a370" -> "a371" [label = "low"];
+"a370" -> "a372" [label = "high"];
+"a369" -> "a370" [label = "office"];
+"a373" -> "a290" [label = "dead"];
+"a373" -> "a374" [label = "low"];
+"a373" -> "a375" [label = "high"];
+"a369" -> "a373" [label = "shop"];
+"a361" -> "a369" [label = "no"];
+"a330" -> "a361" [label = "no"];
+"a282" -> "a330" [label = "no"];
+"a281" -> "a282" [label = "drenched"];
+"a380" -> "a381" [label = "dead"];
+"a380" -> "a381" [label = "low"];
+"a380" -> "a382" [label = "high"];
+"a379" -> "a380" [label = "office"];
+"a383" -> "a384" [label = "dead"];
+"a383" -> "a385" [label = "low"];
+"a383" -> "a386" [label = "high"];
+"a379" -> "a383" [label = "shop"];
+"a378" -> "a379" [label = "yes"];
+"a388" -> "a389" [label = "dead"];
+"a388" -> "a389" [label = "low"];
+"a388" -> "a390" [label = "high"];
+"a387" -> "a388" [label = "office"];
+"a391" -> "a384" [label = "dead"];
+"a391" -> "a392" [label = "low"];
+"a391" -> "a393" [label = "high"];
+"a387" -> "a391" [label = "shop"];
+"a378" -> "a387" [label = "no"];
+"a377" -> "a378" [label = "heavy"];
+"a396" -> "a397" [label = "dead"];
+"a396" -> "a397" [label = "low"];
+"a396" -> "a398" [label = "high"];
+"a395" -> "a396" [label = "office"];
+"a399" -> "a384" [label = "dead"];
+"a399" -> "a400" [label = "low"];
+"a399" -> "a401" [label = "high"];
+"a395" -> "a399" [label = "shop"];
+"a394" -> "a395" [label = "yes"];
+"a403" -> "a404" [label = "dead"];
+"a403" -> "a404" [label = "low"];
+"a403" -> "a405" [label = "high"];
+"a402" -> "a403" [label = "office"];
+"a406" -> "a384" [label = "dead"];
+"a406" -> "a407" [label = "low"];
+"a406" -> "a408" [label = "high"];
+"a402" -> "a406" [label = "shop"];
+"a394" -> "a402" [label = "no"];
+"a377" -> "a394" [label = "light"];
+"a411" -> "a412" [label = "dead"];
+"a411" -> "a412" [label = "low"];
+"a411" -> "a413" [label = "high"];
+"a410" -> "a411" [label = "office"];
+"a414" -> "a384" [label = "dead"];
+"a414" -> "a415" [label = "low"];
+"a414" -> "a416" [label = "high"];
+"a410" -> "a414" [label = "shop"];
+"a409" -> "a410" [label = "yes"];
+"a418" -> "a419" [label = "dead"];
+"a418" -> "a419" [label = "low"];
+"a418" -> "a420" [label = "high"];
+"a417" -> "a418" [label = "office"];
+"a421" -> "a384" [label = "dead"];
+"a421" -> "a422" [label = "low"];
+"a421" -> "a423" [label = "high"];
+"a417" -> "a421" [label = "shop"];
+"a409" -> "a417" [label = "no"];
+"a377" -> "a409" [label = "no"];
+"a376" -> "a377" [label = "yes"];
+"a427" -> "a428" [label = "dead"];
+"a427" -> "a428" [label = "low"];
+"a427" -> "a429" [label = "high"];
+"a426" -> "a427" [label = "office"];
+"a430" -> "a384" [label = "dead"];
+"a430" -> "a431" [label = "low"];
+"a430" -> "a432" [label = "high"];
+"a426" -> "a430" [label = "shop"];
+"a425" -> "a426" [label = "yes"];
+"a434" -> "a435" [label = "dead"];
+"a434" -> "a435" [label = "low"];
+"a434" -> "a436" [label = "high"];
+"a433" -> "a434" [label = "office"];
+"a437" -> "a384" [label = "dead"];
+"a437" -> "a438" [label = "low"];
+"a437" -> "a439" [label = "high"];
+"a433" -> "a437" [label = "shop"];
+"a425" -> "a433" [label = "no"];
+"a424" -> "a425" [label = "heavy"];
+"a442" -> "a443" [label = "dead"];
+"a442" -> "a443" [label = "low"];
+"a442" -> "a444" [label = "high"];
+"a441" -> "a442" [label = "office"];
+"a445" -> "a384" [label = "dead"];
+"a445" -> "a446" [label = "low"];
+"a445" -> "a447" [label = "high"];
+"a441" -> "a445" [label = "shop"];
+"a440" -> "a441" [label = "yes"];
+"a449" -> "a450" [label = "dead"];
+"a449" -> "a450" [label = "low"];
+"a449" -> "a451" [label = "high"];
+"a448" -> "a449" [label = "office"];
+"a452" -> "a384" [label = "dead"];
+"a452" -> "a453" [label = "low"];
+"a452" -> "a454" [label = "high"];
+"a448" -> "a452" [label = "shop"];
+"a440" -> "a448" [label = "no"];
+"a424" -> "a440" [label = "light"];
+"a457" -> "a458" [label = "dead"];
+"a457" -> "a458" [label = "low"];
+"a457" -> "a459" [label = "high"];
+"a456" -> "a457" [label = "office"];
+"a460" -> "a384" [label = "dead"];
+"a460" -> "a461" [label = "low"];
+"a460" -> "a462" [label = "high"];
+"a456" -> "a460" [label = "shop"];
+"a455" -> "a456" [label = "yes"];
+"a464" -> "a465" [label = "dead"];
+"a464" -> "a465" [label = "low"];
+"a464" -> "a466" [label = "high"];
+"a463" -> "a464" [label = "office"];
+"a467" -> "a384" [label = "dead"];
+"a467" -> "a468" [label = "low"];
+"a467" -> "a469" [label = "high"];
+"a463" -> "a467" [label = "shop"];
+"a455" -> "a463" [label = "no"];
+"a424" -> "a455" [label = "no"];
+"a376" -> "a424" [label = "no"];
+"a281" -> "a376" [label = "sprinkled"];
+"a474" -> "a475" [label = "dead"];
+"a474" -> "a475" [label = "low"];
+"a474" -> "a476" [label = "high"];
+"a473" -> "a474" [label = "office"];
+"a477" -> "a478" [label = "dead"];
+"a477" -> "a479" [label = "low"];
+"a477" -> "a480" [label = "high"];
+"a473" -> "a477" [label = "shop"];
+"a472" -> "a473" [label = "yes"];
+"a482" -> "a483" [label = "dead"];
+"a482" -> "a483" [label = "low"];
+"a482" -> "a484" [label = "high"];
+"a481" -> "a482" [label = "office"];
+"a485" -> "a478" [label = "dead"];
+"a485" -> "a486" [label = "low"];
+"a485" -> "a487" [label = "high"];
+"a481" -> "a485" [label = "shop"];
+"a472" -> "a481" [label = "no"];
+"a471" -> "a472" [label = "heavy"];
+"a490" -> "a491" [label = "dead"];
+"a490" -> "a491" [label = "low"];
+"a490" -> "a492" [label = "high"];
+"a489" -> "a490" [label = "office"];
+"a493" -> "a478" [label = "dead"];
+"a493" -> "a494" [label = "low"];
+"a493" -> "a495" [label = "high"];
+"a489" -> "a493" [label = "shop"];
+"a488" -> "a489" [label = "yes"];
+"a497" -> "a498" [label = "dead"];
+"a497" -> "a498" [label = "low"];
+"a497" -> "a499" [label = "high"];
+"a496" -> "a497" [label = "office"];
+"a500" -> "a478" [label = "dead"];
+"a500" -> "a501" [label = "low"];
+"a500" -> "a502" [label = "high"];
+"a496" -> "a500" [label = "shop"];
+"a488" -> "a496" [label = "no"];
+"a471" -> "a488" [label = "light"];
+"a505" -> "a506" [label = "dead"];
+"a505" -> "a506" [label = "low"];
+"a505" -> "a507" [label = "high"];
+"a504" -> "a505" [label = "office"];
+"a508" -> "a478" [label = "dead"];
+"a508" -> "a509" [label = "low"];
+"a508" -> "a510" [label = "high"];
+"a504" -> "a508" [label = "shop"];
+"a503" -> "a504" [label = "yes"];
+"a512" -> "a513" [label = "dead"];
+"a512" -> "a513" [label = "low"];
+"a512" -> "a514" [label = "high"];
+"a511" -> "a512" [label = "office"];
+"a515" -> "a478" [label = "dead"];
+"a515" -> "a516" [label = "low"];
+"a515" -> "a517" [label = "high"];
+"a511" -> "a515" [label = "shop"];
+"a503" -> "a511" [label = "no"];
+"a471" -> "a503" [label = "no"];
+"a470" -> "a471" [label = "yes"];
+"a521" -> "a522" [label = "dead"];
+"a521" -> "a522" [label = "low"];
+"a521" -> "a523" [label = "high"];
+"a520" -> "a521" [label = "office"];
+"a524" -> "a478" [label = "dead"];
+"a524" -> "a525" [label = "low"];
+"a524" -> "a526" [label = "high"];
+"a520" -> "a524" [label = "shop"];
+"a519" -> "a520" [label = "yes"];
+"a528" -> "a529" [label = "dead"];
+"a528" -> "a529" [label = "low"];
+"a528" -> "a530" [label = "high"];
+"a527" -> "a528" [label = "office"];
+"a531" -> "a478" [label = "dead"];
+"a531" -> "a532" [label = "low"];
+"a531" -> "a533" [label = "high"];
+"a527" -> "a531" [label = "shop"];
+"a519" -> "a527" [label = "no"];
+"a518" -> "a519" [label = "heavy"];
+"a536" -> "a537" [label = "dead"];
+"a536" -> "a537" [label = "low"];
+"a536" -> "a538" [label = "high"];
+"a535" -> "a536" [label = "office"];
+"a539" -> "a478" [label = "dead"];
+"a539" -> "a540" [label = "low"];
+"a539" -> "a541" [label = "high"];
+"a535" -> "a539" [label = "shop"];
+"a534" -> "a535" [label = "yes"];
+"a543" -> "a544" [label = "dead"];
+"a543" -> "a544" [label = "low"];
+"a543" -> "a545" [label = "high"];
+"a542" -> "a543" [label = "office"];
+"a546" -> "a478" [label = "dead"];
+"a546" -> "a547" [label = "low"];
+"a546" -> "a548" [label = "high"];
+"a542" -> "a546" [label = "shop"];
+"a534" -> "a542" [label = "no"];
+"a518" -> "a534" [label = "light"];
+"a551" -> "a552" [label = "dead"];
+"a551" -> "a552" [label = "low"];
+"a551" -> "a553" [label = "high"];
+"a550" -> "a551" [label = "office"];
+"a554" -> "a478" [label = "dead"];
+"a554" -> "a555" [label = "low"];
+"a554" -> "a556" [label = "high"];
+"a550" -> "a554" [label = "shop"];
+"a549" -> "a550" [label = "yes"];
+"a558" -> "a559" [label = "dead"];
+"a558" -> "a559" [label = "low"];
+"a558" -> "a560" [label = "high"];
+"a557" -> "a558" [label = "office"];
+"a561" -> "a478" [label = "dead"];
+"a561" -> "a562" [label = "low"];
+"a561" -> "a563" [label = "high"];
+"a557" -> "a561" [label = "shop"];
+"a549" -> "a557" [label = "no"];
+"a518" -> "a549" [label = "no"];
+"a470" -> "a518" [label = "no"];
+"a281" -> "a470" [label = "dry"];
+"a0" -> "a281" [label = "no"];
+}

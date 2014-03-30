@@ -1,0 +1,17 @@
+(variables (color red black grey))
+action paintRed 
+	color	(color	(red	(color'	(red	(1.0))	(black	(0.0)) 	(grey (0.0))))
+			(black	(color'	(red	(0.2))	(black	(0.8))	(grey (0.0))))
+			(grey	(color' (red	(0.7))	(black	(0.0))	(grey (0.3)))))
+	cost	(0.1)
+endaction
+dd p1
+(color'	(red	(0.1))	(black	(0.8))	(grey (0.1)))
+enddd
+action paintBlack
+	color	(p1)
+endaction
+reward 	(color	(red	(2.0))	(black	(0.9)) (grey (0.0)))
+discount 0.900000 
+tolerance 0.01
+

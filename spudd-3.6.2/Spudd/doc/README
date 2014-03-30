@@ -1,0 +1,337 @@
+--------------------------------------------
+Authors: 
+	Jesse Hoey 
+	David R. Cheriton School of Computer Science
+	University of Waterloo
+	200 University Ave. West	
+	Waterloo, Ontario
+	N2L 3G1
+phone:	(519)-888-4567x37744
+email:  jhoey@cs.uwaterloo.ca
+	
+	Robert St-Aubin
+	Dept. of Computer Science
+ 	University of British Columbia
+	2366 Main Mall
+	Vancouver, BC
+	V6T 1Z4 CANADA
+phone:	(604)-822-6625
+email:	staubin@cs.ubc.ca
+
+Synopsis: Code for optimal and approximate value iteration
+	using ADDs. Also includes modified CUDD package 	
+	implementing ADDs with any C++ class as leaves
+
+Current version: 3.6
+Available at: http://www.cs.uwaterloo.ca/~jhoey/research/spudd/spudd-3.6.tar.gz
+
+See the Spudd Web Page at 
+	http://www.cs.uwaterloo.ca/~jhoey/research/spudd/
+
+This code is for research purposes only.
+There is no guarantee.
+Please email us with comments and questions
+
+
+Our research is discussed in these vegetables and fruits:
+Jesse Hoey, Robert St-Aubin, Alan Hu, and Craig Boutilier. 
+	SPUDD: Stochastic planning using decision diagrams. 
+	In Proceedings of UAI99, Stockholm, 1999.
+Robert St-Aubin, Jesse Hoey, and Craig Boutilier. 
+	APRICODD: Approximate policy construction using decision diagrams. 
+	In NIPS 14, 2000.
+Jesse Hoey, Robert St-Aubin, Alan Hu, and Craig Boutilier.
+	Optimal and Approximate Stochastic Planning using Decision Diagrams
+	University of British Columbia Technical Report TR-00-05, June 2000 
+
+--------------------------------------------
+
+The Makefiles are set up to compile under Linux.
+If you want to compile under Solaris, change the
+BUILD variable in the Makefile.rules in CuddPP/src and
+Spudd/src/ to appropriately.
+
+Assume in the following that $SPUDDROOT is the directory
+in which you unpacked the tarball.
+There are two packages
+
+-------------------------------------------------------
+CuddPP package
+-------------------------------------------------------
+CuddPP is a modified version of the Cudd package for
+manipulating ADDs and BDDs. This version allows ADDs with
+ANY C++ class at the leaves. The package must be re-compiled
+every time you want to change what is at the ADD leaves.
+Currently the set-up is for Pair ADDs, with pairs (from the 'pair' class defined
+in $(SPUDDROOT)/CuddPP/src/terminal/pair/pair.hh) at the leaves.
+See below for instructions on changing to another C++ class
+
+to make the package 
+cd $(SPUDDROOT)/CuddPP/src/
+make
+
+that should do it.
+The original CUDD package is available on or near
+http://vlsi.colorado.edu/~fabio/
+
+-------------------------------------------------------
+Spudd packages
+-------------------------------------------------------
+The Spudd package contains the source code for
+doing value iteration with ADDs using pairs as the fundamental 
+data type for leaves. This will work for doing optimal or approximate
+value iteration, and works with multi-valued or binary-valued variables.
+
+To compile Spudd, cd to $(SPUDDROOT)/Spudd/src/
+and type
+./make
+
+*** IMPORTANT *** always compile in $(SPUDDROOT)/Spudd/src/
+not in one of the subdirectories
+
+this should put a binary 'Spudd' program in $SPUDDROOT/Spudd/bin/linux/ (or Spudd/bin/solaris if you
+are compiling under solaris).
+
+If you see a ton of errors while compiling the MVPSpudd package - don't worry about them - this 
+is becauase you don't have FLTK - see below
+
+you can now go to your working directory and any of our examples, which are in the
+$SPUDDROOT/Spudd/data/ directory (see UAI paper or Spudd website for details)
+e.g. to try to coffee delivery robot example you would type
+
+$(SPUDDROOT)/Spudd/bin/linux/Spudd $(SPUDDROOT)/Spudd/data/coffee/coffee.dat
+
+which will dump .ADD file representations of the optimal value function and policy
+into your working directory.  To write out 'dot' files, use the -dd flag 
+
+running the program with no arguments gives what the input arguments can be
+
+This version of Spudd can also deal with multi-valued variables, for which the input
+data format is significantly different. You can check out some examples in 
+$SPUDDROOT/Spudd/data/mv/ 
+Spudd deals with mutli-valued variables by simply converting them into log(N) binary variables,
+where N is the number of values the variable can take on. The output 'dot' files show the policy
+and value functions translated back into multi-valued variables. 
+
+-------------------------------------------------------
+Input File Specification
+-------------------------------------------------------
+Take a look at $(SPUDDROOT)/Spudd/data/mv/coffee/coffee3.cost.dat
+This example includes most of the features that can be used in a Spudd input file. 
+It includes the most features that have been implemented to date
+For simpler input file formats, see coffee.dat (in the same directory)
+or $(SPUDDROOT)/Spudd/data/coffee/coffee.dat for the most simple format (for boolean variables only)
+This last one is not recommended as we've stopped testing it. 
+In the following, I'll describe some of the features found in coffee2.cost.dat
+
+Comments are C++-style (// means ignore everything to the end of the line)
+
+diagrams are specifed as scheme (lisp) trees using parentheses '(' and ')' 
+Additionally, mutliplication and addition of diagrams is allowed using square brackets:
+[* dd1 [+ dd2 dd3]]
+means
+dd1*(dd2 + dd3)
+
+these can be inifintely nested - see for example the CPT for variable 'l' and the reward function in coffee2.cost.dat
+
+*variables*
+-----------
+The file starts with the variables list. Variables can be multi-valued, but each value must have a distinct name
+within each variable set (obviously). All variable, action, dd, variable value names must be
+a combination of letters (lower or upper case), the underscore (_) and digits (0-9), but must start with a letter or _
+
+*normalization*
+---------------
+The keyword 'unnormalized' may follow the variables list. If present, it means that the CPTs will not be expected
+to be normalized (sum to 1) - and the parser will normalize all CPTS.  If not present - then each CPT will be checked
+for normalization and a parse error will occur if one is found that doesn't sum to 1
+
+*dds and actions*
+-----------------
+Next follows a series of either 'dd's or 'action's:
+A 'dd' is a pre-defined diagram with a name, and is specified like so
+dd <ddname>
+	(var1	(var1_val1	(var2' 	.... ))
+		(var1_val2	(var2'  ... ))
+	 	...)
+enddd 
+(note that's enddd not endd)
+dds can include unprimed (pre-action) variables (like var1) or primed (post-action) variables (like var2')
+primed variables are specified by putting a ' after the original variable name
+
+There are predefined dds for each variable with names 
+SAME<varname>
+e.g. SAMEvar1, SAMEvar2. 
+These are dds that specify that variable stays the same from pre- to post- action. Thus, if we were to define it ourselves in SPUDD format, SAMEvar1 would be the dd
+dd SAMEvar1
+   (var1  (var1_val1   (var1'	(var1_val1  (1.0))
+				(var1_val2  (0.0))
+				....
+			))
+	  (var1_val2   (var1'	(var1_val1  (0.0))
+				(var1_val2  (1.0))
+				....
+			))
+	  ....)
+enddd
+
+An 'action' is a set of CPTs for an action - 
+action <actionname>
+	var1  (CPT for var1) -- specifies the effects of action actionname on var1 (post-action)
+        var2  (CPT for var2
+		....
+endaction
+
+Any dd or CPT within an action can use terminals which are real numbers (constants) or the name of a previously
+defined dd. Note that the ability to specify dds like this actually allows you to specify your CPTs as ADDs directly
+instead of as trees, as in previous versions of SPUDD. If some node in the ADD is the child of two parents, then that
+node need only be specified as a 'dd' and both parents can 'point' to it. 
+
+Normally, in a CPT for some primed variable, say var1', the distribution over the primed variable must be explicitly
+specified: you are defining a function over the variables and their primed counterparts.
+However, the primed variable var1' holds a special place for its CPT. In particular, the distribution over it will
+sum to 1 (and you must ensure this is so unless you specify the 'unnormalized' keyword). 
+However there is a shorthand that can be used, but ***ONLY FOR CPTS, NOT FOR DDs*****  In this shorthand, a terminal
+can be a vector giving the distribution over the corresponding primed variable 
+***in the order that they are given in the variables list at the beginning of the file***.
+All other primed variables specified in a CPT will be  considered as within-time-step dependencies. 
+However, a the CPT for the i^{th} primed variable in the variables list can only have within-time-step dependencies on
+variables that COME AFTER IT in the variables list (on variable j where j>i). 
+For example, in coffee2.cost.dat, the CPT for primed variable w (wet) in action buyc_careful depends on variable hrc'
+in the same time step. But, looking at the variables list, we see that 'w' comes *BEFORE* 'hrc' in the list.
+It would not be possible to have w depend on huc', for example.
+
+Each action can also contain a 'cost' function which is specified as the keyword 'cost' followed by
+a diagram. This cost is *NEGATED*, but can be used to specify an action-dependent reward function
+Note that the cost function is specified as an ADD with unprimed variables, even though, like the reward function it actually applies to the post-action states.
+
+*reward*
+--------
+Next comes a global reward function, which is the keyword 'reward' followed by a dd with reward values at the leaves
+
+*dicount*
+---------
+The discount factor is the keyword 'discount' followed by a number <= 1
+
+*tolerance or horizon*
+----------------------
+next comes either 'tolerance' (for discounts < 1 - infinite horizon problems) 
+or 'horizon' (for discount = 1 -finite horizon problems)
+
+
+
+
+-------------------------------------------------------
+Ways to view policies
+-------------------------------------------------------
+1 - 'dot' files
+---------------
+If you run Spudd with the -dd flag, you will get two dot files (one for policy, one for value)
+dot is a graph specification language by AT&T (freely available at http://www.research.att.com/sw/tools/graphviz/)
+it is very easy to read the spec and write dot files. To get graphical versions, you need the 'dot' program
+
+2 - pquery GUI
+--------------
+We found that 'dot' files became impractical for viewing large policies, so we have written a 
+small GUI which allows you to interactively query your policy/value functions. 
+You can then use our GUI to read these files in, and query the policy.
+
+This GUI uses the Fast-Light Tool Kit, which you can download from www.fltk.org. 
+You will also need to modify the Makefile in 
+$(SPUDDROOT)/Spudd/src/MVPSpudd/
+change the 
+FLTKDIR
+variable to the directory in which your version of fltk resides. 
+
+then, in $(SPUDDROOT)/Spudd/src/
+type
+make again
+
+this will make an executable called 'pquery' ($(SPUDDROOT)/Spudd/src/MVPSpudd) in which you call with a single argument:
+the name of a 'dual ADD' file generated by Spudd. Once the program starts, you can
+load up other policy/value functions for the same example and compare them.
+For example, you may wish to generate the optimal policy, and a series of approximate
+policies. You can see how well our approximations do by comparing the actions they
+recommend for different states. 
+
+
+3 - Running a policy server/client
+---------------------------------
+If you want to use Spudd in an application - the simplest way is to work with the Spudd API (in MDP/MDP.h).
+For an example, you can check out the MDP/testmdp.cc program (which is the main for the Spudd binary). 
+In it, you'll see the following essentials:
+  // get a new MDP object - this also reads in the input file specs
+  MDP *mdp = new MDP( ... );
+  // generate a policy according to <args>
+  mdp->generatePolicy( <args>  );
+
+  // writes policy and value to file (as Dual ADD and as dot files depending on dotFlag)
+  mdp->writePolicyToFile(basepath,dotFlag);
+
+If you check out the mdpquery.cpp file, you'll see the API being used slightly differently.
+This binary reads in a Dual ADD specificaion of policy, and then queries the policy and prints out the 
+result. A policy query is done with
+  // query the policy 'act' with 'state' to get optimal action 'optact'
+  optact = mdp->consultOptimalPolicy(act,val,state);
+
+
+Another way to queyr policies can be seen in testmdp.cc again, where
+you'll also see the following line commented out
+  mdp->startServer();
+
+If you uncomment this line, then Spudd, after generating the policy, will start a server
+which listens on a socket for a client to connect and query the policy
+
+you can see an example client in testmdpserver.cpp
+You need to change the variable MDP_HOST to the host where you ran Spudd (and started the server)
+You also need to chagne the SUPERVISOR_HOST_TMP variable in MDP.h (and recompile) to the host where
+the client will be running
+At the current time, only a single client-server connection can be made. 
+
+
+-------------------------------------------------------
+TURNING ON 'OPTIMIZATIONS'
+-------------------------------------------------------
+Spudd implements a set of optimization heuristics which make it run more efficiently on
+a large set of problems (see UAI or tech. report paper for details). However, there are
+some problems for which these 'optimizations' actually hurt Spudd more than they help.
+They are now turned off in the distribution
+You can turn them on  by uncommenting the line
+#define OPTIMIZED
+in 
+$(SPUDDROOT)/Spudd/src/MDP/MDP.h
+
+
+-------------------------------------------------------
+VIEWING ALL THE ACTIONS 
+-------------------------------------------------------
+There is a defined variable, ALLACTIONS, in MDP.h, which is set by default.
+It makes it so the policies include every action which is optimal for a given state.
+If you want to turn this off, so you only see a single action per state, comment out the
+following line in MDP.h:
+#define ALLACTIONS 1
+
+**** NOTE: commenting this out this is *required* (but not enforced) if you have more than 50 actions. 
+
+*********************************************************
+To change CuddPP package to have your C++ class at the leaves
+do the following
+
+1) implement your class, and be sure to overload ALL the operators
+that you see in the pair class or the vector class (see $SPUDDROOT/CuddPP/src/terminal/pair/pair.hh
+for example) including the hashCode() method which should generate a nearly unique code for any
+element of your class. If you just want to use the pair or vector classes, skip this step
+
+2) change the typedef statement in $SPUDDROOT/CuddPP/src/cudd/cudd.h as per the instructions
+you will find there 
+
+3) Now implement your wicked good test program using a framework like VSpudd or PSpudd and update
+the Makefile in $SPUDDROOT/Spudd/src/. If you are just going to use pair (PSpudd) or vector (VSpudd), simply
+update the Makefile to have the appropriate package named. 
+** You can't compile PSpudd and VSPudd together since they both use what is essentially a different
+CuddPP package, but refer to that package by the same name..
+
+
+*******************************************************
+
+

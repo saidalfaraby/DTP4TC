@@ -1,0 +1,13 @@
+#!/bin/csh -f
+set outpath = $1
+set pct = $2
+set nsamples = $3
+## generate alphas for the continuous sampled version
+echo 'generate alphas for the continuous sampled version with' $nsamples 'samples'
+gspudd ../../data/mv/sand/tiger1a.$pct.co.txt $outpath -nsam $nsamples -bf $outpath/beliefs.$pct.exact.mdp  >& $outpath/tigoutv.$pct.sampled$nsamples.txt
+cp $outpath/alphas.mdp $outpath/alphas.$pct.sampled$nsamples.mdp
+
+## simulate the sampled continuous version
+echo 'simulate the sampled continuous version'
+gspudd ../../data/mv/sand/tiger1a.$pct.co.txt $outpath -bf $outpath/beliefs.$pct.exact.mdp -af $outpath/alphas.$pct.sampled$nsamples.mdp  >& $outpath/tigout.$pct.sampled$nsamples.txt
+

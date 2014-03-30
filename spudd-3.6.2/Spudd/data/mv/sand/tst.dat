@@ -1,0 +1,26 @@
+(variables (x true false))
+(observations	(z true false))
+belief
+	x  (0.2 0.8)
+endbelief
+action stay
+	x	(x	(true	(1.0	0.0))
+			(false	(0.0	1.0)))
+	observe
+		z (x	(true	(0.8	0.2))
+			(false	(0.2	0.8)))
+	endobserve
+endaction
+action change
+	x	(x	(true	(0.0	1.0))
+			(false  (1.0	0.0)))
+	observe
+		z (x	(true	(0.8	0.2))
+			(false	(0.2	0.8)))
+	endobserve
+endaction
+reward 	(x	(true	(10.0))
+		(false	(5.0)))
+discount 0.9
+tolerance 0.01
+

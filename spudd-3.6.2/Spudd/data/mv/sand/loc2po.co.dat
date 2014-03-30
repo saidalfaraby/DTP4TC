@@ -1,0 +1,47 @@
+(variables (fed yes no) (loc out in))
+(observations	(z mn cov))
+belief
+        fed (0.0 1.0)
+	loc (1.0 0.0)
+endbelief
+action stay
+	fed	(fed	(yes	(1.0	0.0))
+			(no	(0.0	1.0)))
+	loc	(loc	(out	(0.9	0.1))
+			(in	(0.1	0.9)))
+	observe
+	 	z	(loc	(out	(-0.1 0.3))
+				(in	(0.1  0.3)))
+	endobserve
+endaction
+action change 
+	fed	(fed	(yes	(1.0	0.0))
+			(no	(0.0	1.0)))
+	loc	(loc	(out	(0.1	0.9))
+			(in	(0.9	0.1)))
+	observe
+	 	z	(fed	(yes	(loc	(out	(-10.0 0.3))
+						(in	(10.0 0.3))))
+				(no	(loc	(out	(-1.0	0.3))
+						(in	(1.0	0.3)))))
+	endobserve
+	cost (0.1)
+endaction
+action eat 
+	fed	(loc	(in	(fed	(yes	(1.0	0.0))
+					(no	(0.8	0.2))))
+			(out	(fed	(yes	(1.0	0.0))
+					(no	(0.0	1.0)))))
+	loc	(loc	(out	(1.0	0.0))
+			(in	(0.0	1.0)))
+	observe
+	 	z	(loc	(out	(-0.1 0.3))
+				(in	(0.1 0.3)))
+	endobserve
+	cost 	(0.1)
+endaction
+reward 	(fed	(no	(0.0))
+		(yes	(1.0)))
+discount 0.9
+tolerance 0.01
+

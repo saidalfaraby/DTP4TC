@@ -1,0 +1,195 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a0" [label="South_in_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a1" [label="North_in_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a2" [label="North_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a3" [label="TrafficSignal"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a4" [label = "traffict_four "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a5" [label="East_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a6" [label="South_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a7" [label="South_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a8" [label="West_in_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a9" [label="North_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a10" [label="East_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a11" [label="North_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a12" [label="West_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a13" [label="East_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a14" [label="South_out_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a15" [label="South_in_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a16" [label="East_in_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a17" [label="West_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a18" [label="West_out_seg0"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a19" [label = "traffict_three "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a20" [label="East_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a21" [label="South_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a22" [label="South_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a23" [label="West_in_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a24" [label="North_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a25" [label="East_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a26" [label="North_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a27" [label="West_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a28" [label="East_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a29" [label="South_out_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a30" [label="South_in_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a31" [label="East_in_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a32" [label="West_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a33" [label="West_out_seg0"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a34" [label = "traffict_one "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a35" [label="East_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a36" [label="South_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a37" [label="South_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a38" [label="West_in_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a39" [label="North_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a40" [label="East_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a41" [label="North_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a42" [label="West_out_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a43" [label="East_out_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a44" [label="South_out_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a45" [label="South_in_seg1"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a46" [label="East_in_seg0"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a47" [label="West_in_seg2"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a48" [label="West_out_seg0"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a49" [label = "traffict_two "];}
+"a3" -> "a4" [label = "traffict_four"];
+"a18" -> "a19" [label = "low"];
+"a18" -> "a19" [label = "medium"];
+"a18" -> "a19" [label = "high"];
+"a17" -> "a18" [label = "low"];
+"a17" -> "a18" [label = "medium"];
+"a17" -> "a18" [label = "high"];
+"a16" -> "a17" [label = "low"];
+"a16" -> "a17" [label = "medium"];
+"a16" -> "a17" [label = "high"];
+"a15" -> "a16" [label = "low"];
+"a15" -> "a16" [label = "medium"];
+"a15" -> "a16" [label = "high"];
+"a14" -> "a15" [label = "low"];
+"a14" -> "a15" [label = "medium"];
+"a14" -> "a15" [label = "high"];
+"a13" -> "a14" [label = "low"];
+"a13" -> "a14" [label = "medium"];
+"a13" -> "a14" [label = "high"];
+"a12" -> "a13" [label = "low"];
+"a12" -> "a13" [label = "medium"];
+"a12" -> "a13" [label = "high"];
+"a11" -> "a12" [label = "low"];
+"a11" -> "a12" [label = "medium"];
+"a11" -> "a12" [label = "high"];
+"a10" -> "a11" [label = "low"];
+"a10" -> "a11" [label = "medium"];
+"a10" -> "a11" [label = "high"];
+"a9" -> "a10" [label = "low"];
+"a9" -> "a10" [label = "medium"];
+"a9" -> "a10" [label = "high"];
+"a8" -> "a9" [label = "low"];
+"a8" -> "a9" [label = "medium"];
+"a8" -> "a9" [label = "high"];
+"a7" -> "a8" [label = "low"];
+"a7" -> "a8" [label = "medium"];
+"a7" -> "a8" [label = "high"];
+"a6" -> "a7" [label = "low"];
+"a6" -> "a7" [label = "medium"];
+"a6" -> "a7" [label = "high"];
+"a5" -> "a6" [label = "low"];
+"a5" -> "a6" [label = "medium"];
+"a5" -> "a6" [label = "high"];
+"a3" -> "a5" [label = "traffict_three"];
+"a33" -> "a34" [label = "low"];
+"a33" -> "a34" [label = "medium"];
+"a33" -> "a34" [label = "high"];
+"a32" -> "a33" [label = "low"];
+"a32" -> "a33" [label = "medium"];
+"a32" -> "a33" [label = "high"];
+"a31" -> "a32" [label = "low"];
+"a31" -> "a32" [label = "medium"];
+"a31" -> "a32" [label = "high"];
+"a30" -> "a31" [label = "low"];
+"a30" -> "a31" [label = "medium"];
+"a30" -> "a31" [label = "high"];
+"a29" -> "a30" [label = "low"];
+"a29" -> "a30" [label = "medium"];
+"a29" -> "a30" [label = "high"];
+"a28" -> "a29" [label = "low"];
+"a28" -> "a29" [label = "medium"];
+"a28" -> "a29" [label = "high"];
+"a27" -> "a28" [label = "low"];
+"a27" -> "a28" [label = "medium"];
+"a27" -> "a28" [label = "high"];
+"a26" -> "a27" [label = "low"];
+"a26" -> "a27" [label = "medium"];
+"a26" -> "a27" [label = "high"];
+"a25" -> "a26" [label = "low"];
+"a25" -> "a26" [label = "medium"];
+"a25" -> "a26" [label = "high"];
+"a24" -> "a25" [label = "low"];
+"a24" -> "a25" [label = "medium"];
+"a24" -> "a25" [label = "high"];
+"a23" -> "a24" [label = "low"];
+"a23" -> "a24" [label = "medium"];
+"a23" -> "a24" [label = "high"];
+"a22" -> "a23" [label = "low"];
+"a22" -> "a23" [label = "medium"];
+"a22" -> "a23" [label = "high"];
+"a21" -> "a22" [label = "low"];
+"a21" -> "a22" [label = "medium"];
+"a21" -> "a22" [label = "high"];
+"a20" -> "a21" [label = "low"];
+"a20" -> "a21" [label = "medium"];
+"a20" -> "a21" [label = "high"];
+"a3" -> "a20" [label = "traffict_one"];
+"a48" -> "a49" [label = "low"];
+"a48" -> "a49" [label = "medium"];
+"a48" -> "a49" [label = "high"];
+"a47" -> "a48" [label = "low"];
+"a47" -> "a48" [label = "medium"];
+"a47" -> "a48" [label = "high"];
+"a46" -> "a47" [label = "low"];
+"a46" -> "a47" [label = "medium"];
+"a46" -> "a47" [label = "high"];
+"a45" -> "a46" [label = "low"];
+"a45" -> "a46" [label = "medium"];
+"a45" -> "a46" [label = "high"];
+"a44" -> "a45" [label = "low"];
+"a44" -> "a45" [label = "medium"];
+"a44" -> "a45" [label = "high"];
+"a43" -> "a44" [label = "low"];
+"a43" -> "a44" [label = "medium"];
+"a43" -> "a44" [label = "high"];
+"a42" -> "a43" [label = "low"];
+"a42" -> "a43" [label = "medium"];
+"a42" -> "a43" [label = "high"];
+"a41" -> "a42" [label = "low"];
+"a41" -> "a42" [label = "medium"];
+"a41" -> "a42" [label = "high"];
+"a40" -> "a41" [label = "low"];
+"a40" -> "a41" [label = "medium"];
+"a40" -> "a41" [label = "high"];
+"a39" -> "a40" [label = "low"];
+"a39" -> "a40" [label = "medium"];
+"a39" -> "a40" [label = "high"];
+"a38" -> "a39" [label = "low"];
+"a38" -> "a39" [label = "medium"];
+"a38" -> "a39" [label = "high"];
+"a37" -> "a38" [label = "low"];
+"a37" -> "a38" [label = "medium"];
+"a37" -> "a38" [label = "high"];
+"a36" -> "a37" [label = "low"];
+"a36" -> "a37" [label = "medium"];
+"a36" -> "a37" [label = "high"];
+"a35" -> "a36" [label = "low"];
+"a35" -> "a36" [label = "medium"];
+"a35" -> "a36" [label = "high"];
+"a3" -> "a35" [label = "traffict_two"];
+"a2" -> "a3" [label = "low"];
+"a2" -> "a3" [label = "medium"];
+"a2" -> "a3" [label = "high"];
+"a1" -> "a2" [label = "low"];
+"a1" -> "a2" [label = "medium"];
+"a1" -> "a2" [label = "high"];
+"a0" -> "a1" [label = "low"];
+"a0" -> "a1" [label = "medium"];
+"a0" -> "a1" [label = "high"];
+}

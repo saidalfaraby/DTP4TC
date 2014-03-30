@@ -1,0 +1,53 @@
+(variables (fed yes no) (loc room1 room2 room3))
+(observations	(z mn1 mn2 cov11 cov12 cov22))
+belief
+        fed (0.0 1.0)
+	loc (1.0 0.0 0.0)
+endbelief
+action stay
+	fed	(fed	(yes	(1.0	0.0))
+			(no	(0.0	1.0)))
+	loc	(loc	(room1	(0.9	0.05 0.05))
+			(room2	(0.05	0.9  0.05))
+			(room3	(0.05   0.05 0.9)))
+	observe
+	 	z	(loc	(room1	(160.0 120.0 10.0 0.0 10.0))
+				(room2	(160.0 120.0 10.0 0.0 10.0))
+				(room3	(160.0 120.0 10.0 0.0 10.0)))
+	endobserve
+endaction
+action change 
+	fed	(fed	(yes	(1.0	0.0))
+			(no	(0.0	1.0)))
+	loc	(loc	(room1	(0.05	0.9 0.05))
+			(room2	(0.05	0.05  0.9))
+			(room3	(0.9   0.05 0.05)))
+	observe
+	 	z	(loc	(room1	(80.0 60.0 4.0 0.0 3.0))
+				(room2	(80.0 180.0 4.0 0.0 3.0))
+				(room3	(240.0 120.0 6.0 0.0 4.0)))
+	endobserve
+	cost (0.1)
+endaction
+action eat 
+	fed	(loc	(room1	(fed	(yes	(1.0	0.0))
+					(no	(0.8	0.2))))
+			(room2	(fed	(yes	(1.0	0.0))
+					(no	(0.0	1.0))))
+			(room3	(fed	(yes	(1.0	0.0))
+					(no	(0.0	1.0)))))
+	loc	(loc	(room1	(1.0	0.0 0.0))
+			(room2	(0.0	1.0  0.0))
+			(room3	(0.0   0.0 1.0)))
+	observe
+	 	z	(loc	(room1	(160.0 120.0 10.0 0.0 10.0))
+				(room2	(160.0 120.0 10.0 0.0 10.0))
+				(room3	(160.0 120.0 10.0 0.0 10.0)))
+	endobserve
+	cost 	(0.1)
+endaction
+reward 	(fed	(no	(0.0))
+		(yes	(1.0)))
+discount 0.9
+tolerance 0.01
+

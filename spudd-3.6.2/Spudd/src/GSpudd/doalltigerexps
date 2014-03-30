@@ -1,0 +1,24 @@
+#!/bin/csh -f
+
+mkdir /h/23/jhoey/project/pomdp/tigerexp10/
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp10/ 10 100 >& /h/23/jhoey/project/pomdp/tigerexp10/tiger100.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp10/ 10 95 >& /h/23/jhoey/project/pomdp/tigerexp10/tiger95.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp10/ 10 85 >& /h/23/jhoey/project/pomdp/tigerexp10/tiger85.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp10/ 10 75 >& /h/23/jhoey/project/pomdp/tigerexp10/tiger75.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp10/ 10 65 >& /h/23/jhoey/project/pomdp/tigerexp10/tiger65.txt
+
+
+mkdir /h/23/jhoey/project/pomdp/tigerexp20/
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp20/ 20 100 >& /h/23/jhoey/project/pomdp/tigerexp20/tiger100.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp20/ 20 95 >& /h/23/jhoey/project/pomdp/tigerexp20/tiger95.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp20/ 20 85 >& /h/23/jhoey/project/pomdp/tigerexp20/tiger85.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp20/ 20 75 >& /h/23/jhoey/project/pomdp/tigerexp20/tiger75.txt
+#dotigerexps /h/23/jhoey/project/pomdp/tigerexp20/ 20 65 >& /h/23/jhoey/project/pomdp/tigerexp20/tiger65.txt
+
+mkdir /h/23/jhoey/project/pomdp/tigerexp50/
+dotigerexps /h/23/jhoey/project/pomdp/tigerexp50/ 50 100 >& /h/23/jhoey/project/pomdp/tigerexp50/tiger100.txt
+dotigerexps /h/23/jhoey/project/pomdp/tigerexp50/ 50 95 >& /h/23/jhoey/project/pomdp/tigerexp50/tiger95.txt
+dotigerexps /h/23/jhoey/project/pomdp/tigerexp50/ 50 85 >& /h/23/jhoey/project/pomdp/tigerexp50/tiger85.txt
+dotigerexps /h/23/jhoey/project/pomdp/tigerexp50/ 50 75 >& /h/23/jhoey/project/pomdp/tigerexp50/tiger75.txt
+dotigerexps /h/23/jhoey/project/pomdp/tigerexp50/ 50 65 >& /h/23/jhoey/project/pomdp/tigerexp50/tiger65.txt
+

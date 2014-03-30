@@ -1,0 +1,42 @@
+(variables  (tiger_loc  left right))
+(observations (tiger_sound 0) (tiger_sound_co 1))
+belief
+	tiger_loc  (0.5 0.5)
+endbelief
+obsdd soundObsCo tiger_sound_co
+   (tiger_loc'	(left	(observe -1.0 0.608))
+		(right  (observe 1.0 0.608)))
+enddd
+obsdd soundObs tiger_sound
+   (tiger_loc'	(left	(observe 0.95 0.05))
+		(right	(observe 0.05 0.95)))
+enddd
+action listen
+   tiger_loc	(SAMEtiger_loc)
+   observe
+	tiger_sound_co (soundObsCo)
+	tiger_sound (soundObs)
+   endobserve
+   cost   (1.0)
+endaction
+action open_left
+   tiger_loc	(0.5 0.5)
+   observe
+	tiger_sound_co	(observe 0.0 1000.0)
+	tiger_sound	(observe 0.5 0.5)
+   endobserve
+   cost	  (tiger_loc	(left	(100.0))
+			(right   (-10.0)))
+endaction
+action open_right
+   tiger_loc	(0.5 0.5)
+   observe
+	tiger_sound_co	(observe 0.0 1000.0)
+	tiger_sound	(observe 0.5 0.5)
+   endobserve
+   cost	  (tiger_loc	(left	(-10.0))
+			(right   (100.0)))
+endaction
+reward  (0.0)
+discount 0.75
+horizon 47

@@ -1,0 +1,17 @@
+
+#
+# Settings required by solaris
+#
+
+# Compilers
+# C++ compiler
+CXX=/cs/local/lib/pkg/gcc-2.8.1/bin/g++
+
+# C compiler
+#CC=/cs/local/lib/pkg/gcc-2.8.1/bin/g++
+CC=/cs/local/lib/pkg/gcc-2.8.1/bin/gcc
+
+RANLIB	= ranlib
+
+CFLAGS	+= -mcpu=ultrasparc -DHAVE_IEEE_754 -DBSD -DUNIX100
+

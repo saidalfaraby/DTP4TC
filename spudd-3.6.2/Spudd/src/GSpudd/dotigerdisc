@@ -1,0 +1,11 @@
+#!/bin/csh -f
+set outpath = $1
+set pct = $2
+## generate alphas for the discrete version
+echo 'generate alphas for the discrete version'
+gspudd ../../data/mv/sand/tiger1.$pct.disc.txt $outpath -bf $outpath/beliefs.$pct.exact.mdp  >& $outpath/tigoutv.$pct.disc.txt
+cp $outpath/alphas.mdp $outpath/alphas.$pct.disc.mdp
+
+## simulate the combination (discrete) version
+echo 'simulate the combination (discrete) version'
+gspudd ../../data/mv/sand/tiger1.$pct.comb.txt $outpath -bf $outpath/beliefs.$pct.exact.mdp -af $outpath/alphas.$pct.disc.mdp -funky >& $outpath/tigout.$pct.disc.txt

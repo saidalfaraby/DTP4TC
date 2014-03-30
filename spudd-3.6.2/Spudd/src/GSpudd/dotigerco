@@ -1,0 +1,15 @@
+#!/bin/csh -f
+set outpath = $1
+set pct = $2
+set mnb = $3
+## generate beliefs and alphas for the continuous version
+echo 'generate beliefs and alphas for the continuous version'
+gspudd ../../data/mv/sand/tiger1a.$pct.co.txt $outpath -mnb $mnb >& $outpath/tigoutv.$pct.exact.co.txt
+cp $outpath/beliefs.mdp $outpath/beliefs.$pct.exact.mdp
+cp $outpath/alphas.mdp $outpath/alphas.$pct.exact.mdp
+
+## simulate the exact continuous version
+echo 'simulate the exact continuous version'
+gspudd ../../data/mv/sand/tiger1a.$pct.co.txt $outpath -bf $outpath/beliefs.$pct.exact.mdp -af $outpath/alphas.$pct.exact.mdp  >& $outpath/tigout.$pct.exact.co.txt
+
+

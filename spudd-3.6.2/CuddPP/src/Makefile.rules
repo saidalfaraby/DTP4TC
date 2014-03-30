@@ -1,0 +1,40 @@
+
+#
+# Settings common to all packages and 
+#
+
+# set default build to linux or solaris
+BUILD	= linux
+#BUILD	= solaris
+
+
+# define where to find the include and library files
+TOP		= ../..
+INCLUDEDIR	= $(TOP)/include
+LIBDIR		= $(TOP)/lib/$(BUILD)
+BINDIR		= $(TOP)/bin/$(BUILD)
+
+# C preprocessor flags (used with both C++ and C
+#CPPFLAGS	+= -g
+#CPPFLAGS	+= -O6
+CPPFLAGS	+= -I$(INCLUDEDIR)
+CPPFLAGS	+= -DUNIX
+
+# Loader options.
+LDFLAGS		+= -L$(LIBDIR)
+
+
+# Define the level of self-checking and verbosity of the CUDD package.
+#DDDEBUG = -DDD_DEBUG -DDD_VERBOSE -DDD_STATS -DDD_CACHE_PROFILE -DDD_UNIQUE_PROFILE -DDD_COUNT
+DDDEBUG	= 
+
+CPPFLAGS	+= $(DDDEBUG)
+
+
+clean:
+	@echo "cleaning $(PACKAGE)"
+	@\rm -f *.o mon.out gmon.out *.pixie *.Addrs *.Counts mnem.* \
+	.pure core *.warnings 
+
+
+

@@ -1,0 +1,12 @@
+variables (painted red)
+action paintRed
+	painted	(painted	(red	(1.0)	(0.0))	(1.0))
+	red	(painted	(red	(1.0)	(0.2))  (1.0))
+endaction
+action paintBlack
+	painted	(1.0)
+	red	(0.0)
+endaction
+reward	(painted  (red	(1.0) (0.9)) (0.0))
+discount 0.900000
+tolerance 0.010000 

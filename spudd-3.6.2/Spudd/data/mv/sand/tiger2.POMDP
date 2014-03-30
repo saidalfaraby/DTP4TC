@@ -1,0 +1,49 @@
+# This is the tiger problem of AAAI paper fame in the new pomdp
+# format.  This format is still experimental and subject to change
+
+discount: 1.0
+values: reward
+states: big-tiger-left big-tiger-right small-tiger-left small-tiger-right
+actions: listen open-left open-right
+observations: loud-tiger-left loud-tiger-right quiet-tiger-left quiet-tiger-right
+
+T:listen
+identity
+
+T:open-left
+uniform
+
+T:open-right
+uniform
+
+O:listen
+0.65824 0.11616 0.19176 0.03384
+0.19176 0.03384 0.65824 0.11616
+0.11616 0.65824 0.03384 0.19176
+0.03384 0.19176 0.11616 0.65824
+
+O:open-left
+uniform
+
+O:open-right
+uniform
+
+R:listen : * : * : * -1
+
+R:open-left : big-tiger-left : * : * -100
+
+R:open-left : big-tiger-right : * : * 10
+
+R:open-left : small-tiger-left : * : * -10
+
+R:open-left : small-tiger-right : * : * 10
+
+R:open-right : big-tiger-left : * : * 10 
+
+R:open-right : big-tiger-right : * : * -100
+
+R:open-right : small-tiger-left : * : * 10 
+
+R:open-right : small-tiger-right : * : * -10
+
+

@@ -1,0 +1,35 @@
+#!/bin/csh -f
+set outpath = $1
+set mnb = $2
+set pct = $3
+
+## continuous version
+dotigerco $outpath $pct $mnb 
+tail -1 $outpath/tigout.$pct.exact.co.txt
+
+## discrete version
+dotigerdisc $outpath $pct
+tail -1 $outpath/tigout.$pct.disc.txt
+
+## continuous sampled version for a number of different sample sizes
+#dotigersamp $outpath $pct  1
+#tail -1 $outpath/tigout.$pct.sampled1.txt
+#dotigersamp $outpath $pct  2
+#tail -1 $outpath/tigout.$pct.sampled2.txt
+#dotigersamp $outpath $pct  5
+#tail -1 $outpath/tigout.$pct.sampled5.txt
+#dotigersamp $outpath $pct  10
+#tail -1 $outpath/tigout.$pct.sampled10.txt
+#dotigersamp $outpath $pct  20
+#tail -1 $outpath/tigout.$pct.sampled20.txt
+#dotigersamp $outpath $pct  50
+#tail -1 $outpath/tigout.$pct.sampled50.txt
+#dotigersamp $outpath $pct  100
+#tail -1 $outpath/tigout.$pct.sampled100.txt
+
+
+
+
+
+
+

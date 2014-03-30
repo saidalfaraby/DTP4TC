@@ -1,0 +1,41 @@
+(variables  (tiger_size small big) (tiger_loc  left right))
+(observations (tiger_vs lo_left lo_right hi_left hi_right))
+belief	      
+	tiger_size (0.5 0.5)
+	tiger_loc  (0.5 0.5)
+endbelief
+unnormalized
+action listen
+   tiger_size	(SAMEtiger_size)
+   tiger_loc	(SAMEtiger_loc)
+   observe
+	tiger_vs  [*	(tiger_size	(small	(0.7744	0.7744 0.2256 0.2256))
+					(big	(0.2256 0.2256 0.7744 0.7744)))
+			(tiger_loc	(left	(0.85	0.15   0.85   0.15))
+					(right	(0.15	0.85   0.15   0.85)))]
+   endobserve
+   cost   (1.0)
+endaction
+action open_left
+   tiger_size	(0.5 0.5)
+   tiger_loc	(0.5 0.5)
+   observe
+	tiger_vs	(0.25 0.25 0.25 0.25)
+   endobserve
+   cost	  (tiger_loc	(left	(tiger_size	(small	(10.0))
+						(big	(100.0))))
+			(right   (-10.0)))
+endaction
+action open_right
+   tiger_size	(0.5 0.5)
+   tiger_loc	(0.5 0.5)
+   observe
+	tiger_vs	(0.25 0.25 0.25 0.25)
+   endobserve
+   cost	  (tiger_loc	(right	(tiger_size	(small	(10.0))
+						(big	(100.0))))
+			(left   (-10.0)))
+endaction
+reward  (0.0)
+discount 0.75
+horizon 47

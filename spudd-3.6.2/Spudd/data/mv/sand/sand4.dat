@@ -1,0 +1,25 @@
+(variables (color none pink red) (sanded true false))
+action paintRed 
+	color	(sanded	(true	(color	(none	(0.0	0.2	0.8))
+					(pink	(0.0	0.1	0.9))
+					(red	(0.0	0.0	1.0))))
+			(false	(color	(none	(0.3	0.6	0.1))
+					(pink	(0.0	0.7	0.3))
+					(red	(0.0	0.0	1.0)))))
+	sanded	(sanded	(true	(1.0	0.0))
+			(false	(0.0	1.0)))
+endaction
+action sand
+	sanded	(sanded	(true	(1.0	0.0))
+			(false  (0.9	0.1)))
+	color	(color 	(none	(1.0	0.0	0.0))
+			(pink	(1.0	0.0	0.0))
+			(red	(1.0	0.0	0.0)))
+	cost	(0.1)
+endaction
+reward 	(color	(none	(0.0))	
+		(pink	(-0.5)) 
+		(red 	(1.0)))
+discount 0.9
+tolerance 0.01
+

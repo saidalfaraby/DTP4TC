@@ -1,0 +1,26 @@
+(variables (loc out in))
+(observations	(z mn cov))
+belief
+	loc (1.0 0.0)
+endbelief
+action stay
+	loc	(loc	(out	(0.9	0.1))
+			(in	(0.1	0.9)))
+	observe
+	 	z	(loc	(out	(-0.1 0.3))
+				(in	(0.1 0.3)))
+	endobserve
+endaction
+action change
+	loc	(loc	(out	(0.1	0.9))
+			(in	(0.9	0.1)))
+	observe
+	 	z	(loc	(out	(-10.0 0.3))
+				(in	(10.0 0.3)))
+	endobserve
+endaction
+reward 	(loc	(out	(0.0))
+		(in	(1.0)))
+discount 0.9
+tolerance 0.01
+

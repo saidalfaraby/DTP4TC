@@ -1,0 +1,75 @@
+digraph "DD" {
+size = "7.5,10"
+ratio=1.0;
+center = true;
+edge [dir = none];
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a0" [label="huc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a1" [label="w"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a2"  [label = "    8.28210201230815     8.28210201230815 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a3"  [label = "    9.20233556923128     9.20233556923128 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a4" [label="hrc"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a5" [label="w"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a6" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a7"  [label = "    6.74967843233242     6.74967843233242 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a8"  [label = "    5.92907283684870     5.92907283684870 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a9" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a10" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a11" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a12"  [label = "    7.64310394979967     7.64310394979967 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a13"  [label = "    6.73921879916198     6.73921879916198 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a14" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a15"  [label = "    7.55097612429810     7.55097612429810 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a16"  [label = "    6.09477687460030     6.09477687460030 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a17" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a18"  [label = "    7.66991198925555     7.66991198925555 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a19"  [label = "    6.84930639377183     6.84930639377183 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a20" [label="w"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a21" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a22"  [label = "    4.54849607590791     4.54849607590791 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a23"  [label = "    5.19864816248723     5.19864816248723 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a24" [label="r"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a25" [label="u"];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a26" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a27"  [label = "    5.30402817977762     5.30402817977762 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a28"  [label = "    6.02220329374707     6.02220329374707 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a29" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a30"  [label = "    4.74555969659263     4.74555969659263 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a31"  [label = "    5.45527232969503     5.45527232969503 "];}
+{ rank = same; node [shape=ellipse, style=filled, color=cornflowerblue];"a32" [label="l"];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a33"  [label = "    5.46872963283104     5.46872963283104 "];}
+{ rank = same; node [shape=box, style=filled, color=goldenrod];"a34"  [label = "    6.11888171941036     6.11888171941036 "];}
+"a1" -> "a2" [label = "yes"];
+"a1" -> "a3" [label = "no"];
+"a0" -> "a1" [label = "yes"];
+"a6" -> "a7" [label = "office"];
+"a6" -> "a8" [label = "shop"];
+"a5" -> "a6" [label = "yes"];
+"a11" -> "a12" [label = "office"];
+"a11" -> "a13" [label = "shop"];
+"a10" -> "a11" [label = "yes"];
+"a14" -> "a15" [label = "office"];
+"a14" -> "a16" [label = "shop"];
+"a10" -> "a14" [label = "no"];
+"a9" -> "a10" [label = "yes"];
+"a17" -> "a18" [label = "office"];
+"a17" -> "a19" [label = "shop"];
+"a9" -> "a17" [label = "no"];
+"a5" -> "a9" [label = "no"];
+"a4" -> "a5" [label = "yes"];
+"a21" -> "a22" [label = "office"];
+"a21" -> "a23" [label = "shop"];
+"a20" -> "a21" [label = "yes"];
+"a26" -> "a27" [label = "office"];
+"a26" -> "a28" [label = "shop"];
+"a25" -> "a26" [label = "yes"];
+"a29" -> "a30" [label = "office"];
+"a29" -> "a31" [label = "shop"];
+"a25" -> "a29" [label = "no"];
+"a24" -> "a25" [label = "yes"];
+"a32" -> "a33" [label = "office"];
+"a32" -> "a34" [label = "shop"];
+"a24" -> "a32" [label = "no"];
+"a20" -> "a24" [label = "no"];
+"a4" -> "a20" [label = "no"];
+"a0" -> "a4" [label = "no"];
+}

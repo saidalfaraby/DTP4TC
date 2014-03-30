@@ -1,0 +1,19 @@
+
+#
+# Settings required by solaris
+#
+
+# Compilers
+# C++ compiler
+CXX	= g++
+
+# C compiler
+CC	= gcc
+#CC	= g++	# C files are including some c++ include files
+
+RANLIB	= ranlib
+
+CFLAGS	+= -mcpu=ultrasparc -DHAVE_IEEE_754 -DBSD -DUNIX100
+
+INSTALLFLAGS 	+= 
+INSTALL		= \cp

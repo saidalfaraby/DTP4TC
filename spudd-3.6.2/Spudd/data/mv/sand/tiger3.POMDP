@@ -1,0 +1,88 @@
+# This is the tiger problem of AAAI paper fame in the new pomdp
+# format.  This format is still experimental and subject to change
+
+discount: 1.0
+values: reward
+states: big-tiger-left-1 big-tiger-right-1 small-tiger-left-1 small-tiger-right-1 big-tiger-left-2 big-tiger-right-2 small-tiger-left-2 small-tiger-right-2
+actions: listen open-left open-right
+observations: loud-tiger-left quiet-tiger-right 
+
+T:listen
+0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 
+0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 
+1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 
+
+T:open-left
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 
+
+
+T:open-right
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+0.000000 0.000000 0.000000 0.000000 0.250000 0.250000 0.250000 0.250000 
+1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 
+
+
+O:listen
+0.7744 0.2256
+0.7744 0.2256
+0.2256 0.7744
+0.2256 0.7744
+0.85 0.15
+0.15 0.85
+0.85 0.15
+0.15 0.85
+
+O:open-left
+uniform
+
+O:open-right
+uniform
+
+R:listen : big-tiger-left-1 : * : * -1
+R:listen : big-tiger-right-1 : * : * -1
+R:listen : small-tiger-left-1 : * : * -1
+R:listen : small-tiger-right-1 : * : * -1
+R:listen : big-tiger-left-2 : * : * 0
+R:listen : big-tiger-right-2 : * : * 0
+R:listen : small-tiger-left-2 : * : * 0
+R:listen : small-tiger-right-2 : * : * 0
+
+R:open-left : big-tiger-left-1 : * : * -100
+R:open-left : big-tiger-right-1 : * : * 10
+R:open-left : small-tiger-left-1 : * : * -10
+R:open-left : small-tiger-right-1 : * : * 10
+R:open-right : big-tiger-left-1 : * : * 10 
+R:open-right : big-tiger-right-1 : * : * -100
+R:open-right : small-tiger-left-1 : * : * 10 
+R:open-right : small-tiger-right-1 : * : * -10
+
+
+R:open-left : big-tiger-left-2 : * : * 0
+R:open-left : big-tiger-right-2 : * : * 0
+R:open-left : small-tiger-left-2 : * : * 0
+R:open-left : small-tiger-right-2 : * : * 0
+
+R:open-right : big-tiger-left-2 : * : * 0
+R:open-right : big-tiger-right-2 : * : * 0
+R:open-right : small-tiger-left-2 : * : * 0
+R:open-right : small-tiger-right-2 : * : * 0
+
+
+

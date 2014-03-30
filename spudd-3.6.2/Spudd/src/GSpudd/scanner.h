@@ -1,0 +1,32 @@
+#define	VARIABLES	258
+#define	REWARD	259
+#define	VALUE	260
+#define	DISCOUNT	261
+#define	ACTION	262
+#define	ENDACTION	263
+#define	OPP	264
+#define	CLP	265
+#define	MINUS	266
+#define	NAME	267
+#define	REAL	268
+#define INTGR   269
+#define DISJ    270
+#define CONJ    271
+#define OSB     272
+#define CSB     273
+#define TOLERANCE 280
+#define HORIZON 281
+#define VAL     282
+#define COST    283
+#define PRIME   284
+#define UNNORM  285
+#define STARTDD 286
+#define ENDDD   287
+#define	OBSERVATIONS	288
+#define OBSERVE   289
+#define ENDOBSERVE 290
+#define BELIEF 291
+#define ENDBELIEF 292
+#define STARTOBSDD 293
+
+
