@@ -77,6 +77,6 @@ EXECUTION
         - var listFilename = List("previousDATA/merged_newactions.data", "previousDATA/merged_old_actions.data")
             - Specify the filenames of the data that should be merged
         - util.saveprevdata("previousDATA/merged_all.data)
-            - Call the function and specify the filename for the meurged data
+            - Call the function and specify the filename for the merged data
 
 
