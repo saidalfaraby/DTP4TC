@@ -47,6 +47,13 @@ MISC STUFF
         - Traffic signals is the only thing that affects the traffic
 - The necessary maps can be found at aorta/maps
 - The data are stored in the folder aorta/previousDATA with the extension .data
+- The folder for the spudd planner is in spudd/
+    - To compute the policy for a given model
+        - ./Spudd model.dat -dd
+        - (-dd) is needed if you want to output a .dot file and see what the policy looks like
+    - You can get the .dat file from the aorta/ folder when you build the trees
+- The trees we computed are under dotFilesCompactTree and dotFilesFullTree
+    - Inside there are subfolders according to the type of action and scoring function
 
 EXECUTION
 ==========
