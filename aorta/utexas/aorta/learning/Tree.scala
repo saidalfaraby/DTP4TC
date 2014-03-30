@@ -5,6 +5,9 @@ import java.io.FileWriter
 import scala.collection.mutable
 import scala.collection.immutable
 
+/**
+ * To create an unique ID for each Node and leaf. Used in creating dot file
+ */
 object GenericNode{
   var ID = 0
   def generateID :Int = {
@@ -12,6 +15,7 @@ object GenericNode{
     return ID
   }
 }
+
 abstract class GenericNode(label : String){
   var parent : Node = null
   var edge : String = null
@@ -20,19 +24,30 @@ abstract class GenericNode(label : String){
   override def toString = getLabel
 }
 
+/**
+ * Data class contains the value of each parent and value of decision variable
+ * The instantiation of this class will be stored in the Leaf of the tree
+ */
 class Data(pv : immutable.Map[String, String], dv : String){
   var parentVal = pv
   var decisionVal = dv
 }
 
+/**
+ * @param label - label of the node, in this case a parent variable name
+ */
 class Node(label : String) extends GenericNode(label){
   var children = LinkedHashMap[String, GenericNode]()
   val score : Double = 0.0
-  var untestedParents = 0 //just make sure that the root will have nParent - 1, and -1 for 1-level deeper node
+  var untestedParents = 0 //make sure the root will have ||Parent|| - 1, and -1 from parent for each 1-level deeper node
   def getChild(edgeName : String) = children(edgeName)
   def addChild(edgeName : String, child : GenericNode) = children.+=(edgeName -> child)
 }
 
+/**
+ * @param label - label of the leaf, in this case the decision variable name
+ * @param decisionVals - list of all possible values of decision variable can take
+ */
 class Leaf(label : String, decisionVals : List[String]) extends GenericNode(label){
   def this() {this("", List())}
   var splitCandidates = mutable.ListBuffer[String]()
@@ -61,8 +76,10 @@ class Leaf(label : String, decisionVals : List[String]) extends GenericNode(labe
  * @param decisionNodeName - label of decision node
  * @param decisionVals - all possible values/states of decision node
  * @param parentsMap - contain parents labels as key and all possible value of each parent as value
+ * @param treeType - what kind of tree we want to build ("COMPACT" or "FULL")
+ * @param sf - what kind of scoring function we want to use ("MDL", "BIC", "Entropy")
  */
-class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : Map[String, List[String]], typeTree : String, sf : String){
+class Tree (decisionNodeName : String, decisionVals : List[String], parentsMap : Map[String, List[String]], typeTree : String, sf : String){
   //Assume the order of internalNode is fix, and the first one is the root
   var root : GenericNode = null
   var decisionNodeVals = decisionVals
@@ -95,7 +112,12 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     root.asInstanceOf[Leaf].addData(new Data(data._1, data._2))
   }
   
-  //now we need to know all possible value of each internal node beforehand
+  /**
+   * Add a split by a parent variable Y at the location of leaf l
+   * @param Y - parent variable name
+   * @param l - instantiation of leaf where we want to make a split
+   * @return t - a parent subtree with label Y and have some leaves as children
+   */
   def addSplit(Y : String,l : Leaf):Node = {
     allLeaves.-=(l)
     refCandidates.-=(l)
@@ -134,8 +156,13 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     return t
   }
   
-  //switch a parent of leaves with the previous leaf at the same position. Here we don't copy the data into the leaf
-  //because it still contain the old data we need
+  /**
+   * Switch a parent of leaves with the previous leaf (when this parent got split) at the same position. 
+   * Here we don't copy the data into the leaf because the leaf still contain the old data we need.
+   * This method is used for testing the new tree by split and remove multiple candidate.
+   * @param Y - parent node that we want to replace with the old leaf
+   * @param l - old leaf 
+   */
   def switchNode(Y : Node, l : Leaf){
     allLeaves.+=(l)
     try
@@ -170,6 +197,10 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     }
   }
   
+  /**
+   * A procedure to extend a tree, by picking a refinement candidate, and find the best splitting candidate for that position.
+   * @return tuple3(score, bestParentName, leaf) - score after splitting. the best parent for splitting. leaf : location of splitting. 
+   */
   def extendTree : Tuple3[Double, String, Leaf] ={
     //select a node from refinement candidates with a probability (uniform)
     var l : Leaf = null
@@ -196,6 +227,10 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     return (minScore, bestCandidate, l)
   }
   
+  /**
+   * Compute the score of the tree using certain scoring function
+   * @return tree score
+   */
   def score : Double ={
     def DLstruct(testNode : GenericNode) : Double ={
       if (testNode.isInstanceOf[Leaf])
@@ -215,13 +250,11 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     
     def DLdata() : Double = {
       var sum = 0.0
-//      println("N leaves : "+allLeaves.length)
       for (l <- allLeaves){
         val total = l.counter.valuesIterator.sum
         val nVal = l.counter.size
         for (v <- l.counter.valuesIterator){
-        	val tmp = - ((v.toFloat+1)/N)*(Math.log((v.toFloat+1)/(total + nVal))/Math.log(2))
-        	//val tmp = - ((v.toFloat)/N)*(Math.log((v.toFloat)/(total))/Math.log(2))
+        	val tmp = - ((v.toFloat+1)/N)*(Math.log((v.toFloat+1)/(total + nVal))/Math.log(2)) //apply Laplace smoothing to avoid division by zero
         	sum+= tmp
         }
       }
@@ -232,9 +265,7 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
     val first_ = DLstruct(root)
     val second_ = DLparam
     val third_ = DLdata
-    //println("DLStr:" +first_ + " DLparam:" + second_ + " DLdata:"+third_)
     val total =first_ + second_ + third_ 
-//    println("remember score only depend on entropy now")
     if (total !=Double.PositiveInfinity && total !=Double.NegativeInfinity && !total.isNaN()){
       if (scoringFunction == "MDL")
         return total
@@ -245,35 +276,32 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
           else
             return total
     }
-      
       else
         return 999999 //just to make sure if total =  NaN then return big number. But this shouldn't happen anymore. Will check later.
   }
   
+  /**
+   * Learning tree procedure that iteratively call extendTree procedure and compare the score after and before splitting.
+   * If the different is higher than the threshold, then do the real split.
+   * Do the learning until no refinement candidate to extend
+   */
   def learning(){
     var curr_score = Double.PositiveInfinity
     var differ = Double.PositiveInfinity
     var result : Tuple3[Double, String, Leaf] = (0.0, null, null)
     
     while (refCandidates.length > 0) {
-//      println("previously: " + curr_score)
-//      println("refCandidates " + refCandidates.toString)
       result = extendTree
-      differ = curr_score - result._1
       var testCond = false
       if (typeOfTree == "COMPACT"){
-        println("Different : "+(curr_score-result._1))
         testCond = curr_score - result._1 >= MDLthreshold
       }else
           testCond = true
-        //      if (curr_score - result._1 > MDLthreshold){
       if (testCond){
         addSplit(result._2, result._3)
         curr_score = result._1
       } else 
         refCandidates.-=(result._3)
-//      println("after: " + curr_score)
-//      println("differ : " + differ)
     } 
   }
   
@@ -282,11 +310,10 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   }
   
   /**
-   * @param state - values/states of all internal nodes at time step n
-   * @param value - value/state of decision node at time step n+1
+   * Print the tree to dot file format for the purpose of visualization.
+   * Traversing Breadth first
    */
-  def printTree(fileName : String) {
-    //traverse breadth first
+  def printToDotFile(fileName : String) {
     var queue : Array[GenericNode] = Array(root)
     var dotRelation = ""
     var dotShape = ""
@@ -314,8 +341,6 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
       }
       //remaining-=1
     }
-//    println(dotShape)
-//    println(dotRelation)
     dotString = "digraph \"DD\" {\nsize = \"7.5,10\"\nratio=1.0;\ncenter = true;\nedge [dir = none];\n"
     dotString += dotShape+dotRelation+"\n}"
     val fw = new FileWriter(fileName)
@@ -329,10 +354,10 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
   
   
   /**
-   * This method return a string of the ADD as a dat file format
+   * This method return a string of the tree as a dat file format
+   * Traversing Depth first
    */
-  def printToString() : String = {
-    //traverse depth first
+  def printToString : String = {
     var string = ""
     string += getName
     def traverseHelper(node : GenericNode){
@@ -367,15 +392,14 @@ class ADD (decisionNodeName : String, decisionVals : List[String], parentsMap : 
 
 
 /**
- * This class is for storing all transition probabilities for all actions and all
- * features for each actions
+ * This class is for storing all transition probabilities for all actions and all decision variable for each actions
  */
 class Model{
   
   import scala.util.Marshal
   import java.io._
 
-  var actionADD : mutable.HashMap[String, mutable.ListBuffer[ADD]] = mutable.HashMap()
+  var actionADD : mutable.HashMap[String, mutable.ListBuffer[Tree]] = mutable.HashMap()
   val tolerance = 0.1
   val discount = 0.9
   
@@ -386,17 +410,22 @@ class Model{
   private var cnt = 0
   private var flag = 1
   var typeOfTree =  "COMPACT"//"FULL" //
-  var scoringFunction = "Entropy"// "MDL" //"BIC" "Entropy" 
-  val path = "previousDATA/prevdata8actions_5000.data"
+  var scoringFunction = "MDL"// "MDL" //"BIC" "Entropy" 
+  val path = "previousDATA/merged_old_actions.data"
   var list_Data = new mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]
   var totalValueInData = mutable.HashMap[String, mutable.HashMap[String,mutable.LinkedHashMap[String, Int]]]()
   
-  
+  /**
+   * Initialize the each tree for the parent values, decision node values, tree type, and scoring function
+   */
   def addModel(action : String, decisionNode : String, parents : List[String], params : Map[String, List[String]]){
-    val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[ADD];actionADD.put(action, v);v})
-    act+= new ADD(decisionNode, params(decisionNode), params.filterKeys(parents.toSet), typeOfTree, scoringFunction)
+    val act = actionADD.getOrElse(action, {val v = new mutable.ListBuffer[Tree];actionADD.put(action, v);v})
+    act+= new Tree(decisionNode, params(decisionNode), params.filterKeys(parents.toSet), typeOfTree, scoringFunction)
   }
   
+  /**
+   * Collect data from the simulation.
+   */
   def gather_data_per_ADD(action : String, prevState : mutable.HashMap[String, String], curState : mutable.HashMap[String, String]){
     //compute simple statistics of the data
     val actionStat = totalValueInData.getOrElseUpdate(action, new mutable.HashMap[String, mutable.LinkedHashMap[String,Int]])
@@ -435,10 +464,16 @@ class Model{
     total_N +=1
   }
   
+  /**
+   * Method to build the learning tree. Assuming the data has been loaded to list_Data variable.
+   * Then put these data into the root of each tree. Then build the tree.
+   * Finally printing the tree to dat file format.
+   */
   def buildTree(){
     print("Building the Tree")
     list_Data.foreach(t => {
       //-----------------DATA SEPARATE ACTION--------------
+      //The data will be separated according to the action. Each Tree will only contains data according to it's action. Used in SPUDD.
 //      var ADD = actionADD.get(t._1).get
 //	  ADD.foreach(smt => {
 //	    var filter_map = t._2.filterKeys(smt.getParents.toSet)
@@ -446,6 +481,7 @@ class Model{
 //	    smt.addData(data_add_pair)
 //	  })
 	  //-----------------DATA ALL ACTION--------------
+      //The data will be copied over all the action. This is for the purpose of getting an idea about the dependency of data with actions
 	  for (key <- actionADD.keys){
 	    var ADD = actionADD(key)
 	    ADD.foreach(smt => {
@@ -457,9 +493,6 @@ class Model{
     })
              
     start_building()
-    val chAction = actionADD.keys.head
-    val chADD = actionADD(chAction)(16)
-//    println("Chosen Action : "+chAction.toString+" Chosen ADD : "+chADD.getName)
     printToDatFile
   }
   
@@ -471,6 +504,7 @@ class Model{
     val out = new FileOutputStream(path)
     out.write(Marshal.dump(list_Data))
     out.close
+    println("Data size = "+list_Data.size)
     println("Finish saving data")
   }
   
@@ -511,7 +545,8 @@ class Model{
     val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
     list_Data =Marshal.load[mutable.ListBuffer[Tuple3[String, mutable.HashMap[String, String], mutable.HashMap[String, String]]]](bytes)
     list_Data.foreach(l => {
-      //compute simple statistics of the data
+      //compute simple statistics of the data ===========
+      //shouldn't be part of this method though
       val actionStat = totalValueInData.getOrElseUpdate(l._1, new mutable.HashMap[String, mutable.LinkedHashMap[String,Int]])
       for ((key,value) <- l._2){
         //val varName = actionStat.getOrElseUpdate(key, new mutable.HashMap[String, Int])
@@ -538,22 +573,22 @@ class Model{
     val total = actionADD.keys.size
     var i=0
     for (key <- actionADD.keys){
-//      println(i+" of "+total)
       i+=1
        actionADD(key).foreach(add => {
-//         println(key+" " + add.getName)
-         if (add.getName=="TrafficSignal" && typeOfTree == "FULL"){
+         if (add.getName=="TrafficSignal" && typeOfTree == "FULL"){ //avoid building the full tree for trafficsignal because it's super huge
 //         if (add.getName=="TrafficSignal"){
            //do nothing
          } else {
            add.learning
-           add.printTree(key+"__"+add.getName+".dot")
+           add.printToDotFile(key+"__"+add.getName+".dot")
          }
        })
     }
   } 
   
-  
+  /**
+   * Method to print trees according to dat format for SPUDD input
+   */
   def printToDatFile{
     val filename = "test.dat"
     var string = ""
@@ -626,13 +661,4 @@ class Model{
   }
 }
 
-
-object ADD {
-  def main(args: Array[String]): Unit = {
-    var model = new Model
-    model.loadprevdata(model.path)
-    model.buildTree
-    sys.exit
-  }
-}
 
